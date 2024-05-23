@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Recipe" ALTER COLUMN "cook_time" DROP NOT NULL,
+ALTER COLUMN "prep_time" DROP NOT NULL,
+ALTER COLUMN "total_time" DROP NOT NULL;
