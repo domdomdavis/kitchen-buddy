@@ -1,7 +1,6 @@
 import { Link, redirect, useFetcher } from "@remix-run/react";
 import { useEffect, useState } from "react";
-import { IngredientType } from "~/helpers/types";
-import { RecipeType } from "./_index";
+import { IngredientType, RecipeType } from "~/helpers/types";
 
 export default function NewRecipe() {
   const fetcher = useFetcher();
