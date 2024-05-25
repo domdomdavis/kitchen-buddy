@@ -1,5 +1,5 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import { IngredientDisplay } from "~/route-components/ingredientDisplay";
 import { InstructionsDisplay } from "~/route-components/instructionsDisplay";
 import { db } from "~/utils/db.server";
@@ -23,6 +23,10 @@ export default function RecipeDetails() {
   const { recipe, ingredients } = useLoaderData<LoaderType>();
   return (
     <div className="p-8">
+      {" "}
+      <Link to="/" className="text-xl pl-8">
+        Back
+      </Link>
       <h1 className="text-4xl font-semibold p-8">{recipe?.title}</h1>
       <div className="flex">
         <span className="h-108 w-96 p-8">
