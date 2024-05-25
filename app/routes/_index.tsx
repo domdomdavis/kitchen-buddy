@@ -14,7 +14,18 @@ export const loader = async () => {
 
   return data;
 };
-const generateRecipeDisplay = (recipes) => {
+type LoaderType = Awaited<ReturnType<typeof loader>>;
+type RecipeType = {
+  id: string;
+  title: string;
+  photo_url: string;
+  instructions: string[];
+  cook_time: string | null;
+  prep_time: string | null;
+  total_time: string | null;
+  yield: string | null;
+};
+const generateRecipeDisplay = (recipes: RecipeType[]) => {
   return recipes.map((recipe) => (
     <div key={recipe.id} className="flex flex-col w-96 h-96">
       <Link to={`/recipes/${recipe.id}`}>
@@ -30,7 +41,7 @@ const generateRecipeDisplay = (recipes) => {
   ));
 };
 export default function Index() {
-  const data = useLoaderData();
+  const data = useLoaderData<LoaderType>();
   return (
     <div className="p-8">
       <h1 className="text-center text-4xl font-medium">My Recipes</h1>

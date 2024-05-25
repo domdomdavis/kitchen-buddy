@@ -17,7 +17,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
   });
   return { recipe, ingredients };
 };
-export type LoaderType = Awaited<ReturnType<typeof loader>>;
+type LoaderType = Awaited<ReturnType<typeof loader>>;
 
 export default function RecipeDetails() {
   const { recipe, ingredients } = useLoaderData<LoaderType>();
