@@ -1,5 +1,6 @@
 import type { LinksFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
+import { RecipeType } from "~/helpers/types";
 import stylesheet from "~/tailwind.css?url";
 import { db } from "~/utils/db.server";
 
@@ -15,16 +16,7 @@ export const loader = async () => {
   return data;
 };
 type LoaderType = Awaited<ReturnType<typeof loader>>;
-type RecipeType = {
-  id: string;
-  title: string;
-  photo_url: string;
-  instructions: string[];
-  cook_time: string | null;
-  prep_time: string | null;
-  total_time: string | null;
-  yield: string | null;
-};
+
 const generateRecipeDisplay = (recipes: RecipeType[]) => {
   return recipes.map((recipe) => (
     <div key={recipe.id} className="flex flex-col w-96 h-96">
@@ -44,9 +36,11 @@ export default function Index() {
   const data = useLoaderData<LoaderType>();
   return (
     <div className="p-8">
+      <Link to="/recipes/new" className="text-xl">
+        Add New Recipe
+      </Link>
       <h1 className="text-center text-4xl font-medium">My Recipes</h1>
       <div className="flex flex-row gap-8 mt-8 flex-wrap">
-        {" "}
         {generateRecipeDisplay(data.recipes)}
       </div>
     </div>

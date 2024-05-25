@@ -1,6 +1,7 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { IngredientDisplay } from "~/route-components/ingredientDisplay";
+import { IngredientWithComponentDisplay } from "~/route-components/ingredientWithComponentDisplay";
 import { InstructionsDisplay } from "~/route-components/instructionsDisplay";
 import { db } from "~/utils/db.server";
 
@@ -9,21 +10,21 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     where: {
       id: params.id,
     },
-  });
-  const ingredients = await db.ingredientList.findMany({
-    where: {
-      recipe_id: params.id,
+    include: {
+      ingredients: true,
     },
   });
-  return { recipe, ingredients };
+  return { recipe };
 };
 type LoaderType = Awaited<ReturnType<typeof loader>>;
 
 export default function RecipeDetails() {
-  const { recipe, ingredients } = useLoaderData<LoaderType>();
+  const { recipe } = useLoaderData<LoaderType>();
+  const recipeHasComponents = recipe?.ingredients.find(
+    (ingredient) => ingredient.component !== null
+  );
   return (
     <div className="p-8">
-      {" "}
       <Link to="/" className="text-xl pl-8">
         Back
       </Link>
@@ -33,10 +34,16 @@ export default function RecipeDetails() {
           <img src={recipe?.photo_url} className="object-scale-down" />
         </span>
         <span className="p-8">
-          <IngredientDisplay ingredients={ingredients} />
+          {recipeHasComponents ? (
+            <IngredientWithComponentDisplay
+              ingredients={recipe?.ingredients ?? []}
+            />
+          ) : (
+            <IngredientDisplay ingredients={recipe?.ingredients ?? []} />
+          )}
         </span>
       </div>
-      <div className="p-8 flex flex-col flex-wrap">
+      <div className="p-8 flex flex-col flex-wrap w-1/2">
         <InstructionsDisplay instructions={recipe?.instructions} />
       </div>
     </div>
