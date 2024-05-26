@@ -1,16 +1,25 @@
-import { Link, redirect, useFetcher } from "@remix-run/react";
+import { Link, redirect, useFetcher, useNavigate } from "@remix-run/react";
 import { useEffect, useState } from "react";
+import matchIngredientsToComponents from "~/helpers/matchIngredientToComponent";
 import { IngredientType, RecipeType } from "~/helpers/types";
+import { IngredientDisplay } from "~/route-components/ingredientDisplay";
+import { IngredientWithComponentDisplay } from "~/route-components/ingredientWithComponentDisplay";
+import { InstructionsDisplay } from "~/route-components/instructionsDisplay";
 
 export default function NewRecipe() {
   const fetcher = useFetcher();
-
+  const navigate = useNavigate();
   const [instructions, setInstructions] = useState<string[]>([]);
   const [ingredients, setIngredients] = useState<IngredientType[]>([]);
+  const [components, setComponents] = useState<string[]>([]);
   const [recipeTitle, setRecipeTitle] = useState<string>("");
-  const [amountValue, setAmountValue] = useState("");
-  const [ingredientValue, setIngredientValue] = useState("");
-  const [instructionValue, setInstructionValue] = useState<string>("");
+  const [inputFieldValues, setInputFieldValues] = useState({
+    component: "",
+    amount: "",
+    ingredient: "",
+    instruction: "",
+  });
+
   const [photoUrl, setPhotoUrl] = useState<string>("");
   const saveRecipe = () => {
     const newRecipe = {
@@ -32,11 +41,11 @@ export default function NewRecipe() {
   useEffect(() => {
     if (fetcher.data) {
       const fetcherData = fetcher.data as RecipeType;
-      redirect(`/recipes/${fetcherData.id}`);
+      navigate(`/recipes/${fetcherData.id}`);
     }
   }, [fetcher.data]);
   return (
-    <div className="p-4">
+    <div className="p-4 bg-gray-300 h-screen">
       <Link to="/" className="text-xl pb-2">
         Back
       </Link>
@@ -46,7 +55,7 @@ export default function NewRecipe() {
           <input
             name="title"
             id="title"
-            className="w-96 p-4 border-2 border-violet-300 rounded-md mb-2"
+            className="w-full p-4 border-2 border-violet-300 rounded-md mb-2"
             placeholder="Recipe Title"
             value={recipeTitle}
             onChange={(e) => setRecipeTitle(e.target.value)}
@@ -56,7 +65,7 @@ export default function NewRecipe() {
             id="photo_url"
             value={photoUrl ?? ""}
             onChange={(e) => setPhotoUrl(e.target.value)}
-            className="w-96 p-4 border-2 border-violet-300 rounded-md"
+            className="w-full p-4 border-2 border-violet-300 rounded-md"
             placeholder="Photo URL"
           />
           <div className="flex flex-col mt-4">
@@ -67,17 +76,29 @@ export default function NewRecipe() {
               id="component"
               className="w-full p-4 border-2 border-violet-300 rounded-md"
               placeholder="Recipe Component (optional)"
+              value={inputFieldValues.component}
+              onChange={(e) =>
+                setInputFieldValues({
+                  ...inputFieldValues,
+                  component: e.target.value,
+                })
+              }
+              onBlur={(e) => setComponents([...components, e.target.value])}
             />
             <div className="flex-row">
-              {" "}
               <span>
                 <input
                   name="amount"
                   id="amount"
                   className="w-36 p-4  mr-4 mt-4 border-2 border-violet-300 rounded-md"
                   placeholder="Amount"
-                  value={amountValue}
-                  onChange={(e) => setAmountValue(e.target.value)}
+                  value={inputFieldValues.amount}
+                  onChange={(e) =>
+                    setInputFieldValues({
+                      ...inputFieldValues,
+                      amount: e.target.value,
+                    })
+                  }
                 />
               </span>
               <span>
@@ -86,18 +107,31 @@ export default function NewRecipe() {
                   id="ingredient"
                   className="w-64 p-4 border-2 border-violet-300 rounded-md"
                   placeholder="Ingredient"
-                  value={ingredientValue}
-                  onChange={(e) => setIngredientValue(e.target.value)}
+                  value={inputFieldValues.ingredient}
+                  onChange={(e) =>
+                    setInputFieldValues({
+                      ...inputFieldValues,
+                      ingredient: e.target.value,
+                    })
+                  }
                   onKeyDown={(e) => {
                     if (e.code === "Enter") {
-                      if (ingredientValue !== "") {
+                      if (inputFieldValues.ingredient !== "") {
                         const newIngredient = {
-                          amount: amountValue,
-                          ingredient: ingredientValue,
+                          amount: inputFieldValues.amount,
+                          ingredient: inputFieldValues.ingredient,
+                          component:
+                            components.length > 0
+                              ? components[components.length - 1]
+                              : null,
                         };
                         setIngredients([...ingredients, newIngredient]);
-                        setAmountValue("");
-                        setIngredientValue("");
+                        setInputFieldValues({
+                          ...inputFieldValues,
+                          component: "",
+                          amount: "",
+                          ingredient: "",
+                        });
                       }
                     }
                   }}
@@ -117,13 +151,24 @@ export default function NewRecipe() {
               cols={5}
               className="w-full h-24 p-4 flex-wrap border-2 border-violet-300 rounded-md"
               placeholder={`Step ${instructions.length + 1}`}
-              value={instructionValue}
-              onChange={(e) => setInstructionValue(e.target.value)}
+              value={inputFieldValues.instruction}
+              onChange={(e) =>
+                setInputFieldValues({
+                  ...inputFieldValues,
+                  instruction: e.target.value,
+                })
+              }
               onKeyDown={(e) => {
                 if (e.code === "Enter") {
-                  if (instructionValue !== "") {
-                    setInstructionValue("");
-                    setInstructions([...instructions, instructionValue]);
+                  if (inputFieldValues.instruction !== "") {
+                    setInputFieldValues({
+                      ...inputFieldValues,
+                      instruction: "",
+                    });
+                    setInstructions([
+                      ...instructions,
+                      inputFieldValues.instruction,
+                    ]);
                   }
                 }
               }}
@@ -131,37 +176,19 @@ export default function NewRecipe() {
           </div>
         </form>
         <div className="mx-8">
-          {ingredients.length > 0 &&
-            ingredients.map((ingredient, index) => {
-              return (
-                <div key={index}>
-                  <span className="font-semibold">{ingredient.amount} </span>
-                  <span>{ingredient.ingredient}</span>
-                  <button
-                    onClick={() => {
-                      ingredients.splice(index, 1);
-                      setIngredients([...ingredients]);
-                    }}
-                    className="ml-6 text-sm"
-                  >
-                    remove
-                  </button>
-                </div>
-              );
-            })}
+          {components.length > 0 ? (
+            <IngredientWithComponentDisplay ingredients={ingredients} />
+          ) : (
+            <IngredientDisplay
+              ingredients={ingredients}
+              setIngredients={setIngredients}
+            />
+          )}
+
           <div className="mt-8 max-w-96">
-            {" "}
-            {instructions.length > 0 &&
-              instructions.map((instruction, index) => {
-                if (instruction !== "") {
-                  return (
-                    <div key={index} className="mt-2">
-                      <span>{index + 1}. </span>
-                      <span>{instruction}</span>
-                    </div>
-                  );
-                }
-              })}
+            {instructions.length > 0 && (
+              <InstructionsDisplay instructions={instructions} />
+            )}
           </div>
         </div>
         <div className="flex flex-col mx-auto">
@@ -177,6 +204,7 @@ export default function NewRecipe() {
       >
         Save Recipe
       </button>
+      <button onClick={() => console.log(components)}>log</button>
     </div>
   );
 }

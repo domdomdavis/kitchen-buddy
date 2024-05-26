@@ -1,11 +1,30 @@
-import { IngredientDisplayProps } from "~/helpers/types";
+import { Dispatch, SetStateAction } from "react";
+import { IngredientType } from "~/helpers/types";
 
-export const IngredientDisplay = ({ ingredients }: IngredientDisplayProps) => {
-  return ingredients.map((ingredient) => {
+export type IngredientDisplayProps = {
+  ingredients: Array<IngredientType>;
+  setIngredients?: Dispatch<SetStateAction<IngredientType[]>>;
+};
+export const IngredientDisplay = ({
+  ingredients,
+  setIngredients,
+}: IngredientDisplayProps) => {
+  return ingredients.map((ingredient, index) => {
     return (
-      <div>
+      <div key={index}>
         <span className="font-semibold">{ingredient.amount} </span>
         <span>{ingredient.ingredient}</span>
+        {setIngredients && (
+          <button
+            className="mx-8 text-sm"
+            onClick={() => {
+              ingredients.splice(index, 1);
+              setIngredients([...ingredients]);
+            }}
+          >
+            remove
+          </button>
+        )}
       </div>
     );
   });
