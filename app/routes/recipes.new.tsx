@@ -12,19 +12,19 @@ export default function NewRecipe() {
   const [instructions, setInstructions] = useState<string[]>([]);
   const [ingredients, setIngredients] = useState<IngredientType[]>([]);
   const [components, setComponents] = useState<string[]>([]);
-  const [recipeTitle, setRecipeTitle] = useState<string>("");
   const [inputFieldValues, setInputFieldValues] = useState({
+    title: "",
+    photoUrl: "",
     component: "",
     amount: "",
     ingredient: "",
     instruction: "",
   });
 
-  const [photoUrl, setPhotoUrl] = useState<string>("");
   const saveRecipe = () => {
     const newRecipe = {
-      title: recipeTitle,
-      photo_url: photoUrl,
+      title: inputFieldValues.title,
+      photo_url: inputFieldValues.photoUrl,
       ingredients,
       instructions,
     };
@@ -57,14 +57,24 @@ export default function NewRecipe() {
             id="title"
             className="w-full p-4 border-2 border-violet-300 rounded-md mb-2"
             placeholder="Recipe Title"
-            value={recipeTitle}
-            onChange={(e) => setRecipeTitle(e.target.value)}
+            value={inputFieldValues.title}
+            onChange={(e) =>
+              setInputFieldValues({
+                ...inputFieldValues,
+                title: e.target.value,
+              })
+            }
           />
           <input
             name="photo_url"
             id="photo_url"
-            value={photoUrl ?? ""}
-            onChange={(e) => setPhotoUrl(e.target.value)}
+            value={inputFieldValues.photoUrl ?? ""}
+            onChange={(e) =>
+              setInputFieldValues({
+                ...inputFieldValues,
+                photoUrl: e.target.value,
+              })
+            }
             className="w-full p-4 border-2 border-violet-300 rounded-md"
             placeholder="Photo URL"
           />
@@ -192,10 +202,12 @@ export default function NewRecipe() {
           </div>
         </div>
         <div className="flex flex-col mx-auto">
-          {recipeTitle !== "" && (
-            <h2 className="text-2xl font-semibold">{recipeTitle}</h2>
+          {inputFieldValues.title !== "" && (
+            <h2 className="text-2xl font-semibold">{inputFieldValues.title}</h2>
           )}
-          {photoUrl !== "" && <img src={photoUrl} className="h-96 w-64" />}
+          {inputFieldValues.photoUrl !== "" && (
+            <img src={inputFieldValues.photoUrl} className="h-96 w-64" />
+          )}
         </div>
       </div>
       <button

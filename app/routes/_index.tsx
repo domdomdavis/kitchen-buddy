@@ -9,8 +9,11 @@ export const links: LinksFunction = () => [
 ];
 export const loader = async () => {
   const data = {
-    recipes: await db.recipe.findMany(),
-    ingredientsLists: await db.ingredientList.findMany(),
+    recipes: await db.recipe.findMany({
+      include: {
+        ingredients: true,
+      },
+    }),
   };
 
   return data;

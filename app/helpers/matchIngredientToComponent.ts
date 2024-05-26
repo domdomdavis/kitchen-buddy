@@ -1,4 +1,4 @@
-import { IngredientDisplayProps, IngredientType } from "./types";
+import { IngredientType } from "./types";
 
 export default function matchIngredientsToComponents(
   ingredients: IngredientType[]

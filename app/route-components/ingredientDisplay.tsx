@@ -9,23 +9,25 @@ export const IngredientDisplay = ({
   ingredients,
   setIngredients,
 }: IngredientDisplayProps) => {
-  return ingredients.map((ingredient, index) => {
-    return (
-      <div key={index}>
-        <span className="font-semibold">{ingredient.amount} </span>
-        <span>{ingredient.ingredient}</span>
-        {setIngredients && (
-          <button
-            className="mx-8 text-sm"
-            onClick={() => {
-              ingredients.splice(index, 1);
-              setIngredients([...ingredients]);
-            }}
-          >
-            remove
-          </button>
-        )}
-      </div>
-    );
-  });
+  return ingredients
+    .sort((a, b) => a.id - b.id)
+    .map((ingredient, index) => {
+      return (
+        <div key={index}>
+          <span className="font-semibold">{ingredient.amount} </span>
+          <span>{ingredient.ingredient}</span>
+          {setIngredients && (
+            <button
+              className="mx-8 text-sm"
+              onClick={() => {
+                ingredients.splice(index, 1);
+                setIngredients([...ingredients]);
+              }}
+            >
+              remove
+            </button>
+          )}
+        </div>
+      );
+    });
 };

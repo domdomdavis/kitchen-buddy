@@ -3,7 +3,7 @@ export type IngredientType = {
   ingredient: string;
   component?: string | null;
   recipe_id?: string;
-  id?: number;
+  id: number;
 };
 
 export type IngredientDisplayProps = {
@@ -14,6 +14,7 @@ export type RecipeType = {
   id: string;
   title: string;
   photo_url: string;
+  ingredients: IngredientType[];
   instructions: string[];
   cook_time: string | null;
   prep_time: string | null;

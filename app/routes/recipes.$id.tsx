@@ -1,8 +1,11 @@
-import { LoaderFunctionArgs } from "@remix-run/node";
+import { LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
+import { useState } from "react";
+import { EditModeRecipe } from "~/route-components/editModeRecipe";
 import { IngredientDisplay } from "~/route-components/ingredientDisplay";
 import { IngredientWithComponentDisplay } from "~/route-components/ingredientWithComponentDisplay";
 import { InstructionsDisplay } from "~/route-components/instructionsDisplay";
+import { ReadOnlyRecipe } from "~/route-components/readOnlyRecipe";
 import { db } from "~/utils/db.server";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
@@ -14,38 +17,39 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
       ingredients: true,
     },
   });
+  if (!recipe) throw redirect("/");
   return { recipe };
 };
 type LoaderType = Awaited<ReturnType<typeof loader>>;
 
 export default function RecipeDetails() {
   const { recipe } = useLoaderData<LoaderType>();
-  const recipeHasComponents = recipe?.ingredients.find(
+  const [editMode, setEditMode] = useState<boolean>(false);
+  const recipeHasComponents = recipe?.ingredients.some(
     (ingredient) => ingredient.component !== null
   );
   return (
     <div className="p-8">
-      <Link to="/" className="text-xl pl-8">
-        Back
-      </Link>
-      <h1 className="text-4xl font-semibold p-8">{recipe?.title}</h1>
-      <div className="flex">
-        <span className="h-108 w-96 p-8">
-          <img src={recipe?.photo_url} className="object-scale-down" />
-        </span>
-        <span className="p-8">
-          {recipeHasComponents ? (
-            <IngredientWithComponentDisplay
-              ingredients={recipe?.ingredients ?? []}
-            />
-          ) : (
-            <IngredientDisplay ingredients={recipe?.ingredients ?? []} />
-          )}
-        </span>
+      <div className="flex w-full">
+        <Link to="/" className="text-xl pl-8">
+          Back
+        </Link>
+        <button className="text-xl mx-auto" onClick={() => setEditMode(true)}>
+          Edit Recipe
+        </button>
+        <button className="text-xl mx-auto">Delete Recipe</button>
       </div>
-      <div className="p-8 flex flex-col flex-wrap w-1/2">
-        <InstructionsDisplay instructions={recipe?.instructions} />
-      </div>
+      {!editMode ? (
+        <ReadOnlyRecipe
+          recipe={recipe}
+          recipeHasComponents={recipeHasComponents}
+        />
+      ) : (
+        <EditModeRecipe
+          recipe={recipe}
+          recipeHasComponents={recipeHasComponents}
+        />
+      )}
     </div>
   );
 }
