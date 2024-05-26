@@ -6,14 +6,13 @@ type ActionProps = {
 export const action = async ({ request }: ActionProps) => {
   const prisma = new PrismaClient();
   const { formData } = await request.json();
-  const updatedIngredient = await prisma.ingredientList.update({
+  const updatedIngredients = await prisma.ingredientList.updateMany({
     where: {
-      id: formData.id,
+      component: formData.oldComponent,
     },
     data: {
-      amount: formData.amount,
-      ingredient: formData.ingredient,
+      component: formData.newComponent,
     },
   });
-  return updatedIngredient;
+  return updatedIngredients;
 };
