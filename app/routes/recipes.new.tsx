@@ -204,7 +204,6 @@ export default function NewRecipe() {
       >
         Save Recipe
       </button>
-      <button onClick={() => console.log(components)}>log</button>
     </div>
   );
 }
