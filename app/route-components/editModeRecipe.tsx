@@ -36,8 +36,6 @@ export const EditModeRecipe = ({
   };
   useEffect(() => {
     if (fetcher.data) {
-      const fetcherData = fetcher.data as RecipeType;
-      console.log(fetcherData);
       navigate(0);
     }
   }, [fetcher.data]);

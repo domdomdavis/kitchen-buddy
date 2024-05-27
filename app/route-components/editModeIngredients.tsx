@@ -22,11 +22,7 @@ export const EditModeIngredients = ({
       { method: "POST", action: "/editIngredient", encType: "application/json" }
     );
   };
-  useEffect(() => {
-    if (fetcher.data) {
-      console.log(fetcher.data);
-    }
-  }, [fetcher.data]);
+
   if (!recipeHasComponents) {
     return ingredients
       .sort((a, b) => a.id - b.id)
@@ -84,6 +80,7 @@ export const EditModeIngredients = ({
     };
 
     const ingredientList = matchIngredientsToComponents(ingredients);
+    console.log(ingredientList);
     return ingredientList.map((component, index) => {
       const [componentValue, setComponentValue] = useState(component.component);
       return (
@@ -123,7 +120,9 @@ export const EditModeIngredients = ({
                     value={ingredientName}
                     className="border-2 p-2 border-violet-300 rounded-md m-2 w-1/2"
                     onChange={(e) => setIngredientName(e.target.value)}
-                    onBlur={() => saveEditIngredient(updatedIngredient)}
+                    onBlur={() => {
+                      saveEditIngredient(updatedIngredient);
+                    }}
                   />
                 </span>
               </div>
