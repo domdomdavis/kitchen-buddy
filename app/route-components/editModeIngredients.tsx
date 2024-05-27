@@ -85,7 +85,7 @@ export const EditModeIngredients = ({
         <div key={index} className="w-full">
           <input
             value={componentValue}
-            className="border-2 p-2 border-violet-300 rounded-md m-2 text-lg"
+            className="border-2 p-2 border-emerald-300 rounded-md my-2 text-lg"
             onChange={(e) => setComponentValue(e.target.value)}
             onBlur={() =>
               assignNewComponentToIngredients(

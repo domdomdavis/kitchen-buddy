@@ -52,7 +52,7 @@ export const Recipe = ({
       ) : (
         <div className="place-self-center w-1/4">
           <input
-            className="text-center font-semibold p-2 border-2 border-violet-300 rounded-md w-full text-4xl"
+            className="text-center font-semibold p-2 border-2 border-orange-300 rounded-md w-full text-4xl"
             value={recipeTitle}
             onChange={(e) => setRecipeTitle(e.target.value)}
           />
@@ -93,7 +93,7 @@ export const Recipe = ({
         <div className="w-1/6 h-5/6 place-self-end place-content-end fixed mr-48">
           <button
             onClick={saveEditRecipe}
-            className="p-4 rounded-md font-semibold text-xl mt-4 mx-16"
+            className="p-4 rounded-md font-semibold text-xl mt-4 mx-16 bg-sky-300"
           >
             Save Changes
           </button>
@@ -118,7 +118,7 @@ export const Recipe = ({
                   <span className="w-full">
                     <textarea
                       value={instructionValue}
-                      className="border-2 p-2 border-violet-300 rounded-md w-full mt-2"
+                      className="border-2 p-2 border-fuchsia-300 rounded-md w-full mt-2"
                       rows={5}
                       onChange={(e) => setInstructionValue(e.target.value)}
                       onBlur={() =>
