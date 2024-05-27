@@ -3,7 +3,7 @@ export type IngredientType = {
   ingredient: string;
   component?: string | null;
   recipe_id?: string;
-  id: number;
+  id?: number;
 };
 
 export type IngredientDisplayProps = {

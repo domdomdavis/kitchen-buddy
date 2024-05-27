@@ -1,11 +1,9 @@
 import { LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { useState } from "react";
-import { EditModeRecipe } from "~/route-components/editModeRecipe";
 import { IngredientDisplay } from "~/route-components/ingredientDisplay";
 import { IngredientWithComponentDisplay } from "~/route-components/ingredientWithComponentDisplay";
-import { InstructionsDisplay } from "~/route-components/instructionsDisplay";
-import { ReadOnlyRecipe } from "~/route-components/readOnlyRecipe";
+import { Recipe } from "~/route-components/recipe";
 import { db } from "~/utils/db.server";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
@@ -29,27 +27,31 @@ export default function RecipeDetails() {
     (ingredient) => ingredient.component !== null
   );
   return (
-    <div className="p-8">
-      <div className="flex w-full">
-        <Link to="/" className="text-xl pl-8">
-          Back
+    <div>
+      <div className="flex w-full justify-between">
+        <Link
+          to="/"
+          className="text-xl mt-8 ml-8 p-4 bg-violet-300 rounded-md font-medium"
+        >
+          Back to Home
         </Link>
-        <button className="text-xl mx-auto" onClick={() => setEditMode(true)}>
-          Edit Recipe
-        </button>
-        <button className="text-xl mx-auto">Delete Recipe</button>
+        <div>
+          <button
+            className="text-xl mt-8 mr-8 p-4 bg-violet-300 rounded-md font-medium"
+            onClick={() => setEditMode(!editMode)}
+          >
+            {!editMode ? "Edit Recipe" : "Stop Editing"}
+          </button>
+          <button className="text-xl mt-8 mr-8 p-4 border-red-500 border-2 text-red-500 rounded-md font-medium">
+            Delete Recipe
+          </button>
+        </div>
       </div>
-      {!editMode ? (
-        <ReadOnlyRecipe
-          recipe={recipe}
-          recipeHasComponents={recipeHasComponents}
-        />
-      ) : (
-        <EditModeRecipe
-          recipe={recipe}
-          recipeHasComponents={recipeHasComponents}
-        />
-      )}
+      <Recipe
+        recipe={recipe}
+        recipeHasComponents={recipeHasComponents}
+        editMode={editMode}
+      />
     </div>
   );
 }

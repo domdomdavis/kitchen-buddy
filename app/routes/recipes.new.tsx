@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 import matchIngredientsToComponents from "~/helpers/matchIngredientToComponent";
 import { IngredientType, RecipeType } from "~/helpers/types";
 import { IngredientDisplay } from "~/route-components/ingredientDisplay";
-import { IngredientWithComponentDisplay } from "~/route-components/ingredientWithComponentDisplay";
-import { InstructionsDisplay } from "~/route-components/instructionsDisplay";
 
 export default function NewRecipe() {
   const fetcher = useFetcher();
@@ -45,7 +43,7 @@ export default function NewRecipe() {
     }
   }, [fetcher.data]);
   return (
-    <div className="p-4 bg-gray-300 h-screen">
+    <div className="p-4 h-screen">
       <Link to="/" className="text-xl pb-2">
         Back
       </Link>
@@ -186,19 +184,22 @@ export default function NewRecipe() {
           </div>
         </form>
         <div className="mx-8">
-          {components.length > 0 ? (
-            <IngredientWithComponentDisplay ingredients={ingredients} />
-          ) : (
-            <IngredientDisplay
-              ingredients={ingredients}
-              setIngredients={setIngredients}
-            />
-          )}
+          <IngredientDisplay
+            ingredients={ingredients}
+            setIngredients={setIngredients}
+            recipeHasComponents={components.length > 0}
+          />
 
           <div className="mt-8 max-w-96">
-            {instructions.length > 0 && (
-              <InstructionsDisplay instructions={instructions} />
-            )}
+            {instructions.length > 0 &&
+              instructions.map((step, index) => {
+                return (
+                  <div className="mb-4" key={index}>
+                    <span className="font-semibold text-xl">{index + 1}. </span>
+                    <span className="text-lg">{step}</span>
+                  </div>
+                );
+              })}
           </div>
         </div>
         <div className="flex flex-col mx-auto">

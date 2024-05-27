@@ -5,14 +5,13 @@ import { IngredientType } from "~/helpers/types";
 
 type EditModeIngredientsProps = {
   ingredients: IngredientType[];
-  recipeHasComponents: boolean;
+  recipeHasComponents?: boolean;
 };
 
 export const EditModeIngredients = ({
   ingredients,
   recipeHasComponents,
 }: EditModeIngredientsProps) => {
-  const navigate = useNavigate();
   const fetcher = useFetcher();
   const saveEditIngredient = (updatedIngredient: IngredientType) => {
     fetcher.submit(
@@ -25,7 +24,7 @@ export const EditModeIngredients = ({
 
   if (!recipeHasComponents) {
     return ingredients
-      .sort((a, b) => a.id - b.id)
+      .sort((a, b) => (a.id ?? 0) - (b.id ?? 0))
       .map((ingredient, index) => {
         const [amountValue, setAmountValue] = useState(ingredient.amount);
         const [ingredientName, setIngredientName] = useState(
@@ -37,18 +36,18 @@ export const EditModeIngredients = ({
           ingredient: ingredientName,
         };
         return (
-          <div key={index}>
-            <span>
+          <div key={index} className="w-full flex">
+            <span className="w-1/3 m-2">
               <input
                 value={amountValue}
-                className="border-2 p-2 border-violet-300 rounded-md m-2"
+                className="border-2 p-2 border-violet-300 rounded-md w-full"
                 onChange={(e) => setAmountValue(e.target.value)}
               />
             </span>
-            <span>
+            <span className="w-2/3 m-2">
               <input
                 value={ingredientName}
-                className="border-2 p-2 border-violet-300 rounded-md m-2 w-1/2"
+                className="border-2 p-2 border-violet-300 rounded-md w-full"
                 onChange={(e) => setIngredientName(e.target.value)}
                 onBlur={() => saveEditIngredient(updatedIngredient)}
               />
@@ -80,14 +79,13 @@ export const EditModeIngredients = ({
     };
 
     const ingredientList = matchIngredientsToComponents(ingredients);
-    console.log(ingredientList);
     return ingredientList.map((component, index) => {
       const [componentValue, setComponentValue] = useState(component.component);
       return (
-        <div key={index}>
+        <div key={index} className="w-full">
           <input
             value={componentValue}
-            className="border-2 p-2 border-violet-300 rounded-md m-2 w-1/3 text-lg"
+            className="border-2 p-2 border-violet-300 rounded-md m-2 text-lg"
             onChange={(e) => setComponentValue(e.target.value)}
             onBlur={() =>
               assignNewComponentToIngredients(
@@ -107,15 +105,15 @@ export const EditModeIngredients = ({
               ingredient: ingredientName,
             };
             return (
-              <div key={index}>
-                <span>
+              <div key={index} className="pl-4 w-full">
+                <span className="">
                   <input
                     value={amountValue}
                     className="border-2 p-2 border-violet-300 rounded-md m-2"
                     onChange={(e) => setAmountValue(e.target.value)}
                   />
                 </span>
-                <span>
+                <span className="w-full">
                   <input
                     value={ingredientName}
                     className="border-2 p-2 border-violet-300 rounded-md m-2 w-1/2"
