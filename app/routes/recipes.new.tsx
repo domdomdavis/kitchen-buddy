@@ -184,9 +184,6 @@ export default function NewRecipe() {
               }}
             />
           </div>
-          <button className="mt-8 place-self-center w-1/3 p-4 border-2 border-sky-400 rounded-md font-semibold text-lg">
-            Clear Inputs
-          </button>
         </form>
         <div className="w-1/4">
           {instructions.length > 0 &&
@@ -221,13 +218,16 @@ export default function NewRecipe() {
         </div>
       </div>
 
-      <div className="w-full flex justify-end">
-        <div className="justify-end">
+      <div className="w-full flex justify-center">
+        <div className="justify-center">
           <button
             onClick={saveRecipe}
             className="m-4 p-4 bg-sky-400 border-2 border-sky-400 rounded-md font-semibold text-lg"
           >
             Save Recipe
+          </button>
+          <button className="ml-4 p-4 mx-auto border-2 border-sky-400 rounded-md font-semibold text-lg">
+            Clear
           </button>
         </div>
       </div>

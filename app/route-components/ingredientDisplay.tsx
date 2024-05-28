@@ -19,7 +19,6 @@ export const IngredientDisplay = ({
         return (
           <div key={index} className="text-lg">
             <span className="mx-2 text-sm text-emerald-500">✦</span>
-
             <span className="font-semibold">{ingredient.amount} </span>
             <span>{ingredient.ingredient}</span>
             {setIngredients && (
