@@ -25,7 +25,10 @@ export default function Index() {
   const data = useLoaderData<LoaderType>();
   return (
     <div className="p-8">
-      <Link to="/recipes/new" className="text-xl">
+      <Link
+        to="/recipes/new"
+        className="text-xl p-4 bg-sky-300 font-medium rounded-md"
+      >
         Add New Recipe
       </Link>
       <h1 className="text-center text-4xl font-medium">My Recipes</h1>

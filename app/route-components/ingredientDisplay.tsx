@@ -14,7 +14,7 @@ export const IngredientDisplay = ({
 }: IngredientDisplayProps) => {
   if (!recipeHasComponents) {
     return ingredients
-      .sort((a, b) => a.id - b.id)
+      .sort((a, b) => (a.id ?? 0) - (b.id ?? 0))
       .map((ingredient, index) => {
         return (
           <div key={index} className="text-lg">
@@ -41,8 +41,8 @@ export const IngredientDisplay = ({
         <p className="text-xl font-medium mb-2">{component.component}</p>
         {component.ingredientsForComponent.map((ingredient, index) => {
           return (
-            <div className="mx-4 text-lg" key={index}>
-              <span>• </span>
+            <div className="mx-4 text-lg m-2" key={index}>
+              <span className="mx-2 text-sm text-emerald-500">✦</span>
               <span className="font-semibold">{ingredient.amount} </span>
               <span>{ingredient.ingredient}</span>
             </div>

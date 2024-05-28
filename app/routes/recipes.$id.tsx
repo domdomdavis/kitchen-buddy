@@ -1,8 +1,7 @@
 import { LoaderFunctionArgs, redirect } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useFetcher, useLoaderData } from "@remix-run/react";
 import { useState } from "react";
 import { IngredientDisplay } from "~/route-components/ingredientDisplay";
-import { IngredientWithComponentDisplay } from "~/route-components/ingredientWithComponentDisplay";
 import { Recipe } from "~/route-components/recipe";
 import { db } from "~/utils/db.server";
 
@@ -22,10 +21,25 @@ type LoaderType = Awaited<ReturnType<typeof loader>>;
 
 export default function RecipeDetails() {
   const { recipe } = useLoaderData<LoaderType>();
+  const fetcher = useFetcher();
   const [editMode, setEditMode] = useState<boolean>(false);
   const recipeHasComponents = recipe?.ingredients.some(
     (ingredient) => ingredient.component !== null
   );
+
+  const deleteRecipe = async () => {
+    const areYouSure = window.confirm(
+      "Are you sure you want to delete this recipe?"
+    );
+    if (areYouSure) {
+      fetcher.submit(
+        {
+          formData: { id: recipe.id },
+        },
+        { method: "POST", action: "/deleteRecipe", encType: "application/json" }
+      );
+    }
+  };
   return (
     <div>
       <div className="flex w-full justify-between">
@@ -42,7 +56,10 @@ export default function RecipeDetails() {
           >
             {!editMode ? "Edit Recipe" : "Stop Editing"}
           </button>
-          <button className="text-xl mt-8 mr-8 p-4 border-red-500 border-2 text-red-500 rounded-md font-medium">
+          <button
+            className="text-xl mt-8 mr-8 p-4 border-red-500 border-2 text-red-500 rounded-md font-medium"
+            onClick={deleteRecipe}
+          >
             Delete Recipe
           </button>
         </div>
@@ -51,6 +68,7 @@ export default function RecipeDetails() {
         recipe={recipe}
         recipeHasComponents={recipeHasComponents}
         editMode={editMode}
+        setEditMode={setEditMode}
       />
     </div>
   );

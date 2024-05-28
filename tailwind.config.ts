@@ -7,4 +7,5 @@ export default {
   },
   plugins: [],
   darkMode: "media",
+  variants: ["dark", "dark-hover", "dark-group-hover", "dark-even", "dark-odd"],
 } satisfies Config;
