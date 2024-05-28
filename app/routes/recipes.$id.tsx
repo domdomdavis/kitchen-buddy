@@ -1,6 +1,7 @@
 import { LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { Link, useFetcher, useLoaderData } from "@remix-run/react";
 import { useState } from "react";
+import { HomeButton } from "~/common-components/homeButton";
 import { IngredientDisplay } from "~/route-components/ingredientDisplay";
 import { Recipe } from "~/route-components/recipe";
 import { db } from "~/utils/db.server";
@@ -42,22 +43,17 @@ export default function RecipeDetails() {
   };
   return (
     <div>
-      <div className="flex w-full justify-between">
-        <Link
-          to="/"
-          className="text-xl mt-8 ml-8 p-4 bg-violet-300 rounded-md font-medium"
-        >
-          Back to Home
-        </Link>
+      <div className="flex w-full justify-between mt-8">
+        <HomeButton />
         <div>
           <button
-            className="text-xl mt-8 mr-8 p-4 bg-violet-300 rounded-md font-medium"
+            className="text-xl mr-8 p-4 bg-violet-300 rounded-md font-medium"
             onClick={() => setEditMode(!editMode)}
           >
             {!editMode ? "Edit Recipe" : "Stop Editing"}
           </button>
           <button
-            className="text-xl mt-8 mr-8 p-4 border-red-500 border-2 text-red-500 rounded-md font-medium"
+            className="text-xl mr-8 p-4 border-red-500 border-2 text-red-500 rounded-md font-medium"
             onClick={deleteRecipe}
           >
             Delete Recipe

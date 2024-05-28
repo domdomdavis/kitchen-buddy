@@ -1,6 +1,6 @@
-import { Link, redirect, useFetcher, useNavigate } from "@remix-run/react";
+import { useFetcher, useNavigate } from "@remix-run/react";
 import { useEffect, useState } from "react";
-import matchIngredientsToComponents from "~/helpers/matchIngredientToComponent";
+import { HomeButton } from "~/common-components/homeButton";
 import { IngredientType, RecipeType } from "~/helpers/types";
 import { IngredientDisplay } from "~/route-components/ingredientDisplay";
 
@@ -43,13 +43,13 @@ export default function NewRecipe() {
     }
   }, [fetcher.data]);
   return (
-    <div className="p-4 h-screen">
-      <Link to="/" className="text-xl pb-2">
-        Back
-      </Link>
-      <h1 className="text-4xl font-semibold">Add New Recipe</h1>
-      <div className="flex space-between">
-        <form className="p-4 flex flex-col">
+    <div className="p-8 w-full">
+      <HomeButton />
+      <h1 className="text-3xl text-center font-semibold mb-8">
+        Add New Recipe
+      </h1>
+      <div className="flex justify-evenly w-full">
+        <form className="flex flex-col">
           <input
             name="title"
             id="title"
@@ -140,6 +140,7 @@ export default function NewRecipe() {
                           amount: "",
                           ingredient: "",
                         });
+                        document.getElementById("amount")?.focus();
                       }
                     }
                   }}
@@ -183,40 +184,52 @@ export default function NewRecipe() {
             />
           </div>
         </form>
-        <div className="mx-8">
+        <div className="w-1/4">
+          {instructions.length > 0 &&
+            instructions.map((step, index) => {
+              return (
+                <div className="mb-4" key={index}>
+                  <span className="font-semibold text-xl">{index + 1}. </span>
+                  <span className="text-lg">{step}</span>
+                </div>
+              );
+            })}
+        </div>
+        <div>
           <IngredientDisplay
             ingredients={ingredients}
             setIngredients={setIngredients}
             recipeHasComponents={components.length > 0}
           />
-
-          <div className="mt-8 max-w-96">
-            {instructions.length > 0 &&
-              instructions.map((step, index) => {
-                return (
-                  <div className="mb-4" key={index}>
-                    <span className="font-semibold text-xl">{index + 1}. </span>
-                    <span className="text-lg">{step}</span>
-                  </div>
-                );
-              })}
-          </div>
         </div>
-        <div className="flex flex-col mx-auto">
+        <div className="flex flex-col mx-16 items-center">
           {inputFieldValues.title !== "" && (
-            <h2 className="text-2xl font-semibold">{inputFieldValues.title}</h2>
+            <h2 className="text-2xl font-semibold mb-4">
+              {inputFieldValues.title}
+            </h2>
           )}
           {inputFieldValues.photoUrl !== "" && (
-            <img src={inputFieldValues.photoUrl} className="h-96 w-64" />
+            <img
+              src={inputFieldValues.photoUrl}
+              className="h-96 w-64 rounded-md"
+            />
           )}
         </div>
       </div>
-      <button
-        onClick={saveRecipe}
-        className="mt-2 p-4 mx-16 bg-sky-400 rounded-md font-semibold text-lg"
-      >
-        Save Recipe
-      </button>
+
+      <div className="w-full flex justify-center">
+        <div className="justify-center">
+          <button
+            onClick={saveRecipe}
+            className="m-4 p-4 bg-sky-400 border-2 border-sky-400 rounded-md font-semibold text-lg"
+          >
+            Save Recipe
+          </button>
+          <button className="ml-4 p-4 mx-auto border-2 border-sky-400 rounded-md font-semibold text-lg">
+            Clear
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
