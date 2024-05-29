@@ -10,7 +10,7 @@ export default function NewRecipe() {
   const [instructions, setInstructions] = useState<string[]>([]);
   const [ingredients, setIngredients] = useState<IngredientType[]>([]);
   const [components, setComponents] = useState<string[]>([]);
-  const [inputFieldValues, setInputFieldValues] = useState({
+  const defaultInputValues = {
     title: "",
     photoUrl: "",
     component: "",
@@ -21,7 +21,8 @@ export default function NewRecipe() {
     cookTime: "",
     totalTime: "",
     yield: "",
-  });
+  };
+  const [inputFieldValues, setInputFieldValues] = useState(defaultInputValues);
 
   const saveRecipe = () => {
     const newRecipe = {
@@ -312,7 +313,14 @@ export default function NewRecipe() {
           >
             Save Recipe
           </button>
-          <button className="ml-4 p-4 mx-auto border-2 border-sky-400 rounded-md font-semibold text-lg">
+          <button
+            className="ml-4 p-4 mx-auto border-2 border-sky-400 rounded-md font-semibold text-lg"
+            onClick={() => {
+              setInputFieldValues(defaultInputValues);
+              setIngredients([]);
+              setInstructions([]);
+            }}
+          >
             Clear
           </button>
         </div>

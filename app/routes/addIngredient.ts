@@ -11,6 +11,7 @@ export const action = async ({ request }: ActionProps) => {
   return await prisma.ingredientList.create({
     data: {
       amount: formData.amount,
+      component: formData.component,
       ingredient: formData.ingredient,
       recipe_id: formData.recipe_id,
     },

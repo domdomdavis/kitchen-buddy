@@ -1,8 +1,16 @@
 import { RecipeType } from "~/helpers/types";
 import { IngredientDisplay } from "./ingredients/ingredientDisplay";
-import { useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  JSXElementConstructor,
+  ReactElement,
+  ReactNode,
+  useEffect,
+  useState,
+} from "react";
 import { EditModeIngredients } from "./ingredients/editModeIngredients";
 import { useFetcher, useNavigate } from "@remix-run/react";
+import { JSX } from "react/jsx-runtime";
 
 type RecipeProps = {
   recipe: RecipeType;
@@ -26,6 +34,7 @@ export const Recipe = ({
     totalTime: recipe.total_time,
     yield: recipe.yield,
   });
+  const [addingNewComponent, setAddingNewComponent] = useState(false);
   const [addingNewIngredient, setAddingNewIngredient] = useState(false);
   const [addingNewStep, setAddingNewStep] = useState(false);
 
@@ -84,6 +93,23 @@ export const Recipe = ({
       navigate(0);
     }
   }, [saveAllFetcher.data]);
+
+  const recipeComponents: string[] = [];
+  const components = new Set(
+    ingredients.map((ingredient) => ingredient.component)
+  );
+  components.forEach((component) => {
+    recipeComponents.push(component ?? "");
+  });
+
+  const getValueFromDropdown = (e: ChangeEvent<HTMLSelectElement>) => {
+    if (e.target.value === "new") setAddingNewComponent(true);
+    else
+      setNewIngredientInput({
+        ...newIngredientInput,
+        component: e.target.value,
+      });
+  };
   return (
     <div className="flex flex-col mx-8 w-full pb-8">
       {!editMode ? (
@@ -225,43 +251,86 @@ export const Recipe = ({
                 />
                 {addingNewIngredient && (
                   <div>
-                    <span className="mx-2 text-sm text-emerald-500">✦</span>
+                    {recipeHasComponents && (
+                      <div className="mt-4">
+                        <span className="mr-4 text-sm text-fuchsia-500">✦</span>
 
-                    <span className="">
-                      <input
-                        value={newIngredientInput.amount}
-                        className="border-2 p-2 border-blue-400 rounded-md m-2"
-                        onChange={(e) =>
-                          setNewIngredientInput({
-                            ...newIngredientInput,
-                            amount: e.target.value,
-                          })
-                        }
-                      />
-                    </span>
-                    <span className="w-full">
-                      <input
-                        value={newIngredientInput.ingredient}
-                        className="border-2 p-2 border-blue-400 rounded-md m-2 w-1/2"
-                        onChange={(e) =>
-                          setNewIngredientInput({
-                            ...newIngredientInput,
-                            ingredient: e.target.value,
-                          })
-                        }
-                        onKeyDown={(e) => {
-                          if (e.code === "Enter") {
-                            if (newIngredientInput.ingredient !== "") {
-                              setAddingNewIngredient(false);
-                              setNewIngredientInput(
-                                defaultIngredientInputValues
-                              );
-                              addIngredient();
-                            }
+                        {!addingNewComponent ? (
+                          <span>
+                            <select
+                              defaultValue="default"
+                              name="Component"
+                              id="component"
+                              className="w-1/2 p-2 border-2 border-blue-400 rounded-md"
+                              onChange={(e) => getValueFromDropdown(e)}
+                            >
+                              <option value="default" disabled>
+                                Recipe Component
+                              </option>
+                              {recipeComponents.map((component, index) => {
+                                return (
+                                  <option value={component} key={index}>
+                                    {component}
+                                  </option>
+                                );
+                              })}
+                              <option value="new">New Component</option>
+                            </select>
+                          </span>
+                        ) : (
+                          <span>
+                            <input
+                              className="border-2 p-2 border-blue-400 rounded-md m-2 w-1/3"
+                              value={newIngredientInput.component}
+                              onChange={(e) =>
+                                setNewIngredientInput({
+                                  ...newIngredientInput,
+                                  component: e.target.value,
+                                })
+                              }
+                            />
+                          </span>
+                        )}
+                      </div>
+                    )}
+                    <div className="ml-4">
+                      <span className="mx-2 text-sm text-emerald-500">✦</span>
+                      <span className="">
+                        <input
+                          value={newIngredientInput.amount}
+                          className="border-2 p-2 border-blue-400 rounded-md m-2"
+                          onChange={(e) =>
+                            setNewIngredientInput({
+                              ...newIngredientInput,
+                              amount: e.target.value,
+                            })
                           }
-                        }}
-                      />
-                    </span>
+                        />
+                      </span>
+                      <span className="w-full">
+                        <input
+                          value={newIngredientInput.ingredient}
+                          className="border-2 p-2 border-blue-400 rounded-md m-2 w-1/2"
+                          onChange={(e) =>
+                            setNewIngredientInput({
+                              ...newIngredientInput,
+                              ingredient: e.target.value,
+                            })
+                          }
+                          onKeyDown={(e) => {
+                            if (e.code === "Enter") {
+                              if (newIngredientInput.ingredient !== "") {
+                                setAddingNewIngredient(false);
+                                setNewIngredientInput(
+                                  defaultIngredientInputValues
+                                );
+                                addIngredient();
+                              }
+                            }
+                          }}
+                        />
+                      </span>
+                    </div>
                   </div>
                 )}
                 <div className="flex justify-end">

@@ -29,7 +29,7 @@ export const EditWithComponents = ({
         },
         {
           method: "POST",
-          action: "/ingredient/editRecipeComponent",
+          action: "/editRecipeComponent",
           encType: "application/json",
         }
       );
@@ -38,46 +38,48 @@ export const EditWithComponents = ({
 
   const ingredientList = matchIngredientsToComponents(ingredients);
   return ingredientList.map((component, index) => {
-    const [componentValue, setComponentValue] = useState(component.component);
+    let componentValue = component.component;
     return (
       <div key={index} className="w-full">
         <span className="mr-4 text-sm text-fuchsia-500">✦</span>
 
         <input
-          value={componentValue}
+          defaultValue={componentValue}
           className="border-2 p-2 border-blue-400 rounded-md my-2 text-lg"
-          onChange={(e) => setComponentValue(e.target.value)}
-          onBlur={() =>
-            assignNewComponentToIngredients(componentValue, component.component)
-          }
+          onBlur={(e) => {
+            componentValue = e.target.value;
+            assignNewComponentToIngredients(
+              componentValue,
+              component.component
+            );
+          }}
         />
         {component.ingredientsForComponent.map((ingredient, index) => {
-          const [amountValue, setAmountValue] = useState(ingredient.amount);
-          const [ingredientName, setIngredientName] = useState(
-            ingredient.ingredient
-          );
-          const updatedIngredient = {
-            id: ingredient.id,
-            amount: amountValue,
-            ingredient: ingredientName,
-          };
+          let amountValue = ingredient.amount;
+          let ingredientName = ingredient.ingredient;
+
           return (
             <div key={index} className="pl-4 w-full">
               <span className="mx-2 text-sm text-emerald-500">✦</span>
 
               <span className="">
                 <input
-                  value={amountValue}
+                  defaultValue={amountValue}
                   className="border-2 p-2 border-blue-400 rounded-md m-2 w-1/4"
-                  onChange={(e) => setAmountValue(e.target.value)}
+                  onBlur={(e) => (amountValue = e.target.value)}
                 />
               </span>
               <span className="w-full">
                 <input
-                  value={ingredientName}
+                  defaultValue={ingredientName}
                   className="border-2 p-2 border-blue-400 rounded-md m-2 w-1/2"
-                  onChange={(e) => setIngredientName(e.target.value)}
-                  onBlur={() => {
+                  onBlur={(e) => {
+                    ingredientName = e.target.value;
+                    const updatedIngredient = {
+                      id: ingredient.id,
+                      amount: amountValue,
+                      ingredient: ingredientName,
+                    };
                     saveEditIngredient(updatedIngredient);
                   }}
                 />
