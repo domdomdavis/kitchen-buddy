@@ -43,10 +43,10 @@ export default function NewRecipe() {
     }
   }, [fetcher.data]);
   return (
-    <div className="p-8 w-full">
+    <div className="grid p-8 w-full">
       <HomeButton />
 
-      <div className="flex justify-evenly w-full">
+      <div className="flex justify-between place-self-center w-3/4">
         <form className="flex flex-col">
           <h1 className="text-3xl text-center font-semibold mb-8">
             Add New Recipe
