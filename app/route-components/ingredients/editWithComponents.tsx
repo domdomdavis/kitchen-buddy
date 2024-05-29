@@ -68,7 +68,7 @@ export const EditWithComponents = ({
               <span className="">
                 <input
                   value={amountValue}
-                  className="border-2 p-2 border-blue-400 rounded-md m-2"
+                  className="border-2 p-2 border-blue-400 rounded-md m-2 w-1/4"
                   onChange={(e) => setAmountValue(e.target.value)}
                 />
               </span>

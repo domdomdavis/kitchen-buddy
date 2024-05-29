@@ -25,13 +25,15 @@ export const Recipe = ({
     yield: recipe.yield,
   });
   const [addingNewIngredient, setAddingNewIngredient] = useState(false);
+  const [addingNewStep, setAddingNewStep] = useState(false);
   const [newIngredientInput, setNewIngredientInput] = useState({
     amount: "",
     ingredient: "",
     component: "",
   });
-  const ingredients = recipe.ingredients;
+  const [newInstructionInput, setNewInstructionInput] = useState("");
   const instructions = recipe.instructions;
+  const ingredients = recipe.ingredients;
 
   const saveEditRecipe = () => {
     const updatedRecipe = {
@@ -273,7 +275,17 @@ export const Recipe = ({
       )}
       <div className="flex justify-center mt-4">
         <div className="p-2 flex-col flex-wrap w-1/2">
-          <h3 className="text-2xl mb-4 font-medium">Instructions</h3>
+          <h3 className="text-2xl font-medium">Instructions</h3>
+          {editMode && (
+            <div className="flex justify-end">
+              <button
+                className="text-lg font-medium"
+                onClick={() => setAddingNewStep(true)}
+              >
+                Add Step
+              </button>
+            </div>
+          )}
           {instructions.map((step, index) => {
             const [instructionValue, setInstructionValue] = useState(step);
             if (!editMode) {
@@ -307,6 +319,22 @@ export const Recipe = ({
               );
             }
           })}
+          {addingNewStep && (
+            <div className="m-2 flex w-full">
+              <span className="text-xl mr-4 mt-2 font-semibold">
+                {instructions.length + 1}.
+              </span>
+              <span className="w-full">
+                <textarea
+                  value={newInstructionInput}
+                  className="border-2 p-2 border-blue-400 rounded-md w-full mt-2"
+                  rows={5}
+                  onChange={(e) => setNewInstructionInput(e.target.value)}
+                  onBlur={() => instructions.push(newInstructionInput)}
+                />
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </div>
