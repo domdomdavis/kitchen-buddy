@@ -41,19 +41,23 @@ export const EditWithComponents = ({
     let componentValue = component.component;
     return (
       <div key={index} className="w-full">
-        <span className="mr-4 text-sm text-fuchsia-500">✦</span>
+        {component.component !== "" && (
+          <div>
+            <span className="mr-4 text-sm text-fuchsia-500">✦</span>
 
-        <input
-          defaultValue={componentValue}
-          className="border-2 p-2 border-blue-400 rounded-md my-2 text-lg"
-          onBlur={(e) => {
-            componentValue = e.target.value;
-            assignNewComponentToIngredients(
-              componentValue,
-              component.component
-            );
-          }}
-        />
+            <input
+              defaultValue={componentValue}
+              className="border-2 p-2 border-blue-400 rounded-md my-2 text-lg"
+              onBlur={(e) => {
+                componentValue = e.target.value;
+                assignNewComponentToIngredients(
+                  componentValue,
+                  component.component
+                );
+              }}
+            />
+          </div>
+        )}
         {component.ingredientsForComponent.map((ingredient, index) => {
           let amountValue = ingredient.amount;
           let ingredientName = ingredient.ingredient;

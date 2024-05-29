@@ -39,9 +39,15 @@ export const IngredientDisplay = ({
     const ingredientList = matchIngredientsToComponents(ingredients);
     return ingredientList.map((component, index) => (
       <div key={index} className="mb-4">
-        <span className="mx-2 text-sm text-fuchsia-500">✦</span>
+        {component.component !== "" && (
+          <div>
+            <span className="mx-2 text-sm text-fuchsia-500">✦</span>
 
-        <span className="text-xl font-medium mb-2">{component.component}</span>
+            <span className="text-xl font-medium mb-2">
+              {component.component}
+            </span>
+          </div>
+        )}
         {component.ingredientsForComponent.map((ingredient, index) => {
           return (
             <div className="mx-4 text-lg m-2" key={index}>
