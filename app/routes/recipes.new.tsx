@@ -92,7 +92,10 @@ export default function NewRecipe() {
                   component: e.target.value,
                 })
               }
-              onBlur={(e) => setComponents([...components, e.target.value])}
+              onBlur={(e) => {
+                if (inputFieldValues.component !== "")
+                  setComponents([...components, e.target.value]);
+              }}
             />
             <div className="flex-row">
               <span>
@@ -212,7 +215,7 @@ export default function NewRecipe() {
           {inputFieldValues.photoUrl !== "" && (
             <img
               src={inputFieldValues.photoUrl}
-              className="h-96 w-64 rounded-md"
+              className="h-96 w-72 rounded-md object-cover"
             />
           )}
         </div>

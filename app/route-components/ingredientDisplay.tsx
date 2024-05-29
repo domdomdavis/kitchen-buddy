@@ -48,6 +48,17 @@ export const IngredientDisplay = ({
               <span className="mx-2 text-sm text-emerald-500">✦</span>
               <span className="font-semibold">{ingredient.amount} </span>
               <span>{ingredient.ingredient}</span>
+              {setIngredients && (
+                <button
+                  className="mx-8 text-sm"
+                  onClick={() => {
+                    ingredients.splice(index, 1);
+                    setIngredients([...ingredients]);
+                  }}
+                >
+                  remove
+                </button>
+              )}
             </div>
           );
         })}
