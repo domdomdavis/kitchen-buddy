@@ -19,8 +19,16 @@ export const Recipe = ({
 }: RecipeProps) => {
   const fetcher = useFetcher();
   const navigate = useNavigate();
-  const [recipeTitle, setRecipeTitle] = useState(recipe.title);
-  const [photoUrl, setPhotoUrl] = useState(recipe.photo_url);
+  // const [recipeTitle, setRecipeTitle] = useState(recipe.title);
+  // const [photoUrl, setPhotoUrl] = useState(recipe.photo_url);
+  const [inputFieldValues, setInputFieldValues] = useState({
+    recipeTitle: recipe.title,
+    photoUrl: recipe.photo_url,
+    prepTime: recipe.prep_time,
+    cookTime: recipe.cook_time,
+    totalTime: recipe.total_time,
+    yield: recipe.yield,
+  });
   const [ingredients, setIngredients] = useState<IngredientType[]>(
     recipe.ingredients
   );
@@ -29,8 +37,12 @@ export const Recipe = ({
   const saveEditRecipe = () => {
     const updatedRecipe = {
       id: recipe.id,
-      title: recipeTitle,
-      photo_url: photoUrl,
+      title: inputFieldValues.recipeTitle,
+      photo_url: inputFieldValues.photoUrl,
+      prep_time: inputFieldValues.prepTime,
+      cook_time: inputFieldValues.cookTime,
+      total_time: inputFieldValues.totalTime,
+      yield: inputFieldValues.yield,
       instructions,
       ingredients,
     };
@@ -47,7 +59,6 @@ export const Recipe = ({
       navigate(0);
     }
   }, [fetcher.data]);
-
   return (
     <div className="flex flex-col mx-8 w-full">
       {!editMode ? (
@@ -56,28 +67,126 @@ export const Recipe = ({
         <div className="place-self-center w-1/4">
           <input
             className="text-center font-semibold p-2 border-2 border-blue-400 rounded-md w-full text-4xl"
-            value={recipeTitle}
-            onChange={(e) => setRecipeTitle(e.target.value)}
+            value={inputFieldValues.recipeTitle}
+            onChange={(e) =>
+              setInputFieldValues({
+                ...inputFieldValues,
+                recipeTitle: e.target.value,
+              })
+            }
           />
         </div>
       )}
       <div className="flex justify-center w-full mt-4">
         <span className="h-108 w-96 p-8 border-2 rounded-md border-violet-200 mx-2">
-          <img
-            src={recipe?.photo_url}
-            className="object-scale-down rounded-md"
-          />
+          <img src={recipe?.photo_url} className="rounded-md object-cover" />
           {editMode && (
             <input
               className="border-2 p-4 border-blue-400 w-full rounded-md mt-2"
-              value={photoUrl}
-              onChange={(e) => setPhotoUrl(e.target.value)}
+              value={inputFieldValues.photoUrl}
+              onChange={(e) =>
+                setInputFieldValues({
+                  ...inputFieldValues,
+                  photoUrl: e.target.value,
+                })
+              }
             />
+          )}
+          {!editMode ? (
+            <div className="mt-4 mx-8">
+              {recipe.prep_time && (
+                <p>
+                  <span>Prep time: </span>
+                  <span className="font-medium">{recipe.prep_time}</span>
+                </p>
+              )}
+              {recipe.cook_time && (
+                <p>
+                  <span>Cook time: </span>
+                  <span className="font-medium">{recipe.cook_time}</span>
+                </p>
+              )}
+              {recipe.total_time && (
+                <p>
+                  <span>Total time: </span>
+                  <span className="font-medium">{recipe.total_time}</span>
+                </p>
+              )}
+              {recipe.yield && (
+                <p>
+                  <span>Yield: </span>
+                  <span className="font-medium">{recipe.yield}</span>
+                </p>
+              )}
+            </div>
+          ) : (
+            <div className="mt-8">
+              <div>
+                <label htmlFor="prep-time" className="font-medium">
+                  Prep time:{" "}
+                </label>
+                <input
+                  value={inputFieldValues.prepTime ?? ""}
+                  onChange={(e) =>
+                    setInputFieldValues({
+                      ...inputFieldValues,
+                      prepTime: e.target.value !== "" ? e.target.value : null,
+                    })
+                  }
+                  className="border-2 p-2 border-blue-400 rounded-md w-full mt-2"
+                />
+              </div>
+              <div className="mt-2">
+                <label htmlFor="cook-time" className="font-medium">
+                  Cook time:{" "}
+                </label>
+                <input
+                  value={inputFieldValues.cookTime ?? ""}
+                  onChange={(e) =>
+                    setInputFieldValues({
+                      ...inputFieldValues,
+                      cookTime: e.target.value !== "" ? e.target.value : null,
+                    })
+                  }
+                  className="border-2 p-2 border-blue-400 rounded-md w-full mt-2"
+                />
+              </div>
+              <div className="mt-2">
+                <label htmlFor="total-time" className="font-medium">
+                  Total time:{" "}
+                </label>
+                <input
+                  value={inputFieldValues.totalTime ?? ""}
+                  onChange={(e) =>
+                    setInputFieldValues({
+                      ...inputFieldValues,
+                      totalTime: e.target.value !== "" ? e.target.value : null,
+                    })
+                  }
+                  className="border-2 p-2 border-blue-400 rounded-md w-full mt-2"
+                />
+              </div>
+              <div className="mt-2">
+                <label htmlFor="yield" className="font-medium">
+                  Yield:{" "}
+                </label>
+                <input
+                  value={inputFieldValues.yield ?? ""}
+                  onChange={(e) =>
+                    setInputFieldValues({
+                      ...inputFieldValues,
+                      yield: e.target.value !== "" ? e.target.value : null,
+                    })
+                  }
+                  className="border-2 p-2 border-blue-400 rounded-md w-full mt-2"
+                />
+              </div>
+            </div>
           )}
         </span>
         <span className="p-4 w-1/3 border-2 mx-2 rounded-md border-violet-200">
-          <h2 className="text-2xl font-medium mb-2">Ingredients</h2>
-          <div className="mx-4">
+          <h2 className="text-2xl font-medium mx-2">Ingredients</h2>
+          <div className="mx-8 mt-2">
             {" "}
             {!editMode ? (
               <IngredientDisplay

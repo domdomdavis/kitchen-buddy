@@ -17,12 +17,23 @@ export default function NewRecipe() {
     amount: "",
     ingredient: "",
     instruction: "",
+    prepTime: "",
+    cookTime: "",
+    totalTime: "",
+    yield: "",
   });
 
   const saveRecipe = () => {
     const newRecipe = {
       title: inputFieldValues.title,
       photo_url: inputFieldValues.photoUrl,
+      prep_time:
+        inputFieldValues.prepTime !== "" ? inputFieldValues.prepTime : null,
+      cook_time:
+        inputFieldValues.cookTime !== "" ? inputFieldValues.cookTime : null,
+      total_time:
+        inputFieldValues.totalTime !== "" ? inputFieldValues.totalTime : null,
+      yield: inputFieldValues.yield !== "" ? inputFieldValues.yield : null,
       ingredients,
       instructions,
     };
@@ -48,7 +59,7 @@ export default function NewRecipe() {
 
       <div className="flex justify-between place-self-center w-3/4">
         <form className="flex flex-col">
-          <h1 className="text-3xl text-center font-semibold mb-8">
+          <h1 className="text-3xl text-center font-semibold mb-4">
             Add New Recipe
           </h1>
           <input
@@ -74,16 +85,64 @@ export default function NewRecipe() {
                 photoUrl: e.target.value,
               })
             }
-            className="w-full p-4 border-2 border-violet-300 rounded-md"
+            className="w-full p-4 border-2 border-violet-300 rounded-md  mb-2"
             placeholder="Photo URL"
           />
+          <input
+            value={inputFieldValues.prepTime ?? ""}
+            onChange={(e) =>
+              setInputFieldValues({
+                ...inputFieldValues,
+                prepTime: e.target.value,
+              })
+            }
+            placeholder="Prep Time (optional)"
+            className="w-full p-4 border-2 border-violet-300 rounded-md  mb-2"
+          />
+
+          <input
+            value={inputFieldValues.cookTime ?? ""}
+            onChange={(e) =>
+              setInputFieldValues({
+                ...inputFieldValues,
+                cookTime: e.target.value,
+              })
+            }
+            placeholder="Cook Time (optional)"
+            className="w-full p-4 border-2 border-violet-300 rounded-md  mb-2"
+          />
+
+          <input
+            value={inputFieldValues.totalTime ?? ""}
+            onChange={(e) =>
+              setInputFieldValues({
+                ...inputFieldValues,
+                totalTime: e.target.value,
+              })
+            }
+            placeholder="Total Time (optional)"
+            className="w-full p-4 border-2 border-violet-300 rounded-md  mb-2"
+          />
+
+          <input
+            value={inputFieldValues.yield ?? ""}
+            onChange={(e) =>
+              setInputFieldValues({
+                ...inputFieldValues,
+                yield: e.target.value,
+              })
+            }
+            placeholder="Yield (optional)"
+            className="w-full p-4 border-2 border-violet-300 rounded-md mb-2"
+          />
+
           <div className="flex flex-col mt-4">
             <label htmlFor="ingredients">Add Ingredients</label>
 
             <input
               name="component"
               id="component"
-              className="w-full p-4 border-2 border-violet-300 rounded-md"
+              className="w-full p-4 border-2 border-violet-300 rounded-md mb-2"
               placeholder="Recipe Component (optional)"
               value={inputFieldValues.component}
               onChange={(e) =>
@@ -102,7 +161,7 @@ export default function NewRecipe() {
                 <input
                   name="amount"
                   id="amount"
-                  className="w-36 p-4  mr-4 mt-4 border-2 border-violet-300 rounded-md"
+                  className="w-36 p-4  mr-4 border-2 border-violet-300 rounded-md"
                   placeholder="Amount"
                   value={inputFieldValues.amount}
                   onChange={(e) =>
@@ -215,8 +274,32 @@ export default function NewRecipe() {
           {inputFieldValues.photoUrl !== "" && (
             <img
               src={inputFieldValues.photoUrl}
-              className="h-96 w-72 rounded-md object-cover"
+              className="h-96 w-72 rounded-md object-cover mb-4"
             />
+          )}
+          {inputFieldValues.prepTime !== "" && (
+            <p className="text-lg">
+              <span>Prep time: </span>
+              <span className="font-medium">{inputFieldValues.prepTime}</span>
+            </p>
+          )}
+          {inputFieldValues.cookTime !== "" && (
+            <p className="text-lg">
+              <span>Cook time: </span>
+              <span className="font-medium">{inputFieldValues.cookTime}</span>
+            </p>
+          )}
+          {inputFieldValues.totalTime !== "" && (
+            <p className="text-lg">
+              <span>Total time: </span>
+              <span className="font-medium">{inputFieldValues.totalTime}</span>
+            </p>
+          )}
+          {inputFieldValues.yield !== "" && (
+            <p className="text-lg">
+              <span>Yield: </span>
+              <span className="font-medium">{inputFieldValues.yield}</span>
+            </p>
           )}
         </div>
       </div>

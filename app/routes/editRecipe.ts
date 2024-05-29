@@ -13,6 +13,10 @@ export const action = async ({ request }: ActionProps) => {
     data: {
       title: formData.title,
       photo_url: formData.photo_url,
+      prep_time: formData.prep_time,
+      cook_time: formData.cook_time,
+      total_time: formData.total_time,
+      yield: formData.yield,
       instructions: formData.instructions,
     },
   });
