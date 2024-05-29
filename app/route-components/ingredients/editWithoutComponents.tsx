@@ -14,10 +14,9 @@ export const EditWithoutComponents = ({
   return ingredients
     .sort((a, b) => (a.id ?? 0) - (b.id ?? 0))
     .map((ingredient, index) => {
-      const [amountValue, setAmountValue] = useState(ingredient.amount);
-      const [ingredientName, setIngredientName] = useState(
-        ingredient.ingredient
-      );
+      let amountValue = ingredient.amount;
+      let ingredientName = ingredient.ingredient;
+
       const updatedIngredient = {
         id: ingredient.id,
         amount: amountValue,
@@ -30,14 +29,14 @@ export const EditWithoutComponents = ({
             <input
               value={amountValue}
               className="border-2 p-2 border-blue-400 rounded-md w-full"
-              onChange={(e) => setAmountValue(e.target.value)}
+              onChange={(e) => (amountValue = e.target.value)}
             />
           </span>
           <span className="w-2/3 m-2">
             <input
               value={ingredientName}
               className="border-2 p-2 border-blue-400 rounded-md w-full"
-              onChange={(e) => setIngredientName(e.target.value)}
+              onChange={(e) => (ingredientName = e.target.value)}
               onBlur={() => saveEditIngredient(updatedIngredient)}
             />
           </span>

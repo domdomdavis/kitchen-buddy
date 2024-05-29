@@ -1,6 +1,6 @@
-import { IngredientType, RecipeType } from "~/helpers/types";
+import { RecipeType } from "~/helpers/types";
 import { IngredientDisplay } from "./ingredients/ingredientDisplay";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useState } from "react";
 import { EditModeIngredients } from "./ingredients/editModeIngredients";
 import { useFetcher, useNavigate } from "@remix-run/react";
 
@@ -16,6 +16,7 @@ export const Recipe = ({
   editMode,
 }: RecipeProps) => {
   const fetcher = useFetcher();
+  const navigate = useNavigate();
   const [inputFieldValues, setInputFieldValues] = useState({
     recipeTitle: recipe.title,
     photoUrl: recipe.photo_url,
@@ -26,11 +27,15 @@ export const Recipe = ({
   });
   const [addingNewIngredient, setAddingNewIngredient] = useState(false);
   const [addingNewStep, setAddingNewStep] = useState(false);
-  const [newIngredientInput, setNewIngredientInput] = useState({
+
+  const defaultIngredientInputValues = {
     amount: "",
     ingredient: "",
     component: "",
-  });
+  };
+  const [newIngredientInput, setNewIngredientInput] = useState(
+    defaultIngredientInputValues
+  );
   const [newInstructionInput, setNewInstructionInput] = useState("");
   const instructions = recipe.instructions;
   const ingredients = recipe.ingredients;
@@ -53,6 +58,7 @@ export const Recipe = ({
       },
       { method: "POST", action: "/editRecipe", encType: "application/json" }
     );
+    navigate(0);
   };
   const addIngredient = () => {
     const newIngredient = {
@@ -242,6 +248,10 @@ export const Recipe = ({
                         onKeyDown={(e) => {
                           if (e.code === "Enter") {
                             if (newIngredientInput.ingredient !== "") {
+                              setAddingNewIngredient(false);
+                              setNewIngredientInput(
+                                defaultIngredientInputValues
+                              );
                               addIngredient();
                             }
                           }
