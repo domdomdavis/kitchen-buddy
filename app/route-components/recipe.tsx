@@ -1,6 +1,6 @@
 import { RecipeType } from "~/helpers/types";
 import { IngredientDisplay } from "./ingredients/ingredientDisplay";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { EditModeIngredients } from "./ingredients/editModeIngredients";
 import { useFetcher, useNavigate } from "@remix-run/react";
 
@@ -16,6 +16,7 @@ export const Recipe = ({
   editMode,
 }: RecipeProps) => {
   const fetcher = useFetcher();
+  const saveAllFetcher = useFetcher();
   const navigate = useNavigate();
   const [inputFieldValues, setInputFieldValues] = useState({
     recipeTitle: recipe.title,
@@ -52,13 +53,12 @@ export const Recipe = ({
       instructions,
       ingredients,
     };
-    fetcher.submit(
+    saveAllFetcher.submit(
       {
         formData: updatedRecipe,
       },
       { method: "POST", action: "/editRecipe", encType: "application/json" }
     );
-    navigate(0);
   };
   const addIngredient = () => {
     const newIngredient = {
@@ -79,9 +79,13 @@ export const Recipe = ({
       }
     );
   };
-
+  useEffect(() => {
+    if (saveAllFetcher.data) {
+      navigate(0);
+    }
+  }, [saveAllFetcher.data]);
   return (
-    <div className="flex flex-col mx-8 w-full">
+    <div className="flex flex-col mx-8 w-full pb-8">
       {!editMode ? (
         <h1 className="text-4xl font-semibold text-center">{recipe?.title}</h1>
       ) : (
@@ -273,16 +277,7 @@ export const Recipe = ({
           </div>
         </span>
       </div>
-      {editMode && (
-        <div className="w-1/6 h-5/6 place-self-end place-content-end fixed mr-48">
-          <button
-            onClick={saveEditRecipe}
-            className="p-4 rounded-md font-semibold text-xl mt-4 mx-16 bg-sky-300"
-          >
-            Save Changes
-          </button>
-        </div>
-      )}
+
       <div className="flex justify-center mt-4">
         <div className="p-2 flex-col flex-wrap w-1/2">
           <h3 className="text-2xl font-medium">Instructions</h3>
@@ -292,12 +287,11 @@ export const Recipe = ({
                 className="text-lg font-medium"
                 onClick={() => setAddingNewStep(true)}
               >
-                Add Step
+                Add New Step
               </button>
             </div>
           )}
           {instructions.map((step, index) => {
-            const [instructionValue, setInstructionValue] = useState(step);
             if (!editMode) {
               return (
                 <div
@@ -316,14 +310,23 @@ export const Recipe = ({
                   </span>
                   <span className="w-full">
                     <textarea
-                      value={instructionValue}
+                      defaultValue={step}
                       className="border-2 p-2 border-blue-400 rounded-md w-full mt-2"
                       rows={5}
-                      onChange={(e) => setInstructionValue(e.target.value)}
-                      onBlur={() =>
-                        instructions.splice(index, 1, instructionValue)
-                      }
+                      onBlur={(e) => {
+                        instructions.splice(index, 1, e.target.value);
+                      }}
                     />
+                  </span>
+                  <span className="flex items-center ml-4">
+                    <button
+                      className=""
+                      onClick={() => {
+                        instructions.splice(index, 1);
+                      }}
+                    >
+                      remove
+                    </button>
                   </span>
                 </div>
               );
@@ -334,19 +337,37 @@ export const Recipe = ({
               <span className="text-xl mr-4 mt-2 font-semibold">
                 {instructions.length + 1}.
               </span>
-              <span className="w-full">
+              <span className="w-11/12">
                 <textarea
                   value={newInstructionInput}
                   className="border-2 p-2 border-blue-400 rounded-md w-full mt-2"
                   rows={5}
                   onChange={(e) => setNewInstructionInput(e.target.value)}
-                  onBlur={() => instructions.push(newInstructionInput)}
+                  onKeyDown={(e) => {
+                    if (e.code === "Enter") {
+                      if (newInstructionInput !== "") {
+                        setAddingNewStep(false);
+                        setNewInstructionInput("");
+                        instructions.push(newInstructionInput);
+                      }
+                    }
+                  }}
                 />
               </span>
             </div>
           )}
         </div>
       </div>
+      {editMode && (
+        <div className="w-1/6 h-5/6 place-self-end place-content-end fixed">
+          <button
+            onClick={saveEditRecipe}
+            className="p-4 rounded-md font-semibold text-xl mx-16 bg-sky-300"
+          >
+            Save Changes
+          </button>
+        </div>
+      )}
     </div>
   );
 };
