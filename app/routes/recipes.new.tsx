@@ -2,7 +2,7 @@ import { useFetcher, useNavigate } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { HomeButton } from "~/common-components/homeButton";
 import { IngredientType, RecipeType } from "~/helpers/types";
-import { IngredientDisplay } from "~/route-components/ingredientDisplay";
+import { IngredientDisplay } from "~/route-components/ingredients/ingredientDisplay";
 
 export default function NewRecipe() {
   const fetcher = useFetcher();

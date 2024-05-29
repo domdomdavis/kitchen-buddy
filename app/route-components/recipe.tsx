@@ -1,26 +1,21 @@
 import { IngredientType, RecipeType } from "~/helpers/types";
-import { IngredientDisplay } from "./ingredientDisplay";
+import { IngredientDisplay } from "./ingredients/ingredientDisplay";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { EditModeIngredients } from "./editModeIngredients";
+import { EditModeIngredients } from "./ingredients/editModeIngredients";
 import { useFetcher, useNavigate } from "@remix-run/react";
 
 type RecipeProps = {
   recipe: RecipeType;
   recipeHasComponents?: boolean;
   editMode: boolean;
-  setEditMode: Dispatch<SetStateAction<boolean>>;
 };
 
 export const Recipe = ({
   recipe,
   recipeHasComponents,
   editMode,
-  setEditMode,
 }: RecipeProps) => {
   const fetcher = useFetcher();
-  const navigate = useNavigate();
-  // const [recipeTitle, setRecipeTitle] = useState(recipe.title);
-  // const [photoUrl, setPhotoUrl] = useState(recipe.photo_url);
   const [inputFieldValues, setInputFieldValues] = useState({
     recipeTitle: recipe.title,
     photoUrl: recipe.photo_url,
@@ -29,9 +24,13 @@ export const Recipe = ({
     totalTime: recipe.total_time,
     yield: recipe.yield,
   });
-  const [ingredients, setIngredients] = useState<IngredientType[]>(
-    recipe.ingredients
-  );
+  const [addingNewIngredient, setAddingNewIngredient] = useState(false);
+  const [newIngredientInput, setNewIngredientInput] = useState({
+    amount: "",
+    ingredient: "",
+    component: "",
+  });
+  const ingredients = recipe.ingredients;
   const instructions = recipe.instructions;
 
   const saveEditRecipe = () => {
@@ -53,12 +52,26 @@ export const Recipe = ({
       { method: "POST", action: "/editRecipe", encType: "application/json" }
     );
   };
+  const addIngredient = () => {
+    const newIngredient = {
+      amount: newIngredientInput.amount,
+      ingredient: newIngredientInput.ingredient,
+      component:
+        newIngredientInput.component !== ""
+          ? newIngredientInput.component
+          : null,
+      recipe_id: recipe.id,
+    };
+    fetcher.submit(
+      { formData: newIngredient },
+      {
+        method: "POST",
+        action: "/addIngredient",
+        encType: "application/json",
+      }
+    );
+  };
 
-  useEffect(() => {
-    if (fetcher.data) {
-      navigate(0);
-    }
-  }, [fetcher.data]);
   return (
     <div className="flex flex-col mx-8 w-full">
       {!editMode ? (
@@ -187,7 +200,6 @@ export const Recipe = ({
         <span className="p-4 w-1/3 border-2 mx-2 rounded-md border-violet-200">
           <h2 className="text-2xl font-medium mx-2">Ingredients</h2>
           <div className="mx-8 mt-2">
-            {" "}
             {!editMode ? (
               <IngredientDisplay
                 ingredients={ingredients}
@@ -197,9 +209,53 @@ export const Recipe = ({
               <div className="w-full">
                 <EditModeIngredients
                   ingredients={ingredients}
-                  setEditMode={setEditMode}
                   recipeHasComponents={recipeHasComponents}
                 />
+                {addingNewIngredient && (
+                  <div>
+                    <span className="mx-2 text-sm text-emerald-500">✦</span>
+
+                    <span className="">
+                      <input
+                        value={newIngredientInput.amount}
+                        className="border-2 p-2 border-blue-400 rounded-md m-2"
+                        onChange={(e) =>
+                          setNewIngredientInput({
+                            ...newIngredientInput,
+                            amount: e.target.value,
+                          })
+                        }
+                      />
+                    </span>
+                    <span className="w-full">
+                      <input
+                        value={newIngredientInput.ingredient}
+                        className="border-2 p-2 border-blue-400 rounded-md m-2 w-1/2"
+                        onChange={(e) =>
+                          setNewIngredientInput({
+                            ...newIngredientInput,
+                            ingredient: e.target.value,
+                          })
+                        }
+                        onKeyDown={(e) => {
+                          if (e.code === "Enter") {
+                            if (newIngredientInput.ingredient !== "") {
+                              addIngredient();
+                            }
+                          }
+                        }}
+                      />
+                    </span>
+                  </div>
+                )}
+                <div className="flex justify-end">
+                  <button
+                    className="m-4 font-medium text-lg"
+                    onClick={() => setAddingNewIngredient(true)}
+                  >
+                    Add New Ingredient
+                  </button>
+                </div>
               </div>
             )}
           </div>
@@ -232,7 +288,7 @@ export const Recipe = ({
               );
             } else {
               return (
-                <div className="m-2 flex w-full">
+                <div className="m-2 flex w-full" key={index}>
                   <span className="text-xl mr-4 mt-2 font-semibold">
                     {index + 1}.
                   </span>

@@ -2,7 +2,7 @@ import { LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { Link, useFetcher, useLoaderData } from "@remix-run/react";
 import { useState } from "react";
 import { HomeButton } from "~/common-components/homeButton";
-import { IngredientDisplay } from "~/route-components/ingredientDisplay";
+import { IngredientDisplay } from "~/route-components/ingredients/ingredientDisplay";
 import { Recipe } from "~/route-components/recipe";
 import { db } from "~/utils/db.server";
 
@@ -64,7 +64,6 @@ export default function RecipeDetails() {
         recipe={recipe}
         recipeHasComponents={recipeHasComponents}
         editMode={editMode}
-        setEditMode={setEditMode}
       />
     </div>
   );
