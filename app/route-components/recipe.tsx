@@ -3,6 +3,7 @@ import { IngredientDisplay } from "./ingredients/ingredientDisplay";
 import { ChangeEvent, LegacyRef, useEffect, useRef, useState } from "react";
 import { EditModeIngredients } from "./ingredients/editModeIngredients";
 import { useFetcher, useNavigate } from "@remix-run/react";
+import { InstructionsDisplay } from "./instructionsDisplay";
 
 type RecipeProps = {
   recipe: RecipeType;
@@ -40,7 +41,7 @@ export const Recipe = ({
   );
   const [newInstructionInput, setNewInstructionInput] = useState("");
   const [instructions, setInstructions] = useState(recipe.instructions);
-  const ingredients = recipe.ingredients;
+  const [ingredients, setIngredients] = useState(recipe.ingredients);
 
   const saveEditRecipe = () => {
     const updatedRecipe = {
@@ -123,54 +124,6 @@ export const Recipe = ({
       });
   };
 
-  const generateInstructionFields = () => {
-    return instructions.map((step, index) => {
-      if (!editMode) {
-        return (
-          <div
-            className="mb-4 border-2 border-fuchsia-200 rounded-md p-8"
-            key={index}
-          >
-            <span className="font-semibold text-xl">{index + 1}. </span>
-            <span className="text-lg">{step}</span>
-          </div>
-        );
-      } else {
-        return (
-          <div className="m-2 flex w-full" key={index}>
-            <span className="text-xl mr-4 mt-2 font-semibold">
-              {index + 1}.
-            </span>
-            <span className="w-full">
-              <textarea
-                value={step}
-                onChange={(e) => {
-                  instructions.splice(index, 1, e.target.value);
-                  setInstructions([...instructions]);
-                }}
-                className="border-2 p-2 border-blue-400 rounded-md w-full mt-2"
-                rows={5}
-                onBlur={(e) => {
-                  instructions.splice(index, 1, e.target.value);
-                }}
-              />
-            </span>
-            <span className="flex items-center ml-4">
-              <button
-                className=""
-                onClick={() => {
-                  instructions.splice(index, 1);
-                  updateInstructions();
-                }}
-              >
-                remove
-              </button>
-            </span>
-          </div>
-        );
-      }
-    });
-  };
   return (
     <div className="flex flex-col mx-8 w-full pb-8">
       {!editMode ? (
@@ -308,6 +261,7 @@ export const Recipe = ({
               <div className="w-full">
                 <EditModeIngredients
                   ingredients={ingredients}
+                  setIngredients={setIngredients}
                   recipeHasComponents={recipeHasComponents}
                 />
                 {addingNewIngredient && (
@@ -381,6 +335,8 @@ export const Recipe = ({
                           onKeyDown={(e) => {
                             if (e.code === "Enter") {
                               if (newIngredientInput.ingredient !== "") {
+                                ingredients.push(newIngredientInput);
+                                setIngredients([...ingredients]);
                                 setAddingNewIngredient(false);
                                 setNewIngredientInput(
                                   defaultIngredientInputValues
@@ -410,18 +366,12 @@ export const Recipe = ({
 
       <div className="flex justify-center mt-4">
         <div className="p-2 flex-col flex-wrap w-1/2">
-          <h3 className="text-2xl font-medium">Instructions</h3>
-          {editMode && (
-            <div className="flex justify-end">
-              <button
-                className="text-lg font-medium"
-                onClick={() => setAddingNewStep(true)}
-              >
-                Add New Step
-              </button>
-            </div>
-          )}
-          {generateInstructionFields()}
+          <InstructionsDisplay
+            instructions={instructions}
+            editMode={editMode}
+            setInstructions={setInstructions}
+            updateInstructions={updateInstructions}
+          />
           {addingNewStep && (
             <div className="m-2 flex w-full">
               <span className="text-xl mr-4 mt-2 font-semibold">

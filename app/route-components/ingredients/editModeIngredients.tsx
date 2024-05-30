@@ -8,10 +8,12 @@ import { EditWithComponents } from "./editWithComponents";
 type EditModeIngredientsProps = {
   ingredients: IngredientType[];
   recipeHasComponents?: boolean;
+  setIngredients: Dispatch<SetStateAction<IngredientType[]>>;
 };
 
 export const EditModeIngredients = ({
   ingredients,
+  setIngredients,
   recipeHasComponents,
 }: EditModeIngredientsProps) => {
   const fetcher = useFetcher();
@@ -42,6 +44,7 @@ export const EditModeIngredients = ({
     return (
       <EditWithoutComponents
         ingredients={ingredients}
+        setIngredients={setIngredients}
         saveEditIngredient={saveEditIngredient}
         deleteIngredient={deleteIngredient}
       />
