@@ -5,7 +5,7 @@ type EditWithoutComponentsProps = {
   ingredients: IngredientType[];
   setIngredients: Dispatch<SetStateAction<IngredientType[]>>;
   saveEditIngredient: (ingredient: IngredientType) => void;
-  deleteIngredient: (ingredientId?: number) => void;
+  deleteIngredient: (ingredientId: number) => void;
 };
 export const EditWithoutComponents = ({
   ingredients,
@@ -54,6 +54,7 @@ export const EditWithoutComponents = ({
                   id: ingredient.id,
                   amount: amountValue,
                   ingredient: ingredientName,
+                  recipe_id: ingredient.recipe_id,
                 };
                 saveEditIngredient(updatedIngredient);
               }}
@@ -64,7 +65,8 @@ export const EditWithoutComponents = ({
               className="mx-8 mt-4 text-sm"
               onClick={() => {
                 ingredients.splice(index, 1);
-                deleteIngredient(ingredient.id);
+                setIngredients([...ingredients]);
+                if (ingredient.id) deleteIngredient(ingredient.id);
               }}
             >
               remove

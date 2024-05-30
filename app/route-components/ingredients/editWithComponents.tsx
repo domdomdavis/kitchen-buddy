@@ -1,15 +1,17 @@
 import { useFetcher } from "@remix-run/react";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import matchIngredientsToComponents from "~/helpers/matchIngredientToComponent";
 import { IngredientType } from "~/helpers/types";
 
 type EditWithComponentsProps = {
   ingredients: IngredientType[];
+  setIngredients: Dispatch<SetStateAction<IngredientType[]>>;
   saveEditIngredient: (ingredient: IngredientType) => void;
   deleteIngredient: (ingredientId?: number) => void;
 };
 export const EditWithComponents = ({
   ingredients,
+  setIngredients,
   saveEditIngredient,
   deleteIngredient,
 }: EditWithComponentsProps) => {
@@ -35,9 +37,25 @@ export const EditWithComponents = ({
       );
     }
   };
-
+  const updateIngredientsArray = (
+    ingredient: IngredientType,
+    updated?: IngredientType
+  ) => {
+    const matchingIngredient = ingredients.find(
+      (item) => item.id === ingredient.id
+    );
+    const ingredientIndex = matchingIngredient
+      ? ingredients.indexOf(matchingIngredient)
+      : null;
+    if (ingredientIndex) {
+      if (updated) ingredients.splice(ingredientIndex, 1, updated);
+      else ingredients.splice(ingredientIndex, 1);
+    }
+    setIngredients([...ingredients]);
+  };
   const ingredientList = matchIngredientsToComponents(ingredients);
-  return ingredientList.map((component, index) => {
+  const [fields] = useState(ingredientList);
+  return fields.map((component, index) => {
     let componentValue = component.component;
     return (
       <div key={index} className="w-full">
@@ -68,17 +86,35 @@ export const EditWithComponents = ({
 
               <span className="">
                 <input
-                  defaultValue={amountValue}
+                  value={amountValue}
                   className="border-2 p-2 border-blue-400 rounded-md m-2 w-1/4"
-                  onBlur={(e) => (amountValue = e.target.value)}
+                  onChange={(e) => {
+                    amountValue = e.target.value;
+                    const updated = {
+                      ...ingredient,
+                      amount: amountValue,
+                      component: componentValue,
+                    };
+                    component.ingredientsForComponent.splice(index, 1, updated);
+                    updateIngredientsArray(ingredient, updated);
+                  }}
                 />
               </span>
               <span className="w-full">
                 <input
-                  defaultValue={ingredientName}
+                  value={ingredientName}
                   className="border-2 p-2 border-blue-400 rounded-md m-2 w-1/2"
-                  onBlur={(e) => {
+                  onChange={(e) => {
                     ingredientName = e.target.value;
+                    const updated = {
+                      ...ingredient,
+                      ingredient: ingredientName,
+                      component: componentValue,
+                    };
+                    component.ingredientsForComponent.splice(index, 1, updated);
+                    updateIngredientsArray(ingredient, updated);
+                  }}
+                  onBlur={() => {
                     const updatedIngredient = {
                       id: ingredient.id,
                       amount: amountValue,
@@ -91,6 +127,8 @@ export const EditWithComponents = ({
               <button
                 className="mx-8 text-sm"
                 onClick={() => {
+                  component.ingredientsForComponent.splice(index, 1);
+                  updateIngredientsArray(ingredient);
                   deleteIngredient(ingredient.id);
                 }}
               >

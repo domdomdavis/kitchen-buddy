@@ -40,6 +40,7 @@ export const EditModeIngredients = ({
     );
   };
 
+  useEffect(() => {});
   if (!recipeHasComponents) {
     return (
       <EditWithoutComponents
@@ -53,6 +54,7 @@ export const EditModeIngredients = ({
     return (
       <EditWithComponents
         ingredients={ingredients}
+        setIngredients={setIngredients}
         saveEditIngredient={saveEditIngredient}
         deleteIngredient={deleteIngredient}
       />
