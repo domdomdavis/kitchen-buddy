@@ -1,16 +1,8 @@
 import { RecipeType } from "~/helpers/types";
 import { IngredientDisplay } from "./ingredients/ingredientDisplay";
-import {
-  ChangeEvent,
-  JSXElementConstructor,
-  ReactElement,
-  ReactNode,
-  useEffect,
-  useState,
-} from "react";
+import { ChangeEvent, LegacyRef, useEffect, useRef, useState } from "react";
 import { EditModeIngredients } from "./ingredients/editModeIngredients";
 import { useFetcher, useNavigate } from "@remix-run/react";
-import { JSX } from "react/jsx-runtime";
 
 type RecipeProps = {
   recipe: RecipeType;
@@ -24,6 +16,7 @@ export const Recipe = ({
   editMode,
 }: RecipeProps) => {
   const fetcher = useFetcher();
+  const instructionFetcher = useFetcher();
   const saveAllFetcher = useFetcher();
   const navigate = useNavigate();
   const [inputFieldValues, setInputFieldValues] = useState({
@@ -37,7 +30,6 @@ export const Recipe = ({
   const [addingNewComponent, setAddingNewComponent] = useState(false);
   const [addingNewIngredient, setAddingNewIngredient] = useState(false);
   const [addingNewStep, setAddingNewStep] = useState(false);
-
   const defaultIngredientInputValues = {
     amount: "",
     ingredient: "",
@@ -47,7 +39,7 @@ export const Recipe = ({
     defaultIngredientInputValues
   );
   const [newInstructionInput, setNewInstructionInput] = useState("");
-  const instructions = recipe.instructions;
+  const [instructions, setInstructions] = useState(recipe.instructions);
   const ingredients = recipe.ingredients;
 
   const saveEditRecipe = () => {
@@ -88,11 +80,31 @@ export const Recipe = ({
       }
     );
   };
+  const updateInstructions = () => {
+    const formData = {
+      id: recipe.id,
+      instructions,
+    };
+    instructionFetcher.submit(
+      {
+        formData,
+      },
+      {
+        method: "POST",
+        action: "/updateInstructions",
+        encType: "application/json",
+      }
+    );
+  };
+
   useEffect(() => {
     if (saveAllFetcher.data) {
       navigate(0);
+    } else if (instructionFetcher.data) {
+      const fetcherData = instructionFetcher.data as RecipeType;
+      generateInstructionFields(fetcherData.instructions);
     }
-  }, [saveAllFetcher.data]);
+  }, [saveAllFetcher.data, instructionFetcher.data]);
 
   const recipeComponents: string[] = [];
   const components = new Set(
@@ -109,6 +121,55 @@ export const Recipe = ({
         ...newIngredientInput,
         component: e.target.value,
       });
+  };
+
+  const generateInstructionFields = () => {
+    return instructions.map((step, index) => {
+      if (!editMode) {
+        return (
+          <div
+            className="mb-4 border-2 border-fuchsia-200 rounded-md p-8"
+            key={index}
+          >
+            <span className="font-semibold text-xl">{index + 1}. </span>
+            <span className="text-lg">{step}</span>
+          </div>
+        );
+      } else {
+        return (
+          <div className="m-2 flex w-full" key={index}>
+            <span className="text-xl mr-4 mt-2 font-semibold">
+              {index + 1}.
+            </span>
+            <span className="w-full">
+              <textarea
+                value={step}
+                onChange={(e) => {
+                  instructions.splice(index, 1, e.target.value);
+                  setInstructions([...instructions]);
+                }}
+                className="border-2 p-2 border-blue-400 rounded-md w-full mt-2"
+                rows={5}
+                onBlur={(e) => {
+                  instructions.splice(index, 1, e.target.value);
+                }}
+              />
+            </span>
+            <span className="flex items-center ml-4">
+              <button
+                className=""
+                onClick={() => {
+                  instructions.splice(index, 1);
+                  updateInstructions();
+                }}
+              >
+                remove
+              </button>
+            </span>
+          </div>
+        );
+      }
+    });
   };
   return (
     <div className="flex flex-col mx-8 w-full pb-8">
@@ -293,7 +354,7 @@ export const Recipe = ({
                         )}
                       </div>
                     )}
-                    <div className="ml-4">
+                    <div>
                       <span className="mx-2 text-sm text-emerald-500">✦</span>
                       <span className="">
                         <input
@@ -360,47 +421,7 @@ export const Recipe = ({
               </button>
             </div>
           )}
-          {instructions.map((step, index) => {
-            if (!editMode) {
-              return (
-                <div
-                  className="mb-4 border-2 border-fuchsia-200 rounded-md p-8"
-                  key={index}
-                >
-                  <span className="font-semibold text-xl">{index + 1}. </span>
-                  <span className="text-lg">{step}</span>
-                </div>
-              );
-            } else {
-              return (
-                <div className="m-2 flex w-full" key={index}>
-                  <span className="text-xl mr-4 mt-2 font-semibold">
-                    {index + 1}.
-                  </span>
-                  <span className="w-full">
-                    <textarea
-                      defaultValue={step}
-                      className="border-2 p-2 border-blue-400 rounded-md w-full mt-2"
-                      rows={5}
-                      onBlur={(e) => {
-                        instructions.splice(index, 1, e.target.value);
-                      }}
-                    />
-                  </span>
-                  <span className="flex items-center ml-4">
-                    <button
-                      className=""
-                      onClick={() => {
-                        instructions.splice(index, 1);
-                      }}
-                    >
-                      remove
-                    </button>
-                  </span>
-                </div>
-              );
-            }
-          })}
+          {generateInstructionFields()}
           {addingNewStep && (
             <div className="m-2 flex w-full">
               <span className="text-xl mr-4 mt-2 font-semibold">
@@ -418,6 +439,7 @@ export const Recipe = ({
                         setAddingNewStep(false);
                         setNewInstructionInput("");
                         instructions.push(newInstructionInput);
+                        setInstructions([...instructions]);
                       }
                     }
                   }}
