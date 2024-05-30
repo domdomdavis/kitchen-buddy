@@ -102,7 +102,7 @@ export const Recipe = ({
       navigate(0);
     } else if (instructionFetcher.data) {
       const fetcherData = instructionFetcher.data as RecipeType;
-      generateInstructionFields(fetcherData.instructions);
+      setInstructions(fetcherData.instructions);
     }
   }, [saveAllFetcher.data, instructionFetcher.data]);
 
