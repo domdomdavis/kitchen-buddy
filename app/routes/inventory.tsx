@@ -128,13 +128,13 @@ export default function Inventory() {
             <span className="mx-4 inline-block" key={item.id}>
               <button
                 key={item.id}
-                className="mt-3 p-4 rounded-md bg-pink-300 font-medium text-xl"
+                className="mt-3 p-4 rounded-md bg-fuchsia-300 font-medium text-xl hover:bg-emerald-300"
                 onClick={() => findRecipes(item.item)}
               >
                 {item.item}
               </button>
               <button
-                className="ml-2"
+                className="m-2 px-2 text-lg hover:bg-orange-300 rounded-md"
                 onClick={() => removeItemFromInventory(item)}
               >
                 x
@@ -144,7 +144,7 @@ export default function Inventory() {
         </div>
 
         {recipes.length > 0 && (
-          <div className="flex space-x-4">
+          <div className="mt-8 flex space-x-4">
             <RecipesDisplay recipes={recipes} />
           </div>
         )}
