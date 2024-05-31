@@ -3,6 +3,7 @@ import { ActionFunctionArgs } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { RecipeType } from "~/helpers/types";
+import { RecipesDisplay } from "~/route-components/recipesDisplay";
 import { db } from "~/utils/db.server";
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -54,7 +55,11 @@ export default function Inventory() {
           {item.item}
         </button>
       ))}
-      {recipes.length > 0 && recipes.map((recipe) => <p>{recipe.title}</p>)}
+      {recipes.length > 0 && (
+        <div className="flex space-x-4">
+          <RecipesDisplay recipes={recipes} />
+        </div>
+      )}
     </div>
   );
 }
