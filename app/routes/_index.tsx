@@ -16,7 +16,6 @@ export const loader = async () => {
       },
     }),
   };
-
   return data;
 };
 type LoaderType = Awaited<ReturnType<typeof loader>>;
@@ -25,12 +24,21 @@ export default function Index() {
   const data = useLoaderData<LoaderType>();
   return (
     <div className="p-8">
-      <Link
-        to="/recipes/new"
-        className="text-xl p-4 bg-sky-300 font-medium rounded-md"
-      >
-        Add New Recipe
-      </Link>
+      <div>
+        <Link
+          to="/recipes/new"
+          className="text-xl p-4 bg-sky-300 font-medium rounded-md mx-4"
+        >
+          Add New Recipe
+        </Link>
+        <Link
+          to="/inventory"
+          className="text-xl p-4 bg-sky-300 font-medium rounded-md mx-4"
+        >
+          View Inventory
+        </Link>
+      </div>
+
       <h1 className="text-center text-4xl font-medium">My Recipes</h1>
       <div className="flex flex-row gap-8 mt-8 flex-wrap">
         <RecipesDisplay recipes={data.recipes} />

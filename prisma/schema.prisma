@@ -19,9 +19,11 @@ model IngredientList {
   id            Int     @id @default(autoincrement())
   amount        String
   ingredient    String
+  details       String?
   component     String?
   recipe        Recipe  @relation(fields: [recipe_id], references: [id])
   recipe_id     String
+  inventory     Inventory? 
 }
 
 model Recipe {
@@ -36,3 +38,10 @@ model Recipe {
   yield         String?
 }
 
+model Inventory {
+  id           String @id @default(uuid())
+  item         String @unique
+  amount       String?
+  ingredient   IngredientList? @relation(fields: [ingredient_id], references: [id])
+  ingredient_id  Int?  @unique
+}
