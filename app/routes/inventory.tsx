@@ -1,19 +1,28 @@
 import { PrismaClient } from "@prisma/client";
 import { ActionFunctionArgs } from "@remix-run/node";
-import { useFetcher, useLoaderData } from "@remix-run/react";
+import { useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { InventoryType, RecipeType } from "~/helpers/types";
 import { RecipesDisplay } from "~/route-components/recipesDisplay";
 import { db } from "~/utils/db.server";
-
+type RecipeFetcherType = {
+  recipes: RecipeType[];
+};
 export async function action({ request }: ActionFunctionArgs) {
   const prisma = new PrismaClient();
   const { formData } = await request.json();
   if (!formData.addingItem) {
+    if (formData.removingItem) {
+      return await prisma.inventory.delete({
+        where: {
+          id: formData.id,
+        },
+      });
+    }
     const matchingRecipes = await prisma.recipe.findMany({
       where: { id: { in: formData.ids } },
     });
-    return matchingRecipes;
+    return { recipes: matchingRecipes };
   } else {
     const newItem = await prisma.inventory.create({
       data: {
@@ -36,37 +45,45 @@ export default function Inventory() {
   const [recipes, setRecipes] = useState<RecipeType[]>([]);
   const [newItemInput, setNewItemInput] = useState("");
   const [searchInput, setSearchInput] = useState("");
-  const recipeFetcher = useFetcher();
-  const addItemFetcher = useFetcher();
+  const fetcher = useFetcher();
+  const navigate = useNavigate();
   const findRecipes = (item: string) => {
     const recipeIds: string[] = [];
     ingredientList.map((ingredient) => {
       if (ingredient.ingredient.includes(item))
         recipeIds.push(ingredient.recipe_id);
     });
-    recipeFetcher.submit(
+    fetcher.submit(
       {
-        formData: { ids: recipeIds, addingItem: false },
+        formData: { ids: recipeIds },
       },
       { method: "POST", action: "/inventory", encType: "application/json" }
     );
   };
   const addItemToInventory = (item: string) => {
-    addItemFetcher.submit(
+    fetcher.submit(
       {
         formData: { item, addingItem: true },
       },
       { method: "POST", action: "/inventory", encType: "application/json" }
     );
   };
+  const removeItemFromInventory = (item: InventoryType) => {
+    fetcher.submit(
+      {
+        formData: { id: item.id, removingItem: true },
+      },
+      { method: "POST", action: "/inventory", encType: "application/json" }
+    );
+  };
+
   useEffect(() => {
-    if (recipeFetcher.data) {
-      setRecipes(recipeFetcher.data as RecipeType[]);
-    } else if (addItemFetcher.data) {
-      itemList.push(addItemFetcher.data as InventoryType);
-      setItemList([...itemList]);
+    if (fetcher.data) {
+      const fetcherData = fetcher.data as RecipeFetcherType;
+      if (fetcherData.recipes) setRecipes(fetcherData.recipes);
+      else navigate(0);
     }
-  }, [recipeFetcher.data, addItemFetcher.data]);
+  }, [fetcher.data]);
 
   const searchInventory = (searchInput: string) => {
     const matching = inventory.filter((item) =>
@@ -106,13 +123,21 @@ export default function Inventory() {
 
         <div className="flex-row">
           {itemList.map((item) => (
-            <button
-              key={item.id}
-              className="m-4 p-4 rounded-md bg-pink-300 font-medium text-xl"
-              onClick={() => findRecipes(item.item)}
-            >
-              {item.item}
-            </button>
+            <span className="mx-4">
+              <button
+                key={item.id}
+                className="mt-3 p-4 rounded-md bg-pink-300 font-medium text-xl"
+                onClick={() => findRecipes(item.item)}
+              >
+                {item.item}
+              </button>
+              <button
+                className="ml-2"
+                onClick={() => removeItemFromInventory(item)}
+              >
+                x
+              </button>
+            </span>
           ))}
         </div>
 
