@@ -21,3 +21,9 @@ export type RecipeType = {
   total_time: string | null;
   yield: string | null;
 };
+
+export type InventoryType = {
+  id: string;
+  item: string;
+  amount: string | null;
+};

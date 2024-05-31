@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { ActionFunctionArgs } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
-import { RecipeType } from "~/helpers/types";
+import { InventoryType, RecipeType } from "~/helpers/types";
 import { RecipesDisplay } from "~/route-components/recipesDisplay";
 import { db } from "~/utils/db.server";
 
@@ -36,14 +36,15 @@ export default function Inventory() {
   const [recipes, setRecipes] = useState<RecipeType[]>([]);
   const [newItemInput, setNewItemInput] = useState("");
   const [searchInput, setSearchInput] = useState("");
-  const fetcher = useFetcher();
+  const recipeFetcher = useFetcher();
+  const addItemFetcher = useFetcher();
   const findRecipes = (item: string) => {
     const recipeIds: string[] = [];
     ingredientList.map((ingredient) => {
       if (ingredient.ingredient.includes(item))
         recipeIds.push(ingredient.recipe_id);
     });
-    fetcher.submit(
+    recipeFetcher.submit(
       {
         formData: { ids: recipeIds, addingItem: false },
       },
@@ -51,7 +52,7 @@ export default function Inventory() {
     );
   };
   const addItemToInventory = (item: string) => {
-    fetcher.submit(
+    addItemFetcher.submit(
       {
         formData: { item, addingItem: true },
       },
@@ -59,11 +60,13 @@ export default function Inventory() {
     );
   };
   useEffect(() => {
-    if (fetcher.data) {
-      console.log(fetcher.data);
-      setRecipes(fetcher.data as RecipeType[]);
+    if (recipeFetcher.data) {
+      setRecipes(recipeFetcher.data as RecipeType[]);
+    } else if (addItemFetcher.data) {
+      itemList.push(addItemFetcher.data as InventoryType);
+      setItemList([...itemList]);
     }
-  }, [fetcher.data]);
+  }, [recipeFetcher.data, addItemFetcher.data]);
 
   const searchInventory = (searchInput: string) => {
     const matching = inventory.filter((item) =>
