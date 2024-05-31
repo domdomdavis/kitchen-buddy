@@ -266,49 +266,49 @@ export const Recipe = ({
                 />
                 {addingNewIngredient && (
                   <div>
-                    {/* {recipeHasComponents && ( */}
-                    <div className="mt-4">
-                      <span className="mr-4 text-sm text-fuchsia-500">✦</span>
+                    {recipeHasComponents && (
+                      <div className="mt-4">
+                        <span className="mr-4 text-sm text-fuchsia-500">✦</span>
 
-                      {!addingNewComponent ? (
-                        <span>
-                          <select
-                            defaultValue="default"
-                            name="Component"
-                            id="component"
-                            className="w-1/2 p-2 border-2 border-blue-400 rounded-md"
-                            onChange={(e) => getValueFromDropdown(e)}
-                          >
-                            <option value="default" disabled>
-                              Recipe Component
-                            </option>
-                            <option value="">None</option>
-                            {recipeComponents.map((component, index) => {
-                              return (
-                                <option value={component} key={index}>
-                                  {component}
-                                </option>
-                              );
-                            })}
-                            <option value="new">New Component</option>
-                          </select>
-                        </span>
-                      ) : (
-                        <span>
-                          <input
-                            className="border-2 p-2 border-blue-400 rounded-md m-2 w-1/3"
-                            value={newIngredientInput.component}
-                            onChange={(e) =>
-                              setNewIngredientInput({
-                                ...newIngredientInput,
-                                component: e.target.value,
-                              })
-                            }
-                          />
-                        </span>
-                      )}
-                    </div>
-                    {/* )} */}
+                        {!addingNewComponent ? (
+                          <span>
+                            <select
+                              defaultValue="default"
+                              name="Component"
+                              id="component"
+                              className="w-1/2 p-2 border-2 border-blue-400 rounded-md"
+                              onChange={(e) => getValueFromDropdown(e)}
+                            >
+                              <option value="default" disabled>
+                                Recipe Component
+                              </option>
+                              <option value="">None</option>
+                              {recipeComponents.map((component, index) => {
+                                return (
+                                  <option value={component} key={index}>
+                                    {component}
+                                  </option>
+                                );
+                              })}
+                              <option value="new">New Component</option>
+                            </select>
+                          </span>
+                        ) : (
+                          <span>
+                            <input
+                              className="border-2 p-2 border-blue-400 rounded-md m-2 w-1/3"
+                              value={newIngredientInput.component}
+                              onChange={(e) =>
+                                setNewIngredientInput({
+                                  ...newIngredientInput,
+                                  component: e.target.value,
+                                })
+                              }
+                            />
+                          </span>
+                        )}
+                      </div>
+                    )}
                     <div>
                       <span className="mx-2 text-sm text-emerald-500">✦</span>
                       <span className="">

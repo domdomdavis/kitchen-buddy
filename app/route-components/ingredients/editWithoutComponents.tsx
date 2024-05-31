@@ -41,7 +41,7 @@ export const EditWithoutComponents = ({
             <input
               value={ingredientName}
               className="border-2 p-2 border-blue-400 rounded-md w-full"
-              onBlur={(e) => {
+              onChange={(e) => {
                 ingredientName = e.target.value;
                 const updated = {
                   ...ingredient,
@@ -49,12 +49,12 @@ export const EditWithoutComponents = ({
                 };
                 ingredients.splice(index, 1, updated);
                 setIngredients([...ingredients]);
-
+              }}
+              onBlur={() => {
                 const updatedIngredient = {
                   id: ingredient.id,
                   amount: amountValue,
                   ingredient: ingredientName,
-                  recipe_id: ingredient.recipe_id,
                 };
                 saveEditIngredient(updatedIngredient);
               }}
