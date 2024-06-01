@@ -29,7 +29,7 @@ export default function Index() {
           to="/recipes/new"
           className="text-xl p-4 bg-sky-300 font-medium rounded-md mx-4"
         >
-          Add New Recipe
+          Add New Recipeee
         </Link>
         <Link
           to="/inventory"
