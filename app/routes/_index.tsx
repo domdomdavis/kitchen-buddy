@@ -35,7 +35,7 @@ export default function Index() {
           to="/inventory"
           className="text-xl p-4 bg-sky-300 font-medium rounded-md mx-4"
         >
-          View Inventory!
+          View Inventory
         </Link>
       </div>
 
