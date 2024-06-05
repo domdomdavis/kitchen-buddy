@@ -1,6 +1,5 @@
-import { useFetcher, useNavigate } from "@remix-run/react";
+import { useFetcher } from "@remix-run/react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import matchIngredientsToComponents from "~/helpers/matchIngredientToComponent";
 import { IngredientType } from "~/helpers/types";
 import { EditWithoutComponents } from "./editWithoutComponents";
 import { EditWithComponents } from "./editWithComponents";
@@ -29,9 +28,9 @@ export const EditModeIngredients = ({
       }
     );
   };
-  const deleteIngredient = (ingredientId?: number) => {
+  const deleteIngredient = (ingredientId: number) => {
     fetcher.submit(
-      { formData: { id: ingredientId ?? null } },
+      { formData: { id: ingredientId } },
       {
         method: "POST",
         action: "/deleteIngredient",
@@ -40,7 +39,6 @@ export const EditModeIngredients = ({
     );
   };
 
-  useEffect(() => {});
   if (!recipeHasComponents) {
     return (
       <EditWithoutComponents

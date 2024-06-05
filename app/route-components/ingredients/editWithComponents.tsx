@@ -1,5 +1,5 @@
 import { useFetcher } from "@remix-run/react";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import matchIngredientsToComponents from "~/helpers/matchIngredientToComponent";
 import { IngredientType } from "~/helpers/types";
 
@@ -7,7 +7,7 @@ type EditWithComponentsProps = {
   ingredients: IngredientType[];
   setIngredients: Dispatch<SetStateAction<IngredientType[]>>;
   saveEditIngredient: (ingredient: IngredientType) => void;
-  deleteIngredient: (ingredientId?: number) => void;
+  deleteIngredient: (ingredientId: number) => void;
 };
 export const EditWithComponents = ({
   ingredients,
@@ -15,7 +15,15 @@ export const EditWithComponents = ({
   saveEditIngredient,
   deleteIngredient,
 }: EditWithComponentsProps) => {
+  const [ingredientList, setIngredientList] = useState(
+    matchIngredientsToComponents(ingredients)
+  );
   const fetcher = useFetcher();
+
+  useEffect(() => {
+    setIngredientList(matchIngredientsToComponents(ingredients));
+  }, [ingredients]);
+
   const assignNewComponentToIngredients = (
     newComponent: string,
     oldComponent: string
@@ -53,9 +61,7 @@ export const EditWithComponents = ({
     }
     setIngredients([...ingredients]);
   };
-  const ingredientList = matchIngredientsToComponents(ingredients);
-  const [fields] = useState(ingredientList);
-  return fields.map((component, index) => {
+  return ingredientList.map((component, index) => {
     let componentValue = component.component;
     return (
       <div key={index} className="w-full">
@@ -129,7 +135,7 @@ export const EditWithComponents = ({
                 onClick={() => {
                   component.ingredientsForComponent.splice(index, 1);
                   updateIngredientsArray(ingredient);
-                  deleteIngredient(ingredient.id);
+                  if (ingredient.id) deleteIngredient(ingredient.id);
                 }}
               >
                 remove
