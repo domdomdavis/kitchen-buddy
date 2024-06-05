@@ -145,7 +145,7 @@ export const Recipe = ({
         </div>
       )}
       <div className="flex justify-center w-full mt-4">
-        <span className="h-108 w-96 p-8 border-2 rounded-md border-violet-200 mx-2">
+        <span className="h-108 w-96 p-8 border-2 rounded-md border-violet-300 mx-2">
           <img src={recipe?.photo_url} className="rounded-md object-cover" />
           {editMode && (
             <input
@@ -251,7 +251,7 @@ export const Recipe = ({
             </div>
           )}
         </span>
-        <span className="p-4 w-1/3 border-2 mx-2 rounded-md border-violet-200">
+        <span className="p-4 w-1/3 border-2 mx-2 rounded-md border-violet-300">
           <h2 className="text-2xl font-medium mx-2">Ingredients</h2>
           <div className="mx-8 mt-2">
             {!editMode ? (
@@ -420,7 +420,7 @@ export const Recipe = ({
         <div className="w-1/6 h-5/6 place-self-end place-content-end fixed">
           <button
             onClick={saveEditRecipe}
-            className="p-4 rounded-md font-semibold text-xl mx-16 bg-sky-300"
+            className="p-4 rounded-md font-semibold text-xl mx-16 bg-orange-300"
           >
             Save Changes
           </button>

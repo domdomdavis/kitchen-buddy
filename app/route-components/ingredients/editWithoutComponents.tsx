@@ -21,7 +21,7 @@ export const EditWithoutComponents = ({
 
       return (
         <div key={index} className="w-full flex">
-          <span className="mx-2 mt-6 text-sm text-emerald-500">✦</span>
+          <span className="mx-2 mt-6 text-sm text-cyan-500">✦</span>
           <span className="w-1/3 m-2">
             <input
               value={amountValue}

@@ -88,7 +88,7 @@ export const EditWithComponents = ({
 
           return (
             <div key={index} className="pl-4 w-full">
-              <span className="mx-2 text-sm text-emerald-500">✦</span>
+              <span className="mx-2 text-sm text-cyan-500">✦</span>
 
               <span className="">
                 <input

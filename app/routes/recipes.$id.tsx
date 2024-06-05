@@ -48,7 +48,7 @@ export default function RecipeDetails() {
         <HomeButton />
         <div>
           <button
-            className="text-xl mr-8 p-4 bg-violet-300 rounded-md font-medium"
+            className="text-xl mr-8 p-4 bg-sky-300 rounded-md font-medium"
             onClick={() => setEditMode(!editMode)}
           >
             {!editMode ? "Edit Recipe" : "Stop Editing"}
