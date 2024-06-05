@@ -46,6 +46,7 @@ export default function Inventory() {
   const [recipes, setRecipes] = useState<RecipeType[]>([]);
   const [newItemInput, setNewItemInput] = useState("");
   const [searchInput, setSearchInput] = useState("");
+  const [itemSelected, setItemSelected] = useState(false);
   const fetcher = useFetcher();
   const navigate = useNavigate();
   const findRecipes = (item: string) => {
@@ -129,7 +130,10 @@ export default function Inventory() {
               <button
                 key={item.id}
                 className="mt-3 p-4 rounded-md bg-fuchsia-300 font-medium text-xl hover:bg-emerald-300"
-                onClick={() => findRecipes(item.item)}
+                onClick={() => {
+                  setItemSelected(true);
+                  findRecipes(item.item);
+                }}
               >
                 {item.item}
               </button>
@@ -143,11 +147,14 @@ export default function Inventory() {
           ))}
         </div>
 
-        {recipes.length > 0 && (
-          <div className="mt-8 flex space-x-4">
-            <RecipesDisplay recipes={recipes} />
-          </div>
-        )}
+        {itemSelected &&
+          (recipes.length > 0 ? (
+            <div className="mt-8 flex space-x-4">
+              <RecipesDisplay recipes={recipes} />
+            </div>
+          ) : (
+            <div className="mt-8">No recipes for this ingredient.</div>
+          ))}
       </div>
     </div>
   );

@@ -15,13 +15,14 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
       ingredients: true,
     },
   });
+  const inventory = await db.inventory.findMany();
   if (!recipe) throw redirect("/");
-  return { recipe };
+  return { recipe, inventory };
 };
 type LoaderType = Awaited<ReturnType<typeof loader>>;
 
 export default function RecipeDetails() {
-  const { recipe } = useLoaderData<LoaderType>();
+  const { recipe, inventory } = useLoaderData<LoaderType>();
   const fetcher = useFetcher();
   const [editMode, setEditMode] = useState<boolean>(false);
   const recipeHasComponents = recipe?.ingredients.some(
@@ -64,6 +65,7 @@ export default function RecipeDetails() {
         recipe={recipe}
         recipeHasComponents={recipeHasComponents}
         editMode={editMode}
+        inventory={inventory}
       />
     </div>
   );

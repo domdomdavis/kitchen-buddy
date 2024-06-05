@@ -1,4 +1,4 @@
-import { RecipeType } from "~/helpers/types";
+import { InventoryType, RecipeType } from "~/helpers/types";
 import { IngredientDisplay } from "./ingredients/ingredientDisplay";
 import { ChangeEvent, LegacyRef, useEffect, useRef, useState } from "react";
 import { EditModeIngredients } from "./ingredients/editModeIngredients";
@@ -9,12 +9,14 @@ type RecipeProps = {
   recipe: RecipeType;
   recipeHasComponents?: boolean;
   editMode: boolean;
+  inventory: InventoryType[];
 };
 
 export const Recipe = ({
   recipe,
   recipeHasComponents,
   editMode,
+  inventory,
 }: RecipeProps) => {
   const ingredientFetcher = useFetcher();
   const instructionFetcher = useFetcher();
@@ -256,6 +258,7 @@ export const Recipe = ({
               <IngredientDisplay
                 ingredients={ingredients}
                 recipeHasComponents={recipeHasComponents}
+                inventory={inventory}
               />
             ) : (
               <div className="w-full">

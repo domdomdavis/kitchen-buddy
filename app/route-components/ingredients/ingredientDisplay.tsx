@@ -1,26 +1,36 @@
 import { Dispatch, SetStateAction } from "react";
 import matchIngredientsToComponents from "~/helpers/matchIngredientToComponent";
-import { IngredientType } from "~/helpers/types";
+import { IngredientType, InventoryType } from "~/helpers/types";
 
 export type IngredientDisplayProps = {
   ingredients: Array<IngredientType>;
   setIngredients?: Dispatch<SetStateAction<IngredientType[]>>;
   recipeHasComponents?: boolean;
+  inventory: InventoryType[];
 };
 export const IngredientDisplay = ({
   ingredients,
   setIngredients,
   recipeHasComponents,
+  inventory,
 }: IngredientDisplayProps) => {
   if (!recipeHasComponents) {
     return ingredients
       .sort((a, b) => (a.id ?? 0) - (b.id ?? 0))
       .map((ingredient, index) => {
+        const ingredientInInventory = inventory.find((item) =>
+          ingredient.ingredient.includes(item.item)
+        );
         return (
           <div key={index} className="text-lg">
-            <span className="mx-2 text-sm text-emerald-500">✦</span>
+            <span className="mx-2 text-sm text-teal-500">✦</span>
             <span className="font-semibold">{ingredient.amount} </span>
             <span>{ingredient.ingredient}</span>
+            {ingredientInInventory ? (
+              <span className="text-green-500 ml-2 font-bold">✓</span>
+            ) : (
+              <span className="text-red-500 ml-2">x</span>
+            )}
             {setIngredients && (
               <button
                 className="mx-8 text-sm"
@@ -49,11 +59,19 @@ export const IngredientDisplay = ({
           </div>
         )}
         {component.ingredientsForComponent.map((ingredient, index) => {
+          const ingredientInInventory = inventory.find((item) =>
+            ingredient.ingredient.includes(item.item)
+          );
           return (
             <div className="mx-4 text-lg m-2" key={index}>
-              <span className="mx-2 text-sm text-emerald-500">✦</span>
+              <span className="mx-2 text-sm text-teal-500">✦</span>
               <span className="font-semibold">{ingredient.amount} </span>
               <span>{ingredient.ingredient}</span>
+              {ingredientInInventory ? (
+                <span className="text-green-500 ml-2 font-bold">✓</span>
+              ) : (
+                <span className="text-red-500 ml-2">x</span>
+              )}
               {setIngredients && (
                 <button
                   className="mx-8 text-sm"
