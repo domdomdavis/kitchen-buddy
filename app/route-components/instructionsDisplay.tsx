@@ -17,7 +17,7 @@ export const InstructionsDisplay = ({
     if (!editMode) {
       return (
         <div
-          className="mb-4 border-2 border-orange-300 rounded-md p-8"
+          className="mb-4 lg:border-2 border-orange-300 rounded-md p-8"
           key={index}
         >
           <span className="font-semibold text-xl">{index + 1}. </span>
