@@ -27,7 +27,7 @@ export default function Index() {
       <div>
         <Link
           to="/recipes/new"
-          className="text-xl p-4 bg-sky-300 font-medium rounded-md mx-4 hover:bg-sky-500"
+          className="text-xl p-4 bg-sky-300 font-medium rounded-md mx-4 hover:bg-sky-500 hidden lg:block"
         >
           Add New Recipe
         </Link>

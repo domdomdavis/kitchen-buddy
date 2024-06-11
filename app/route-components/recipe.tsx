@@ -254,9 +254,9 @@ export const Recipe = ({
             </div>
           )}
         </span>
-        <span className="p-4 w-1/3 lg:border-2 mx-2 rounded-md border-violet-300">
+        <span className="p-4 lg:w-1/3 lg:border-2 mx-2 rounded-md border-violet-300">
           <h2 className="text-2xl font-medium mx-2">Ingredients</h2>
-          <div className="mx-8 mt-2">
+          <div className="mx-4 lg:mx-8 mt-2">
             {!editMode ? (
               <IngredientDisplay
                 ingredients={ingredients}

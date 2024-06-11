@@ -48,7 +48,7 @@ export default function RecipeDetails() {
     <div>
       <div className="flex w-full justify-between mt-8">
         <HomeButton />
-        <div className="">
+        <div className="hidden lg:flex">
           <button
             className="text-xl lg:mr-8 p-4 bg-sky-300 rounded-md font-medium"
             onClick={() => setEditMode(!editMode)}
