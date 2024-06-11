@@ -129,7 +129,7 @@ export default function Inventory() {
             <span className="mx-4 inline-block" key={item.id}>
               <button
                 key={item.id}
-                className="mt-3 p-4 rounded-md bg-fuchsia-300 font-medium text-xl hover:bg-emerald-300"
+                className="mt-3 p-4 rounded-md bg-fuchsia-300 font-medium text-xl hover:bg-fuchsia-500 focus:bg-emerald-300"
                 onClick={() => {
                   setItemSelected(true);
                   findRecipes(item.item);
@@ -138,7 +138,7 @@ export default function Inventory() {
                 {item.item}
               </button>
               <button
-                className="m-2 px-2 text-lg hover:bg-orange-300 rounded-md"
+                className="m-2 px-2 text-lg hover:bg-red-400 rounded-md"
                 onClick={() => removeItemFromInventory(item)}
               >
                 x

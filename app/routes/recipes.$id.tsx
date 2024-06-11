@@ -1,5 +1,5 @@
 import { LoaderFunctionArgs, redirect } from "@remix-run/node";
-import { Link, useFetcher, useLoaderData } from "@remix-run/react";
+import { Link, useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
 import { useState } from "react";
 import { HomeButton } from "~/common-components/homeButton";
 import { IngredientDisplay } from "~/route-components/ingredients/ingredientDisplay";
@@ -23,6 +23,7 @@ type LoaderType = Awaited<ReturnType<typeof loader>>;
 
 export default function RecipeDetails() {
   const { recipe, inventory } = useLoaderData<LoaderType>();
+  const navigate = useNavigate();
   const fetcher = useFetcher();
   const [editMode, setEditMode] = useState<boolean>(false);
   const recipeHasComponents = recipe?.ingredients.some(
@@ -40,6 +41,7 @@ export default function RecipeDetails() {
         },
         { method: "POST", action: "/deleteRecipe", encType: "application/json" }
       );
+      navigate("/");
     }
   };
   return (

@@ -27,20 +27,20 @@ export default function Index() {
       <div>
         <Link
           to="/recipes/new"
-          className="text-xl p-4 bg-sky-300 font-medium rounded-md mx-4"
+          className="text-xl p-4 bg-sky-300 font-medium rounded-md mx-4 hover:bg-sky-500"
         >
           Add New Recipe
         </Link>
         <Link
           to="/inventory"
-          className="text-xl p-4 bg-sky-300 font-medium rounded-md mx-4"
+          className="text-xl p-4 bg-sky-300 font-medium rounded-md mx-4 hover:bg-sky-500"
         >
           View Inventory
         </Link>
       </div>
 
       <h1 className="text-center text-4xl font-medium">My Recipes</h1>
-      <div className="flex flex-row gap-8 mt-8 flex-wrap">
+      <div className="flex flex-row gap-8 mt-8 flex-wrap justify-center">
         <RecipesDisplay recipes={data.recipes} />
       </div>
     </div>
