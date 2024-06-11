@@ -131,7 +131,7 @@ export const Recipe = ({
       {!editMode ? (
         <h1 className="text-4xl font-semibold text-center">{recipe?.title}</h1>
       ) : (
-        <div className="place-self-center w-1/4">
+        <div className="place-self-center w-full lg:w-1/4">
           <input
             className="text-center font-semibold p-2 border-2 border-blue-400 rounded-md w-full text-4xl"
             value={inputFieldValues.recipeTitle}
@@ -144,9 +144,12 @@ export const Recipe = ({
           />
         </div>
       )}
-      <div className="flex justify-center w-full mt-4">
-        <span className="h-108 w-96 p-8 border-2 rounded-md border-violet-300 mx-2">
-          <img src={recipe?.photo_url} className="rounded-md object-cover" />
+      <div className="lg:flex lg:justify-center w-full mt-4">
+        <span className="h-108 w-96 p-8 lg:border-2 rounded-md border-violet-300 mx-2">
+          <img
+            src={recipe?.photo_url}
+            className="rounded-md object-cover hidden lg:flex"
+          />
           {editMode && (
             <input
               className="border-2 p-4 border-blue-400 w-full rounded-md mt-2"
@@ -251,7 +254,7 @@ export const Recipe = ({
             </div>
           )}
         </span>
-        <span className="p-4 w-1/3 border-2 mx-2 rounded-md border-violet-300">
+        <span className="p-4 w-1/3 lg:border-2 mx-2 rounded-md border-violet-300">
           <h2 className="text-2xl font-medium mx-2">Ingredients</h2>
           <div className="mx-8 mt-2">
             {!editMode ? (
@@ -371,7 +374,7 @@ export const Recipe = ({
       </div>
 
       <div className="flex justify-center mt-4">
-        <div className="p-2 flex-col flex-wrap w-1/2">
+        <div className="p-2 flex-col flex-wrap w-full lg:w-1/2">
           <h3 className="text-2xl font-medium">Instructions</h3>
           {editMode && (
             <div className="flex justify-end">
