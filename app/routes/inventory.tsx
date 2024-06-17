@@ -2,7 +2,6 @@ import { PrismaClient } from "@prisma/client";
 import { ActionFunctionArgs } from "@remix-run/node";
 import { useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
 import { useEffect, useState } from "react";
-import { HomeButton } from "~/common-components/homeButton";
 import { InventoryType, RecipeType } from "~/helpers/types";
 import { RecipesDisplay } from "~/route-components/recipesDisplay";
 import { db } from "~/utils/db.server";
@@ -107,7 +106,6 @@ export default function Inventory() {
   };
   return (
     <div className="p-8">
-      <HomeButton />
       <div className="flex flex-col items-center">
         <h1 className="text-4xl font-medium">My Inventory</h1>
         <div className="flex-row">

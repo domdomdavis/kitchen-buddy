@@ -1,8 +1,6 @@
 import { LoaderFunctionArgs, redirect } from "@remix-run/node";
-import { Link, useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
+import { useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
 import { useState } from "react";
-import { HomeButton } from "~/common-components/homeButton";
-import { IngredientDisplay } from "~/route-components/ingredients/ingredientDisplay";
 import { Recipe } from "~/route-components/recipe";
 import { db } from "~/utils/db.server";
 import { getUser } from "~/utils/session.server";
@@ -53,8 +51,7 @@ export default function RecipeDetails() {
   };
   return (
     <div>
-      <div className="flex w-full justify-between mt-8">
-        <HomeButton />
+      <div className="flex w-full justify-end mt-8">
         <div className="hidden lg:flex">
           <button
             className="text-xl lg:mr-8 p-4 bg-sky-300 rounded-md font-medium"

@@ -27,3 +27,9 @@ export type InventoryType = {
   item: string;
   amount?: string | null;
 };
+
+export type UserType = {
+  id: string;
+  username: string;
+  passwordHash: string;
+};

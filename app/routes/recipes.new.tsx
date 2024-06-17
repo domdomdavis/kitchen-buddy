@@ -1,6 +1,5 @@
 import { useFetcher, useNavigate } from "@remix-run/react";
 import { useEffect, useState } from "react";
-import { HomeButton } from "~/common-components/homeButton";
 import { IngredientType, RecipeType } from "~/helpers/types";
 import { IngredientDisplay } from "~/route-components/ingredients/ingredientDisplay";
 
@@ -56,8 +55,6 @@ export default function NewRecipe() {
   }, [fetcher.data]);
   return (
     <div className="grid p-4 w-full">
-      <HomeButton />
-
       <div className="flex justify-between place-self-center w-11/12 mt-2">
         <form className="flex flex-col">
           <h1 className="text-3xl text-center font-semibold mb-4">

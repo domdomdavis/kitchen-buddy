@@ -37,38 +37,6 @@ export default function Index() {
           Welcome, {user?.username}!
         </p>
       )}
-      <div className="flex ">
-        <Link
-          to="/recipes/new"
-          className="text-xl p-4 bg-sky-300 font-medium rounded-md mr-4 hover:bg-sky-500"
-        >
-          Add New Recipe
-        </Link>
-        <Link
-          to="/inventory"
-          className="text-xl p-4 bg-sky-300 font-medium rounded-md mx-4 hover:bg-sky-500"
-        >
-          View Inventory
-        </Link>
-        {!user ? (
-          <Link
-            to="/login"
-            className="text-xl p-4 bg-sky-300 font-medium rounded-md mx-4 hover:bg-sky-500"
-          >
-            Login
-          </Link>
-        ) : (
-          <form action="/logout" method="POST">
-            <button
-              className="text-xl p-4 bg-sky-300 font-medium rounded-md mx-4 hover:bg-sky-500"
-              type="submit"
-            >
-              Logout
-            </button>
-          </form>
-        )}
-      </div>
-
       <h1 className="text-center text-4xl font-medium">My Recipes</h1>
       <div className="flex flex-row gap-8 mt-8 flex-wrap justify-center">
         <RecipesDisplay recipes={recipes} />
