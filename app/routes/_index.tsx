@@ -1,15 +1,20 @@
 import type { LinksFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import { RecipeType } from "~/helpers/types";
 import { RecipesDisplay } from "~/route-components/recipesDisplay";
 import stylesheet from "~/tailwind.css?url";
 import { db } from "~/utils/db.server";
+import { getUser } from "~/utils/session.server";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
 ];
-export const loader = async () => {
+type LoaderProps = {
+  request: Request;
+};
+export const loader = async ({ request }: LoaderProps) => {
+  const user = await getUser(request);
   const data = {
+    user,
     recipes: await db.recipe.findMany({
       include: {
         ingredients: true,
@@ -21,10 +26,10 @@ export const loader = async () => {
 type LoaderType = Awaited<ReturnType<typeof loader>>;
 
 export default function Index() {
-  const data = useLoaderData<LoaderType>();
+  const { recipes, user } = useLoaderData<LoaderType>();
   return (
-    <div className="p-8">
-      <div>
+    <div className="p-8 ">
+      <div className="flex justify-between">
         <Link
           to="/recipes/new"
           className="text-xl p-4 bg-sky-300 font-medium rounded-md mx-4 hover:bg-sky-500"
@@ -37,11 +42,28 @@ export default function Index() {
         >
           View Inventory
         </Link>
+        {!user ? (
+          <Link
+            to="/login"
+            className="text-xl p-4 bg-sky-300 font-medium rounded-md mx-4 hover:bg-sky-500"
+          >
+            Login
+          </Link>
+        ) : (
+          <form action="/logout" method="POST">
+            <button
+              className="text-xl p-4 bg-sky-300 font-medium rounded-md mx-4 hover:bg-sky-500"
+              type="submit"
+            >
+              Logout
+            </button>
+          </form>
+        )}
       </div>
-
+      {user && <p className="text-center">Welcome, {user?.username}!</p>}
       <h1 className="text-center text-4xl font-medium">My Recipes</h1>
       <div className="flex flex-row gap-8 mt-8 flex-wrap justify-center">
-        <RecipesDisplay recipes={data.recipes} />
+        <RecipesDisplay recipes={recipes} />
       </div>
     </div>
   );
