@@ -159,7 +159,7 @@ export default function NewRecipe() {
                 <input
                   name="amount"
                   id="amount"
-                  className="w-36 p-4  mr-4 border-2 border-violet-300 rounded-md"
+                  className="lg:w-36 p-4 w-full lg:mr-4 mb-2 border-2 border-violet-300 rounded-md"
                   placeholder="Amount"
                   value={inputFieldValues.amount}
                   onChange={(e) =>
@@ -174,7 +174,7 @@ export default function NewRecipe() {
                 <input
                   name="ingredient"
                   id="ingredient"
-                  className="w-64 p-4 border-2 border-violet-300 rounded-md"
+                  className="lg:w-64 w-full p-4 border-2 border-violet-300 rounded-md"
                   placeholder="Ingredient"
                   value={inputFieldValues.ingredient}
                   onChange={(e) =>
@@ -245,7 +245,7 @@ export default function NewRecipe() {
             />
           </div>
         </form>
-        <div className="w-1/4 mx-4">
+        <div className="w-1/4 mx-4 hidden lg:flex">
           {instructions.length > 0 &&
             instructions.map((step, index) => {
               return (
@@ -256,14 +256,14 @@ export default function NewRecipe() {
               );
             })}
         </div>
-        <div>
+        <div className="hidden lg:flex">
           <IngredientDisplay
             ingredients={ingredients}
             setIngredients={setIngredients}
             recipeHasComponents={components.length > 0}
           />
         </div>
-        <div className="flex flex-col mx-16 items-center">
+        <div className="mx-16 items-center hidden lg:flex lg:flex-col">
           {inputFieldValues.title !== "" && (
             <h2 className="text-2xl font-semibold mb-4">
               {inputFieldValues.title}
