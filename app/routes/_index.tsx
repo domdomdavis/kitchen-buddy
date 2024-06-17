@@ -16,6 +16,9 @@ export const loader = async ({ request }: LoaderProps) => {
   const data = {
     user,
     recipes: await db.recipe.findMany({
+      where: {
+        user_id: user?.id,
+      },
       include: {
         ingredients: true,
       },

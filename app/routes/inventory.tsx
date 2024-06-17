@@ -6,10 +6,14 @@ import { HomeButton } from "~/common-components/homeButton";
 import { InventoryType, RecipeType } from "~/helpers/types";
 import { RecipesDisplay } from "~/route-components/recipesDisplay";
 import { db } from "~/utils/db.server";
+import { getUser } from "~/utils/session.server";
 type RecipeFetcherType = {
   recipes: RecipeType[];
 };
+
 export async function action({ request }: ActionFunctionArgs) {
+  const user = await getUser(request);
+
   const prisma = new PrismaClient();
   const { formData } = await request.json();
   if (!formData.addingItem) {
@@ -28,13 +32,20 @@ export async function action({ request }: ActionFunctionArgs) {
     const newItem = await prisma.inventory.create({
       data: {
         item: formData.item,
+        user_id: user?.id ?? "",
       },
     });
     return newItem;
   }
 }
-export const loader = async () => {
-  const inventory = await db.inventory.findMany();
+export const loader = async ({ request }: { request: Request }) => {
+  const user = await getUser(request);
+
+  const inventory = await db.inventory.findMany({
+    where: {
+      user_id: user?.id,
+    },
+  });
   const ingredientList = await db.ingredientList.findMany();
   return { inventory, ingredientList };
 };

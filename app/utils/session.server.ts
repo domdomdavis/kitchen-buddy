@@ -33,6 +33,15 @@ const storage = createCookieSessionStorage({
   },
 });
 
+export async function register({ username, password }: LoginProps) {
+  const passwordHash = await bcrypt.hash(password, 10);
+  return db.user.create({
+    data: {
+      username,
+      passwordHash,
+    },
+  });
+}
 export async function createUserSession(userId: string, redirectTo: string) {
   const session = await storage.getSession();
   session.set("userId", userId);
