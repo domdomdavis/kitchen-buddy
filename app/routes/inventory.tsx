@@ -23,7 +23,10 @@ export async function action({ request }: ActionFunctionArgs) {
       });
     }
     const matchingRecipes = await prisma.recipe.findMany({
-      where: { id: { in: formData.ids } },
+      where: {
+        id: { in: formData.ids },
+        user_id: user?.id,
+      },
     });
     return { recipes: matchingRecipes };
   } else {
@@ -60,6 +63,7 @@ export default function Inventory() {
   const [itemSelected, setItemSelected] = useState(false);
   const fetcher = useFetcher();
   const navigate = useNavigate();
+
   const findRecipes = (item: string) => {
     const recipeIds: string[] = [];
     ingredientList.map((ingredient) => {
