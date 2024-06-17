@@ -5,8 +5,11 @@ import { HomeButton } from "~/common-components/homeButton";
 import { IngredientDisplay } from "~/route-components/ingredients/ingredientDisplay";
 import { Recipe } from "~/route-components/recipe";
 import { db } from "~/utils/db.server";
+import { getUser } from "~/utils/session.server";
 
-export const loader = async ({ params }: LoaderFunctionArgs) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
+  const user = await getUser(request);
+
   const recipe = await db.recipe.findUnique({
     where: {
       id: params.id,
@@ -15,7 +18,11 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
       ingredients: true,
     },
   });
-  const inventory = await db.inventory.findMany();
+  const inventory = await db.inventory.findMany({
+    where: {
+      user_id: user?.id,
+    },
+  });
   if (!recipe) throw redirect("/");
   return { recipe, inventory };
 };

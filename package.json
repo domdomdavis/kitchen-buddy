@@ -23,7 +23,7 @@
     "@remix-run/node": "^2.9.2",
     "@remix-run/react": "^2.9.2",
     "@remix-run/serve": "^2.9.2",
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^5.1.1",
     "decrypt": "^0.0.1",
     "dotenv": "^16.4.5",
     "esbuild-register": "^3.5.0",

@@ -31,11 +31,16 @@ type LoaderType = Awaited<ReturnType<typeof loader>>;
 export default function Index() {
   const { recipes, user } = useLoaderData<LoaderType>();
   return (
-    <div className="p-8 ">
-      <div className="flex justify-between">
+    <div className="p-4 ">
+      {user && (
+        <p className="text-lg font-medium text-violet-800">
+          Welcome, {user?.username}!
+        </p>
+      )}
+      <div className="flex ">
         <Link
           to="/recipes/new"
-          className="text-xl p-4 bg-sky-300 font-medium rounded-md mx-4 hover:bg-sky-500"
+          className="text-xl p-4 bg-sky-300 font-medium rounded-md mr-4 hover:bg-sky-500"
         >
           Add New Recipe
         </Link>
@@ -63,7 +68,7 @@ export default function Index() {
           </form>
         )}
       </div>
-      {user && <p className="text-center">Welcome, {user?.username}!</p>}
+
       <h1 className="text-center text-4xl font-medium">My Recipes</h1>
       <div className="flex flex-row gap-8 mt-8 flex-wrap justify-center">
         <RecipesDisplay recipes={recipes} />

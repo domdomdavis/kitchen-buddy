@@ -13,7 +13,6 @@ type RecipeFetcherType = {
 
 export async function action({ request }: ActionFunctionArgs) {
   const user = await getUser(request);
-
   const prisma = new PrismaClient();
   const { formData } = await request.json();
   if (!formData.addingItem) {
@@ -29,13 +28,15 @@ export async function action({ request }: ActionFunctionArgs) {
     });
     return { recipes: matchingRecipes };
   } else {
-    const newItem = await prisma.inventory.create({
-      data: {
-        item: formData.item,
-        user_id: user?.id ?? "",
-      },
-    });
-    return newItem;
+    if (user) {
+      const newItem = await prisma.inventory.create({
+        data: {
+          item: formData.item,
+          user_id: user.id,
+        },
+      });
+      return newItem;
+    }
   }
 }
 export const loader = async ({ request }: { request: Request }) => {

@@ -55,10 +55,10 @@ export default function NewRecipe() {
     }
   }, [fetcher.data]);
   return (
-    <div className="grid p-8 w-full">
+    <div className="grid p-4 w-full">
       <HomeButton />
 
-      <div className="flex justify-between place-self-center w-3/4">
+      <div className="flex justify-between place-self-center w-11/12 mt-2">
         <form className="flex flex-col">
           <h1 className="text-3xl text-center font-semibold mb-4">
             Add New Recipe
@@ -248,7 +248,7 @@ export default function NewRecipe() {
             />
           </div>
         </form>
-        <div className="w-1/4">
+        <div className="w-1/4 mx-4">
           {instructions.length > 0 &&
             instructions.map((step, index) => {
               return (
