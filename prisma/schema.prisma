@@ -35,10 +35,22 @@ model Recipe {
   prep_time     String?
   total_time    String?
   yield         String?
+  user          User  @relation(fields: [user_id], references: [id])
+  user_id       String
 }
 
 model Inventory {
   id           String @id @default(uuid())
   item         String @unique
   amount       String?
+  user          User  @relation(fields: [user_id], references: [id])
+  user_id       String
+}
+
+model User {
+  id           String @id @default(uuid())
+  username     String   @unique
+  passwordHash  String
+  recipes       Recipe[]
+  invenoty      Inventory[]
 }
