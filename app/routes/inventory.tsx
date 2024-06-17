@@ -143,7 +143,7 @@ export default function Inventory() {
             <span className="mx-4 inline-block" key={item.id}>
               <button
                 key={item.id}
-                className="mt-3 p-4 rounded-md bg-fuchsia-300 font-medium text-xl hover:bg-fuchsia-500 focus:bg-emerald-300"
+                className="mt-3 p-4 rounded-md bg-fuchsia-300 font-medium text-xl hover:bg-fuchsia-500 focus:bg-gradient-to-r from-green-300 to-teal-300"
                 onClick={() => {
                   setItemSelected(true);
                   findRecipes(item.item);

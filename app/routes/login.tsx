@@ -41,7 +41,7 @@ export default function Login() {
     <div className="p-8">
       <h1 className="text-center text-4xl font-semibold">Login</h1>
       <div className="flex flex-col items-center">
-        <form method="POST" className="w-1/4">
+        <form method="POST" className="lg:w-1/4">
           <div>
             <label htmlFor="username">Username</label>
             <input

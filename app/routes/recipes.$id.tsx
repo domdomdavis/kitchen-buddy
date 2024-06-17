@@ -54,13 +54,13 @@ export default function RecipeDetails() {
       <div className="flex w-full justify-end mt-8">
         <div className="hidden lg:flex">
           <button
-            className="text-xl lg:mr-8 p-4 bg-sky-300 rounded-md font-medium"
+            className="text-xl lg:mr-8 p-4 bg-gradient-to-r from-sky-300 to-teal-300 rounded-md font-semibold"
             onClick={() => setEditMode(!editMode)}
           >
             {!editMode ? "Edit Recipe" : "Stop Editing"}
           </button>
           <button
-            className="text-xl lg:mr-8 p-4 border-red-500 border-2 text-red-500 rounded-md font-medium"
+            className="text-xl lg:mr-8 p-4 border-red-500 border-2 text-red-500 rounded-md font-semibold"
             onClick={deleteRecipe}
           >
             Delete Recipe
