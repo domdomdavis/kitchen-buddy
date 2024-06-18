@@ -68,7 +68,7 @@ export default function Inventory() {
   const findRecipes = (item: string) => {
     const recipeIds: string[] = [];
     ingredientList.map((ingredient) => {
-      if (ingredient.ingredient.includes(item))
+      if (ingredient.ingredient.toLowerCase().includes(item.toLowerCase()))
         recipeIds.push(ingredient.recipe_id);
     });
     fetcher.submit(
