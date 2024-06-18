@@ -17,7 +17,10 @@ export const IngredientDisplay = ({
   const findIngredientInInventory = (ingredient: IngredientType) => {
     if (inventory && inventory.length > 0) {
       const found = inventory?.find(
-        (item) => ingredient.ingredient.includes(item.item) ?? null
+        (item) =>
+          ingredient.ingredient
+            .toLowerCase()
+            .includes(item.item.toLowerCase()) ?? null
       );
       if (found)
         return <span className="text-green-500 ml-2 font-bold">✓</span>;

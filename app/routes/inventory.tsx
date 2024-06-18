@@ -61,6 +61,7 @@ export default function Inventory() {
   const [newItemInput, setNewItemInput] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [itemSelected, setItemSelected] = useState(false);
+  const [errorText, setErrorText] = useState("");
   const fetcher = useFetcher();
   const navigate = useNavigate();
 
@@ -78,12 +79,20 @@ export default function Inventory() {
     );
   };
   const addItemToInventory = (item: string) => {
-    fetcher.submit(
-      {
-        formData: { item, addingItem: true },
-      },
-      { method: "POST", action: "/inventory", encType: "application/json" }
-    );
+    if (
+      inventory.find(
+        (foodItem) => foodItem.item.toLowerCase() === item.toLowerCase()
+      )
+    ) {
+      setErrorText("Item already in inventory.");
+    } else {
+      fetcher.submit(
+        {
+          formData: { item, addingItem: true },
+        },
+        { method: "POST", action: "/inventory", encType: "application/json" }
+      );
+    }
   };
   const removeItemFromInventory = (item: InventoryType) => {
     fetcher.submit(
@@ -104,7 +113,7 @@ export default function Inventory() {
 
   const searchInventory = (searchInput: string) => {
     const matching = inventory.filter((item) =>
-      item.item.includes(searchInput)
+      item.item.toLowerCase().includes(searchInput.toLowerCase())
     );
     setItemList(matching);
   };
@@ -113,7 +122,7 @@ export default function Inventory() {
       <div className="flex flex-col items-center">
         <h1 className="text-4xl font-medium">My Inventory</h1>
         <div className="flex-row">
-          {" "}
+          <div></div>
           <input
             placeholder="Add Item"
             className="m-4 p-4 border-2 border-orange-300 rounded-md"
@@ -137,6 +146,7 @@ export default function Inventory() {
             }}
           />
         </div>
+        {errorText.length > 0 && <p>{errorText}</p>}
 
         <div className="flex-row">
           {itemList.map((item) => (
