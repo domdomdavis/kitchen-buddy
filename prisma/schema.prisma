@@ -37,6 +37,7 @@ model Recipe {
   yield         String?
   user          User  @relation(fields: [user_id], references: [id])
   user_id       String
+  categories    CategoriesOnRecipes[]
 }
 
 model Inventory {
@@ -52,5 +53,20 @@ model User {
   username     String   @unique
   passwordHash  String
   recipes       Recipe[]
-  invenoty      Inventory[]
+  inventory      Inventory[]
+}
+
+model Category {
+  id            String  @id @default(uuid())
+  name          String
+  recipes       CategoriesOnRecipes[]
+}
+
+model CategoriesOnRecipes {
+  recipe        Recipe      @relation(fields: [recipe_id], references: [id])
+  recipe_id     String
+  category      Category    @relation(fields: [category_id], references: [id])
+  category_id   String
+    @@id([recipe_id, category_id])
+
 }
