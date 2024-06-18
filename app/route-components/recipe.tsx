@@ -426,16 +426,16 @@ export const Recipe = ({
       </div>
       {editMode && (
         <div>
-          <div className="hidden lg:block w-1/6 h-5/6 place-self-end place-content-end fixed">
+          <div className="hidden lg:flex justify-end w-11/12">
             <button
               onClick={saveEditRecipe}
-              className="p-4 rounded-md font-semibold text-xl mx-16 bg-orange-300"
+              className="p-4 rounded-md font-semibold text-xl mx-16 bg-orange-300 hover:bg-fuchsia-400"
             >
               Save Changes
             </button>
           </div>
           <div className="lg:hidden text-center font-semibold">
-            <button className="border-2 border-emerald-400 rounded-md p-2 bg-gradient-to-r from-emerald-300 to-teal-300">
+            <button className="border-2 border-emerald-400 rounded-md p-2 bg-gradient-to-r from-emerald-300 to-teal-300 text-xl">
               Save Changes
             </button>
           </div>
