@@ -5,10 +5,40 @@ type NavbarProps = {
   user: UserType;
 };
 export const Navbar = ({ user }: NavbarProps) => {
+  const [openMobileNav, setOpenMobileNav] = useState(false);
   return (
     <div>
-      {" "}
-      <div className="flex justify-between mt-2 p-2">
+      <div className="block lg:hidden m-4">
+        <button
+          className="flex items-center px-3 py-2 border rounded text-fuchsia-500 border-orange-500"
+          onClick={() => setOpenMobileNav(!openMobileNav)}
+        >
+          <svg
+            className="fill-current h-3 w-3"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <title>Menu</title>
+            <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
+          </svg>
+        </button>
+        {openMobileNav && (
+          <div>
+            <ul className="flex flex-col items-center justify-between min-h-[250px]">
+              <li className="border-b border-sky-400 my-8 font-medium">
+                <a href="/">Home</a>
+              </li>
+              <li className="border-b border-sky-400 my-8 font-medium">
+                <a href="/recipes/new">Add Recipe</a>
+              </li>
+              <li className="border-b border-sky-400 my-8 font-medium">
+                <a href="/inventory">View Inventory</a>
+              </li>
+            </ul>
+          </div>
+        )}
+      </div>
+      <div className="hidden lg:flex justify-between mt-2 p-2">
         <span>
           <span className="mx-4">
             <Link to="/" className="font-medium">

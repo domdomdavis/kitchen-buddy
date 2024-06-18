@@ -127,7 +127,7 @@ export const Recipe = ({
   };
 
   return (
-    <div className="flex flex-col mx-8 w-full pb-8">
+    <div className="flex flex-col lg:mx-8 w-full pb-8">
       {!editMode ? (
         <h1 className="text-4xl font-semibold text-center">{recipe?.title}</h1>
       ) : (
@@ -144,6 +144,10 @@ export const Recipe = ({
           />
         </div>
       )}
+      <img
+        src={recipe.photo_url}
+        className="lg:hidden self-center h-60 w-60 object-cover rounded-md mt-4"
+      />
       <div className="lg:flex lg:justify-center w-full mt-4">
         <span className="h-108 w-96 p-8 lg:border-2 rounded-md border-violet-300 mx-2">
           <img
@@ -163,27 +167,27 @@ export const Recipe = ({
             />
           )}
           {!editMode ? (
-            <div className="mt-4 mx-8">
+            <div className="lg:mt-4 mx-8 self-center">
               {recipe.prep_time && (
-                <p>
+                <p className="text-center">
                   <span>Prep time: </span>
                   <span className="font-medium">{recipe.prep_time}</span>
                 </p>
               )}
               {recipe.cook_time && (
-                <p>
+                <p className="text-center">
                   <span>Cook time: </span>
                   <span className="font-medium">{recipe.cook_time}</span>
                 </p>
               )}
               {recipe.total_time && (
-                <p>
+                <p className="text-center">
                   <span>Total time: </span>
                   <span className="font-medium">{recipe.total_time}</span>
                 </p>
               )}
               {recipe.yield && (
-                <p>
+                <p className="text-center">
                   <span>Yield: </span>
                   <span className="font-medium">{recipe.yield}</span>
                 </p>
@@ -374,7 +378,7 @@ export const Recipe = ({
       </div>
 
       <div className="flex justify-center mt-4">
-        <div className="p-2 flex-col flex-wrap w-full lg:w-1/2">
+        <div className="p-2 flex-col flex-wrap w-full lg:w-3/4 2xl:w-1/2">
           <h3 className="text-2xl font-medium">Instructions</h3>
           {editMode && (
             <div className="flex justify-end">
