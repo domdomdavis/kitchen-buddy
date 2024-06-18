@@ -22,6 +22,8 @@ export default function NewRecipe() {
     yield: "",
   };
   const [inputFieldValues, setInputFieldValues] = useState(defaultInputValues);
+  const disableComponentField =
+    ingredients.length !== 0 && components.length === 0;
 
   const saveRecipe = () => {
     const newRecipe = {
@@ -53,6 +55,7 @@ export default function NewRecipe() {
       navigate(`/recipes/${fetcherData.id}`);
     }
   }, [fetcher.data]);
+  console.log(ingredients, components);
   return (
     <div className="grid p-4 w-full">
       <div className="flex justify-between place-self-center w-11/12 mt-2">
@@ -140,9 +143,16 @@ export default function NewRecipe() {
             <input
               name="component"
               id="component"
-              className="w-full p-4 border-2 border-violet-300 rounded-md mb-2"
-              placeholder="Recipe Component (optional)"
+              className={`w-full p-4 border-2 ${
+                disableComponentField
+                  ? "border-gray-300 bg-gray-100"
+                  : "border-violet-300"
+              } rounded-md mb-2`}
+              placeholder={`${
+                !disableComponentField ? "Recipe Component (optional)" : ""
+              }`}
               value={inputFieldValues.component}
+              disabled={disableComponentField}
               onChange={(e) =>
                 setInputFieldValues({
                   ...inputFieldValues,

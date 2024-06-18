@@ -21,6 +21,8 @@ export const loader = async ({ request }: { request: Request }) => {
 type LoaderType = Awaited<ReturnType<typeof loader>>;
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const user = useLoaderData<LoaderType>();
+
   return (
     <html lang="en">
       <head>
@@ -30,6 +32,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="bg-white">
+        {user && <Navbar user={user} />}
         {children}
         <ScrollRestoration />
         <Scripts />
@@ -39,12 +42,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  const user = useLoaderData<LoaderType>();
-
   return (
     <div>
-      {user && <Navbar user={user} />}
-
       <Outlet />
     </div>
   );
