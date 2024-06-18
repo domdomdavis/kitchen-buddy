@@ -34,6 +34,18 @@ export const Navbar = ({ user }: NavbarProps) => {
               <li className="border-b border-sky-400 my-8 font-medium">
                 <a href="/inventory">View Inventory</a>
               </li>
+              <li>
+                <form
+                  action="/logout"
+                  method="POST"
+                  className="border-b border-sky-400 my-8 font-medium"
+                >
+                  <button className="font-medium" type="submit">
+                    Logout{" "}
+                    <span className="font-semibold ">{user.username}</span>
+                  </button>
+                </form>
+              </li>
             </ul>
           </div>
         )}
