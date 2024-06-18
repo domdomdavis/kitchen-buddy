@@ -435,7 +435,10 @@ export const Recipe = ({
             </button>
           </div>
           <div className="lg:hidden text-center font-semibold">
-            <button className="border-2 border-emerald-400 rounded-md p-2 bg-gradient-to-r from-emerald-300 to-teal-300 text-xl">
+            <button
+              onClick={saveEditRecipe}
+              className="border-2 border-emerald-400 rounded-md p-2 bg-gradient-to-r from-emerald-300 to-teal-300 text-xl"
+            >
               Save Changes
             </button>
           </div>
