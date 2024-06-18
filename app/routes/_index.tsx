@@ -1,5 +1,6 @@
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import { Link, redirect, useLoaderData } from "@remix-run/react";
+import { useState } from "react";
 import { RecipesDisplay } from "~/route-components/recipesDisplay";
 import stylesheet from "~/tailwind.css?url";
 import { db } from "~/utils/db.server";
@@ -29,11 +30,28 @@ type LoaderType = Awaited<ReturnType<typeof loader>>;
 
 export default function Index() {
   const { recipes } = useLoaderData<LoaderType>();
+  const [filteredRecipes, setFilteredRecipes] = useState(recipes);
   return (
     <div className="p-4">
-      <h1 className="text-center text-4xl font-semibold">My Recipes</h1>
+      <div className="flex flex-col">
+        <h1 className="text-center text-4xl font-semibold">My Recipes</h1>
+        <input
+          placeholder="Search recipes..."
+          onChange={(e) => {
+            setFilteredRecipes(
+              recipes.filter((recipe) =>
+                recipe.title
+                  .toLowerCase()
+                  .includes(e.target.value.toLowerCase())
+              )
+            );
+          }}
+          className="place-self-center border-2 border-sky-300 rounded-md p-2 mt-4 w-3/4 lg:w-1/2 2xl:w-1/5"
+        />
+      </div>
+
       <div className="flex flex-row gap-8 mt-8 flex-wrap justify-center">
-        <RecipesDisplay recipes={recipes} />
+        <RecipesDisplay recipes={filteredRecipes} />
       </div>
     </div>
   );

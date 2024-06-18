@@ -25,7 +25,7 @@ export const Navbar = ({ user }: NavbarProps) => {
         {openMobileNav && (
           <div>
             <ul className="flex flex-col items-center justify-between min-h-[250px]">
-              <li className="border-b border-sky-400 my-8 font-medium">
+              <li className="border-b border-sky-400 my-8 font-medium ">
                 <a href="/">Home</a>
               </li>
               <li className="border-b border-sky-400 my-8 font-medium">
@@ -41,19 +41,28 @@ export const Navbar = ({ user }: NavbarProps) => {
       <div className="hidden lg:flex justify-between mt-2 p-2">
         <span>
           <span className="mx-4">
-            <Link to="/" className="font-medium">
+            <Link
+              to="/"
+              className="font-medium hover:text-violet-700 hover:font-semibold"
+            >
               Home
             </Link>
           </span>
 
           <span className="mx-4">
-            <Link to="/recipes/new" className="font-medium">
+            <Link
+              to="/recipes/new"
+              className="font-medium hover:text-violet-700 hover:font-semibold"
+            >
               Add Recipe
             </Link>
           </span>
           <span className="mx-4">
             {" "}
-            <Link to="/inventory" className="font-medium">
+            <Link
+              to="/inventory"
+              className="font-medium hover:text-violet-700 hover:font-semibold"
+            >
               View Inventory
             </Link>
           </span>
@@ -61,14 +70,21 @@ export const Navbar = ({ user }: NavbarProps) => {
 
         <span>
           {!user ? (
-            <Link to="/login" className="font-medium">
+            <Link
+              to="/login"
+              className="font-medium hover:text-violet-700 hover:font-semibold"
+            >
               Login
             </Link>
           ) : (
             <div className="mx-4">
-              <form action="/logout" method="POST" className="flex justify-end">
+              <form
+                action="/logout"
+                method="POST"
+                className="flex justify-end hover:text-orange-700 hover:font-semibold"
+              >
                 <button className="font-medium" type="submit">
-                  Logout <span className="font-semibold">{user.username}</span>
+                  Logout <span className="font-semibold ">{user.username}</span>
                 </button>
               </form>
             </div>

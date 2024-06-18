@@ -429,7 +429,7 @@ export const Recipe = ({
           <div className="hidden lg:flex justify-end w-11/12">
             <button
               onClick={saveEditRecipe}
-              className="p-4 rounded-md font-semibold text-xl mx-16 bg-orange-300 hover:bg-fuchsia-400"
+              className="p-4 rounded-md font-semibold text-xl mx-16 bg-fuchsia-300 hover:bg-fuchsia-500"
             >
               Save Changes
             </button>
