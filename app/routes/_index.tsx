@@ -1,5 +1,5 @@
-import type { LinksFunction } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
+import { Link, redirect, useLoaderData } from "@remix-run/react";
 import { RecipesDisplay } from "~/route-components/recipesDisplay";
 import stylesheet from "~/tailwind.css?url";
 import { db } from "~/utils/db.server";
@@ -8,11 +8,10 @@ import { getUser } from "~/utils/session.server";
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
 ];
-type LoaderProps = {
-  request: Request;
-};
-export const loader = async ({ request }: LoaderProps) => {
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getUser(request);
+  if (!user) throw redirect("/login");
   const data = {
     user,
     recipes: await db.recipe.findMany({

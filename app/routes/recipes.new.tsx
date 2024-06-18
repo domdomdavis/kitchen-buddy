@@ -55,7 +55,6 @@ export default function NewRecipe() {
       navigate(`/recipes/${fetcherData.id}`);
     }
   }, [fetcher.data]);
-  console.log(ingredients, components);
   return (
     <div className="grid p-4 w-full">
       <div className="flex justify-between place-self-center w-11/12 mt-2">
