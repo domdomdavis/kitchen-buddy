@@ -245,7 +245,7 @@ export default function NewRecipe() {
             />
           </div>
         </form>
-        <div className="w-1/4 mx-4 hidden lg:flex">
+        <div className="w-1/4 mx-4 hidden lg:block">
           {instructions.length > 0 &&
             instructions.map((step, index) => {
               return (
@@ -256,7 +256,7 @@ export default function NewRecipe() {
               );
             })}
         </div>
-        <div className="hidden lg:flex">
+        <div className="hidden lg:block">
           <IngredientDisplay
             ingredients={ingredients}
             setIngredients={setIngredients}

@@ -27,7 +27,7 @@ model IngredientList {
 
 model Recipe {
   id            String    @id @default(uuid())
-  title         String    @unique
+  title         String    
   photo_url     String
   ingredients   IngredientList[]
   instructions  String[]
@@ -41,7 +41,7 @@ model Recipe {
 
 model Inventory {
   id           String @id @default(uuid())
-  item         String @unique
+  item         String
   amount       String?
   user          User  @relation(fields: [user_id], references: [id])
   user_id       String

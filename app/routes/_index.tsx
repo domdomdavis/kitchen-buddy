@@ -29,10 +29,10 @@ export const loader = async ({ request }: LoaderProps) => {
 type LoaderType = Awaited<ReturnType<typeof loader>>;
 
 export default function Index() {
-  const { recipes, user } = useLoaderData<LoaderType>();
+  const { recipes } = useLoaderData<LoaderType>();
   return (
     <div className="p-4">
-      <h1 className="text-center text-3xl font-medium">My Recipes</h1>
+      <h1 className="text-center text-4xl font-medium">My Recipes</h1>
       <div className="flex flex-row gap-8 mt-8 flex-wrap justify-center">
         <RecipesDisplay recipes={recipes} />
       </div>
