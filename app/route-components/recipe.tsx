@@ -149,7 +149,7 @@ export const Recipe = ({
         className="lg:hidden self-center h-60 w-60 object-cover rounded-md mt-4"
       />
       <div className="lg:flex lg:justify-center w-full mt-4">
-        <span className="h-108 w-96 p-8 lg:border-2 rounded-md border-violet-300 mx-2">
+        <span className="h-108 w-96 lg:p-8 lg:border-2 rounded-md border-violet-300 lg:mx-2">
           <img
             src={recipe?.photo_url}
             className="rounded-md object-cover hidden lg:flex"
@@ -158,6 +158,7 @@ export const Recipe = ({
             <input
               className="border-2 p-4 border-blue-400 w-full rounded-md mt-2"
               value={inputFieldValues.photoUrl}
+              placeholder="Add photo URL"
               onChange={(e) =>
                 setInputFieldValues({
                   ...inputFieldValues,
@@ -424,13 +425,20 @@ export const Recipe = ({
         </div>
       </div>
       {editMode && (
-        <div className="w-1/6 h-5/6 place-self-end place-content-end fixed">
-          <button
-            onClick={saveEditRecipe}
-            className="p-4 rounded-md font-semibold text-xl mx-16 bg-orange-300"
-          >
-            Save Changes
-          </button>
+        <div>
+          <div className="hidden lg:block w-1/6 h-5/6 place-self-end place-content-end fixed">
+            <button
+              onClick={saveEditRecipe}
+              className="p-4 rounded-md font-semibold text-xl mx-16 bg-orange-300"
+            >
+              Save Changes
+            </button>
+          </div>
+          <div className="lg:hidden text-center font-semibold">
+            <button className="border-2 border-emerald-400 rounded-md p-2 bg-gradient-to-r from-emerald-300 to-teal-300">
+              Save Changes
+            </button>
+          </div>
         </div>
       )}
     </div>
