@@ -56,9 +56,9 @@ export default function NewRecipe() {
     }
   }, [fetcher.data]);
   return (
-    <div className="grid p-4 w-full">
-      <div className="flex justify-between place-self-center w-11/12 mt-2">
-        <form className="flex flex-col">
+    <div className="p-4 w-full">
+      <div className="flex justify-self-center justify-between w-full mt-2 h-3/4">
+        <form className="flex flex-col px-4">
           <h1 className="text-3xl text-center font-semibold mb-4">
             Add New Recipe
           </h1>
@@ -254,7 +254,7 @@ export default function NewRecipe() {
             />
           </div>
         </form>
-        <div className="w-1/4 mx-4 hidden lg:block">
+        <div className="w-1/4 mx-4 hidden lg:block overflow-auto h-full max-h-[850px]">
           {instructions.length > 0 &&
             instructions.map((step, index) => {
               return (
@@ -265,7 +265,7 @@ export default function NewRecipe() {
               );
             })}
         </div>
-        <div className="hidden lg:block">
+        <div className="hidden lg:block overflow-auto h-full max-h-[850px]">
           <IngredientDisplay
             ingredients={ingredients}
             setIngredients={setIngredients}
@@ -311,7 +311,7 @@ export default function NewRecipe() {
         </div>
       </div>
 
-      <div className="w-full flex justify-center">
+      <div className="w-full flex justify-center mt-4">
         <div className="justify-center">
           <button
             onClick={saveRecipe}
