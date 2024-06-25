@@ -92,8 +92,10 @@ export default function RecipeNotepad() {
                   <div className={`border-b-2 flex justify-between pb-2`}>
                     <textarea
                       className={`${
-                        noteSelected && "border-2 border-emerald-300 rounded-md"
-                      } w-full h-24 bg-white p-2`}
+                        noteSelected
+                          ? "h-48 border-2 border-emerald-300 rounded-md"
+                          : "h-24"
+                      } w-full bg-white p-2`}
                       defaultValue={note.body}
                       disabled={!noteSelected}
                       onBlur={(e) => {
@@ -108,9 +110,9 @@ export default function RecipeNotepad() {
                         setSelectedNote(null);
                       }}
                     />
-                    <div className="flex flex-col">
+                    <div className="flex flex-col mx-2">
                       <button
-                        className={`font-medium text-sm ml-4 border-2 p-2 border-sky-400 rounded-md mb-2 ${
+                        className={`border-2 p-2 border-sky-400 rounded-md mb-2 ${
                           noteSelected && "bg-emerald-200"
                         }`}
                         onClick={() => setSelectedNote(note)}
@@ -118,7 +120,7 @@ export default function RecipeNotepad() {
                         <EditIcon />
                       </button>
                       <button
-                        className="font-medium text-sm ml-4 border-2 p-2 border-red-500 rounded-md"
+                        className="border-2 p-2 border-red-500 rounded-md"
                         onClick={() => {
                           removeNote(note);
                         }}
