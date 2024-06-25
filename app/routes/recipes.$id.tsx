@@ -1,6 +1,6 @@
 import { LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DeleteIcon } from "~/common-components/svg/deleteIcon";
 import { EditIcon } from "~/common-components/svg/editIcon";
 import { Recipe } from "~/route-components/recipe";
@@ -48,9 +48,11 @@ export default function RecipeDetails() {
         },
         { method: "POST", action: "/deleteRecipe", encType: "application/json" }
       );
-      navigate("/");
     }
   };
+  useEffect(() => {
+    if (fetcher.data) navigate("/");
+  }, [fetcher.data]);
   return (
     <div>
       <div className="flex lg:hidden justify-end my-2">

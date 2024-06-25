@@ -1,6 +1,6 @@
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
-import { Link, redirect, useLoaderData } from "@remix-run/react";
-import { useState } from "react";
+import { redirect, useLoaderData } from "@remix-run/react";
+import { useEffect, useState } from "react";
 import { RecipesDisplay } from "~/route-components/recipesDisplay";
 import stylesheet from "~/tailwind.css?url";
 import { db } from "~/utils/db.server";
