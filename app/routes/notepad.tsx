@@ -93,8 +93,8 @@ export default function RecipeNotepad() {
                     <textarea
                       className={`${
                         noteSelected
-                          ? "h-48 border-2 border-emerald-300 rounded-md"
-                          : "h-24"
+                          ? "h-64 border-2 border-emerald-300 rounded-md"
+                          : "h-36"
                       } w-full bg-white p-2`}
                       defaultValue={note.body}
                       disabled={!noteSelected}

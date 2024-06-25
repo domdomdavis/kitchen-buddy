@@ -272,7 +272,7 @@ export default function NewRecipe() {
             recipeHasComponents={components.length > 0}
           />
         </div>
-        <div className="mx-16 items-center hidden lg:flex lg:flex-col">
+        <div className="mx-16 items-center hidden 2xl:flex lg:flex-col">
           {inputFieldValues.title !== "" && (
             <h2 className="text-2xl font-semibold mb-4">
               {inputFieldValues.title}
