@@ -53,7 +53,8 @@ model User {
   username     String   @unique
   passwordHash  String
   recipes       Recipe[]
-  inventory      Inventory[]
+  inventory     Inventory[]
+  notes         RecipeNote[]
 }
 
 model Category {
@@ -68,5 +69,13 @@ model CategoriesOnRecipes {
   category      Category    @relation(fields: [category_id], references: [id])
   category_id   String
     @@id([recipe_id, category_id])
+}
 
+model RecipeNote {
+  id            String  @id @default(uuid())
+  body          String
+  user          User  @relation(fields: [user_id], references: [id])
+  user_id       String
+  date_created  DateTime  @default(now())
+  date_updated  DateTime  @updatedAt  @default(now())
 }

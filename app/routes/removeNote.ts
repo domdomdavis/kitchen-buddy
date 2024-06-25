@@ -4,14 +4,9 @@ import { ActionFunctionArgs } from "@remix-run/node";
 export const action = async ({ request }: ActionFunctionArgs) => {
   const prisma = new PrismaClient();
   const { formData } = await request.json();
-  const updatedIngredient = await prisma.ingredientList.update({
+  return await prisma.recipeNote.delete({
     where: {
       id: formData.id,
     },
-    data: {
-      amount: formData.amount,
-      ingredient: formData.ingredient,
-    },
   });
-  return updatedIngredient;
 };

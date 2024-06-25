@@ -6,6 +6,25 @@ type NavbarProps = {
 };
 export const Navbar = ({ user }: NavbarProps) => {
   const [openMobileNav, setOpenMobileNav] = useState(false);
+
+  const links = [
+    {
+      name: "Home",
+      route: "/",
+    },
+    {
+      name: "Add Recipe",
+      route: "/recipes/new",
+    },
+    {
+      name: "View Inventory",
+      route: "/inventory",
+    },
+    {
+      name: "Recipe Notepad",
+      route: "/notepad",
+    },
+  ];
   return (
     <div>
       <div className="block lg:hidden m-4">
@@ -25,15 +44,15 @@ export const Navbar = ({ user }: NavbarProps) => {
         {openMobileNav && (
           <div>
             <ul className="flex flex-col items-center justify-between min-h-[250px]">
-              <li className="border-b border-sky-400 my-8 font-medium ">
-                <a href="/">Home</a>
-              </li>
-              <li className="border-b border-sky-400 my-8 font-medium">
-                <a href="/recipes/new">Add Recipe</a>
-              </li>
-              <li className="border-b border-sky-400 my-8 font-medium">
-                <a href="/inventory">View Inventory</a>
-              </li>
+              {links.map((link, index) => (
+                <li
+                  className="border-b border-sky-400 my-8 font-medium"
+                  key={index}
+                >
+                  <a href={link.route}>{link.name}</a>
+                </li>
+              ))}
+
               <li>
                 <form
                   action="/logout"
@@ -52,34 +71,17 @@ export const Navbar = ({ user }: NavbarProps) => {
       </div>
       <div className="hidden lg:flex justify-between mt-2 p-2">
         <span>
-          <span className="mx-4">
-            <Link
-              to="/"
-              className="font-medium hover:text-violet-700 hover:font-semibold"
-            >
-              Home
-            </Link>
-          </span>
-
-          <span className="mx-4">
-            <Link
-              to="/recipes/new"
-              className="font-medium hover:text-violet-700 hover:font-semibold"
-            >
-              Add Recipe
-            </Link>
-          </span>
-          <span className="mx-4">
-            {" "}
-            <Link
-              to="/inventory"
-              className="font-medium hover:text-violet-700 hover:font-semibold"
-            >
-              View Inventory
-            </Link>
-          </span>
+          {links.map((link, index) => (
+            <span className="mx-6" key={index}>
+              <Link
+                to={link.route}
+                className="font-medium hover:text-violet-700 hover:font-semibold"
+              >
+                {link.name}
+              </Link>
+            </span>
+          ))}
         </span>
-
         <span>
           {!user ? (
             <Link

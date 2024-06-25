@@ -33,3 +33,9 @@ export type UserType = {
   username: string;
   passwordHash: string;
 };
+
+export type NoteType = {
+  id: string;
+  body: string;
+  user_id: string;
+};

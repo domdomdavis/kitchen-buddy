@@ -121,10 +121,10 @@ export default function Inventory() {
     <div className="p-8">
       <div className="flex flex-col items-center">
         <h1 className="text-4xl font-medium">My Inventory</h1>
-        <div className="">
+        <div className="flex-row">
           <input
             placeholder="Add Item"
-            className="m-4 p-4 border-2 border-orange-300 rounded-md w-full"
+            className="m-4 p-4 border-2 border-orange-300 rounded-md"
             value={newItemInput}
             onChange={(e) => setNewItemInput(e.target.value)}
             onKeyDown={(e) => {
@@ -136,7 +136,7 @@ export default function Inventory() {
           />
           <input
             placeholder="Search inventory"
-            className="m-4 p-4 border-2 border-orange-300 rounded-md w-full"
+            className="m-4 p-4 border-2 border-orange-300 rounded-md"
             value={searchInput}
             onChange={(e) => {
               setSearchInput(e.target.value);
