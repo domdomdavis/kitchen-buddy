@@ -75,12 +75,12 @@ export default function RecipeNotepad() {
         Recipe Notepad
       </h1>
 
-      <div className="flex justify-center">
-        <div className="w-1/2 mx-8">
+      <div className="lg:flex justify-center">
+        <div className="lg:w-1/2 mx-8">
           <h2 className="text-xl font-medium">Notes</h2>
           <div className="w-full border-2 rounded-md">
             {sortedNotes.map((note, index) => {
-              const dateCreated = new Date(note.date_created).toLocaleString();
+              const dateCreated = new Date(note.date_created).toDateString();
               const dateUpdated = new Date(note.date_updated).toLocaleString();
               const noteSelected = selectedNote?.id === note.id;
               return (
@@ -133,7 +133,7 @@ export default function RecipeNotepad() {
           </div>
         </div>
 
-        <div className="w-1/4 mx-8">
+        <div className="lg:w-1/4 mx-8">
           <label className="text-xl font-medium">Add Note</label>
           <form method="POST" className="w-full">
             <textarea
