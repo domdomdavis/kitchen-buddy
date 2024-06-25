@@ -127,11 +127,11 @@ export const Recipe = ({
   };
 
   return (
-    <div className="flex flex-col lg:mx-8 w-full pb-8">
+    <div className="flex flex-col lg:mx-8 w-full pb-8 lg:mt-4 2xl:mt-0">
       {!editMode ? (
         <h1 className="text-4xl font-semibold text-center">{recipe?.title}</h1>
       ) : (
-        <div className="place-self-center w-full lg:w-1/4">
+        <div className="place-self-center w-full lg:w-2/3 2xl:w-1/2">
           <input
             className="text-center font-semibold p-2 border-2 border-blue-400 rounded-md w-full text-4xl"
             value={inputFieldValues.recipeTitle}
@@ -259,7 +259,7 @@ export const Recipe = ({
             </div>
           )}
         </span>
-        <span className="p-4 lg:w-1/3 lg:border-2 mx-2 rounded-md border-violet-300">
+        <span className="p-4 2xl:w-1/2 lg:border-2 mx-2 rounded-md border-violet-300">
           <h2 className="text-2xl font-medium mx-2">Ingredients</h2>
           <div className="mx-4 lg:mx-8 mt-2">
             {!editMode ? (
@@ -379,7 +379,7 @@ export const Recipe = ({
       </div>
 
       <div className="flex justify-center mt-4">
-        <div className="p-2 flex-col flex-wrap w-full lg:w-3/4 2xl:w-1/2">
+        <div className="p-2 flex-col flex-wrap w-full lg:w-3/4 2xl:w-4/5">
           <h3 className="text-2xl font-medium">Instructions</h3>
           {editMode && (
             <div className="flex justify-end">
