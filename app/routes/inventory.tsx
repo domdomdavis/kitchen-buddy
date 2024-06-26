@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { ActionFunctionArgs } from "@remix-run/node";
 import { useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
 import { useEffect, useState } from "react";
+import { DotsIcon } from "~/common-components/svg/dotsIcon";
 import { InventoryType, RecipeType } from "~/helpers/types";
 import { RecipesDisplay } from "~/route-components/recipesDisplay";
 import { db } from "~/utils/db.server";
@@ -119,12 +120,14 @@ export default function Inventory() {
   };
   return (
     <div className="p-8">
-      <div className="flex flex-col items-center">
-        <h1 className="text-4xl font-medium">My Inventory</h1>
-        <div className="flex-row">
+      {errorText.length > 0 && <p>{errorText}</p>}
+      <div className="flex">
+        <div className="w-1/2 lg:w-1/4">
+          <h1 className="text-3xl font-medium">My Inventory</h1>
+
           <input
             placeholder="Add Item"
-            className="m-4 p-4 border-2 border-orange-300 rounded-md"
+            className="p-4 border-2 border-violet-300 rounded-md w-3/4 my-2"
             value={newItemInput}
             onChange={(e) => setNewItemInput(e.target.value)}
             onKeyDown={(e) => {
@@ -136,7 +139,7 @@ export default function Inventory() {
           />
           <input
             placeholder="Search inventory"
-            className="m-4 p-4 border-2 border-orange-300 rounded-md"
+            className="p-4 border-2 border-violet-300 rounded-md w-3/4 my-2"
             value={searchInput}
             onChange={(e) => {
               setSearchInput(e.target.value);
@@ -144,40 +147,45 @@ export default function Inventory() {
               if (e.target.value === "") setItemList(inventory);
             }}
           />
-        </div>
-        {errorText.length > 0 && <p>{errorText}</p>}
-
-        <div className="flex-row">
-          {itemList.map((item) => (
-            <span className="mx-4 inline-block" key={item.id}>
-              <button
+          {itemList
+            .sort((a, b) => a.item.localeCompare(b.item))
+            .map((item) => (
+              <div
+                className="border-b-2 border-cyan-200 flex justify-between group"
                 key={item.id}
-                className="mt-3 p-4 rounded-md bg-fuchsia-300 font-medium text-xl hover:bg-fuchsia-500 focus:bg-gradient-to-r from-green-300 to-teal-300"
-                onClick={() => {
-                  setItemSelected(true);
-                  findRecipes(item.item);
-                }}
               >
-                {item.item}
-              </button>
-              <button
-                className="m-2 px-2 text-lg hover:bg-red-400 rounded-md"
-                onClick={() => removeItemFromInventory(item)}
-              >
-                x
-              </button>
-            </span>
-          ))}
+                <button
+                  key={item.id}
+                  className="p-2 h-full w-full focus:bg-gradient-to-r from-green-300 to-teal-300 text-left focus:font-semibold rounded-md"
+                  onClick={() => {
+                    setItemSelected(true);
+                    findRecipes(item.item);
+                  }}
+                >
+                  {item.item.toLowerCase()}
+                </button>
+                <button
+                  className="text-sm invisible group-hover:visible text-gray-700 hover:border-2 border-red-500 rounded-md"
+                  onClick={() => removeItemFromInventory(item)}
+                >
+                  remove item
+                </button>
+              </div>
+            ))}
         </div>
-
-        {itemSelected &&
-          (recipes.length > 0 ? (
-            <div className="mt-8 flex space-x-4">
-              <RecipesDisplay recipes={recipes} />
-            </div>
+        <div className="m-8">
+          {itemSelected ? (
+            recipes.length > 0 ? (
+              <div className="grid xl:grid-cols-3">
+                <RecipesDisplay recipes={recipes} />
+              </div>
+            ) : (
+              <div className="">No recipes for this ingredient.</div>
+            )
           ) : (
-            <div className="mt-8">No recipes for this ingredient.</div>
-          ))}
+            <div>Select an item to view recipes with that ingredient.</div>
+          )}
+        </div>
       </div>
     </div>
   );
