@@ -34,7 +34,7 @@ export const IngredientDisplay = ({
         return (
           <div key={index} className="text-lg">
             <span className="mx-2 text-sm text-cyan-500">✦</span>
-            <span className="font-semibold">{ingredient.amount} </span>
+            <span className="font-medium">{ingredient.amount} </span>
             <span>{ingredient.ingredient}</span>
             {findIngredientInInventory(ingredient)}
             {setIngredients && (
@@ -68,7 +68,7 @@ export const IngredientDisplay = ({
           return (
             <div className="mx-4 text-lg m-2" key={index}>
               <span className="mx-2 text-sm text-cyan-500">✦</span>
-              <span className="font-semibold">{ingredient.amount} </span>
+              <span className="font-medium">{ingredient.amount} </span>
               <span>{ingredient.ingredient}</span>
               {findIngredientInInventory(ingredient)}
               {setIngredients && (

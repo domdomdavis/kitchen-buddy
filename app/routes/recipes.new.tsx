@@ -254,7 +254,7 @@ export default function NewRecipe() {
           <div className="m-8 hidden lg:flex justify-around">
             <div className="flex-col">
               {inputFieldValues.title !== "" ? (
-                <h2 className="text-2xl text-center font-semibold mb-4 w-full">
+                <h2 className="text-2xl text-center font-medium mb-4 w-full">
                   {inputFieldValues.title}
                 </h2>
               ) : (
@@ -263,7 +263,7 @@ export default function NewRecipe() {
               {inputFieldValues.photoUrl !== "" && (
                 <img
                   src={inputFieldValues.photoUrl}
-                  className="h-64 w-48 rounded-md object-cover mb-4"
+                  className="h-80 w-64 rounded-md object-cover mb-4"
                 />
               )}
               {inputFieldValues.prepTime !== "" && (
@@ -305,7 +305,7 @@ export default function NewRecipe() {
               />
             </div>
           </div>
-          <div className="mx-16">
+          <div className="mx-8 h-96 overflow-y-auto">
             {instructions.length > 0 &&
               instructions.map((step, index) => {
                 return (

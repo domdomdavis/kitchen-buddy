@@ -126,7 +126,7 @@ export default function Inventory() {
 
           <input
             placeholder="Add Item"
-            className="p-4 border-2 border-violet-300 rounded-md w-full lg:w-3/4 my-2"
+            className="p-4 border-2 border-violet-300 rounded-md w-full my-2"
             value={newItemInput}
             onChange={(e) => setNewItemInput(e.target.value)}
             onKeyDown={(e) => {
@@ -138,7 +138,7 @@ export default function Inventory() {
           />
           <input
             placeholder="Search inventory"
-            className="p-4 border-2 border-violet-300 rounded-md w-full lg:w-3/4 my-2"
+            className="p-4 border-2 border-violet-300 rounded-md w-full my-2"
             value={searchInput}
             onChange={(e) => {
               setSearchInput(e.target.value);
