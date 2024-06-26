@@ -57,8 +57,8 @@ export default function NewRecipe() {
   }, [fetcher.data]);
   return (
     <div className="p-4 w-full">
-      <div className="flex justify-self-center justify-between w-full mt-2 h-3/4">
-        <form className="flex flex-col px-4">
+      <div className="flex w-full">
+        <form className="flex flex-col px-4 w-full lg:w-1/2 2xl:w-1/4">
           <h1 className="text-3xl text-center font-semibold mb-4">
             Add New Recipe
           </h1>
@@ -163,60 +163,56 @@ export default function NewRecipe() {
                   setComponents([...components, e.target.value]);
               }}
             />
-            <div className="flex-row">
-              <span>
-                <input
-                  name="amount"
-                  id="amount"
-                  className="lg:w-36 p-4 w-full lg:mr-4 mb-2 border-2 border-violet-300 rounded-md"
-                  placeholder="Amount"
-                  value={inputFieldValues.amount}
-                  onChange={(e) =>
+
+            <input
+              name="amount"
+              id="amount"
+              className="p-4 w-full mb-2 border-2 border-violet-300 rounded-md"
+              placeholder="Amount"
+              value={inputFieldValues.amount}
+              onChange={(e) =>
+                setInputFieldValues({
+                  ...inputFieldValues,
+                  amount: e.target.value,
+                })
+              }
+            />
+
+            <input
+              name="ingredient"
+              id="ingredient"
+              className="w-full p-4 border-2 border-violet-300 rounded-md"
+              placeholder="Ingredient"
+              value={inputFieldValues.ingredient}
+              onChange={(e) =>
+                setInputFieldValues({
+                  ...inputFieldValues,
+                  ingredient: e.target.value,
+                })
+              }
+              onKeyDown={(e) => {
+                if (e.code === "Enter") {
+                  if (inputFieldValues.ingredient !== "") {
+                    const newIngredient = {
+                      amount: inputFieldValues.amount,
+                      ingredient: inputFieldValues.ingredient,
+                      component:
+                        components.length > 0
+                          ? components[components.length - 1]
+                          : null,
+                    };
+                    setIngredients([...ingredients, newIngredient]);
                     setInputFieldValues({
                       ...inputFieldValues,
-                      amount: e.target.value,
-                    })
+                      component: "",
+                      amount: "",
+                      ingredient: "",
+                    });
+                    document.getElementById("amount")?.focus();
                   }
-                />
-              </span>
-              <span>
-                <input
-                  name="ingredient"
-                  id="ingredient"
-                  className="lg:w-64 w-full p-4 border-2 border-violet-300 rounded-md"
-                  placeholder="Ingredient"
-                  value={inputFieldValues.ingredient}
-                  onChange={(e) =>
-                    setInputFieldValues({
-                      ...inputFieldValues,
-                      ingredient: e.target.value,
-                    })
-                  }
-                  onKeyDown={(e) => {
-                    if (e.code === "Enter") {
-                      if (inputFieldValues.ingredient !== "") {
-                        const newIngredient = {
-                          amount: inputFieldValues.amount,
-                          ingredient: inputFieldValues.ingredient,
-                          component:
-                            components.length > 0
-                              ? components[components.length - 1]
-                              : null,
-                        };
-                        setIngredients([...ingredients, newIngredient]);
-                        setInputFieldValues({
-                          ...inputFieldValues,
-                          component: "",
-                          amount: "",
-                          ingredient: "",
-                        });
-                        document.getElementById("amount")?.focus();
-                      }
-                    }
-                  }}
-                />
-              </span>
-            </div>
+                }
+              }}
+            />
           </div>
           <div className="flex flex-col mt-4">
             <label htmlFor="Instructions">Add Instructions</label>
@@ -254,60 +250,72 @@ export default function NewRecipe() {
             />
           </div>
         </form>
-        <div className="w-1/4 mx-4 hidden lg:block overflow-auto h-full max-h-[850px]">
-          {instructions.length > 0 &&
-            instructions.map((step, index) => {
-              return (
-                <div className="mb-4" key={index}>
-                  <span className="font-semibold text-xl">{index + 1}. </span>
-                  <span className="text-lg">{step}</span>
-                </div>
-              );
-            })}
-        </div>
-        <div className="hidden lg:block overflow-auto h-full max-h-[850px]">
-          <IngredientDisplay
-            ingredients={ingredients}
-            setIngredients={setIngredients}
-            recipeHasComponents={components.length > 0}
-          />
-        </div>
-        <div className="mx-16 items-center hidden 2xl:flex lg:flex-col">
-          {inputFieldValues.title !== "" && (
-            <h2 className="text-2xl font-semibold mb-4">
-              {inputFieldValues.title}
-            </h2>
-          )}
-          {inputFieldValues.photoUrl !== "" && (
-            <img
-              src={inputFieldValues.photoUrl}
-              className="h-96 w-72 rounded-md object-cover mb-4"
-            />
-          )}
-          {inputFieldValues.prepTime !== "" && (
-            <p className="text-lg">
-              <span>Prep time: </span>
-              <span className="font-medium">{inputFieldValues.prepTime}</span>
-            </p>
-          )}
-          {inputFieldValues.cookTime !== "" && (
-            <p className="text-lg">
-              <span>Cook time: </span>
-              <span className="font-medium">{inputFieldValues.cookTime}</span>
-            </p>
-          )}
-          {inputFieldValues.totalTime !== "" && (
-            <p className="text-lg">
-              <span>Total time: </span>
-              <span className="font-medium">{inputFieldValues.totalTime}</span>
-            </p>
-          )}
-          {inputFieldValues.yield !== "" && (
-            <p className="text-lg">
-              <span>Yield: </span>
-              <span className="font-medium">{inputFieldValues.yield}</span>
-            </p>
-          )}
+        <div className="hidden lg:block w-full">
+          <div className="m-8 hidden lg:flex justify-around">
+            <div className="flex-col">
+              {inputFieldValues.title !== "" ? (
+                <h2 className="text-2xl text-center font-semibold mb-4 w-full">
+                  {inputFieldValues.title}
+                </h2>
+              ) : (
+                <p>Recipe preview will be displayed here.</p>
+              )}
+              {inputFieldValues.photoUrl !== "" && (
+                <img
+                  src={inputFieldValues.photoUrl}
+                  className="h-64 w-48 rounded-md object-cover mb-4"
+                />
+              )}
+              {inputFieldValues.prepTime !== "" && (
+                <p>
+                  <span>Prep time: </span>
+                  <span className="font-medium">
+                    {inputFieldValues.prepTime}
+                  </span>
+                </p>
+              )}
+              {inputFieldValues.cookTime !== "" && (
+                <p>
+                  <span>Cook time: </span>
+                  <span className="font-medium">
+                    {inputFieldValues.cookTime}
+                  </span>
+                </p>
+              )}
+              {inputFieldValues.totalTime !== "" && (
+                <p>
+                  <span>Total time: </span>
+                  <span className="font-medium">
+                    {inputFieldValues.totalTime}
+                  </span>
+                </p>
+              )}
+              {inputFieldValues.yield !== "" && (
+                <p>
+                  <span>Yield: </span>
+                  <span className="font-medium">{inputFieldValues.yield}</span>
+                </p>
+              )}
+            </div>
+            <div>
+              <IngredientDisplay
+                ingredients={ingredients}
+                setIngredients={setIngredients}
+                recipeHasComponents={components.length > 0}
+              />
+            </div>
+          </div>
+          <div className="mx-16">
+            {instructions.length > 0 &&
+              instructions.map((step, index) => {
+                return (
+                  <div className="mb-4" key={index}>
+                    <span className="font-semibold text-xl">{index + 1}. </span>
+                    <span className="text-lg">{step}</span>
+                  </div>
+                );
+              })}
+          </div>
         </div>
       </div>
 

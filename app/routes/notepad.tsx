@@ -141,7 +141,7 @@ export default function RecipeNotepad() {
             <textarea
               id="note"
               name="note"
-              rows={24}
+              rows={15}
               cols={8}
               className=" w-full p-4 border-2 border-violet-300 rounded-md"
               value={recipeNote}

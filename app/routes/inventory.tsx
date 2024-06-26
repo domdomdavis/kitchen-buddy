@@ -60,7 +60,7 @@ export default function Inventory() {
   const [recipes, setRecipes] = useState<RecipeType[]>([]);
   const [newItemInput, setNewItemInput] = useState("");
   const [searchInput, setSearchInput] = useState("");
-  const [itemSelected, setItemSelected] = useState(false);
+  const [itemSelected, setItemSelected] = useState("");
   const [errorText, setErrorText] = useState("");
   const fetcher = useFetcher();
   const navigate = useNavigate();
@@ -122,11 +122,11 @@ export default function Inventory() {
       {errorText.length > 0 && <p>{errorText}</p>}
       <div className="flex">
         <div className="w-1/2 lg:w-1/4">
-          <h1 className="text-3xl font-medium">My Inventory</h1>
+          <h1 className="text-2xl font-medium">My Inventory</h1>
 
           <input
             placeholder="Add Item"
-            className="p-4 border-2 border-violet-300 rounded-md w-3/4 my-2"
+            className="p-4 border-2 border-violet-300 rounded-md w-full lg:w-3/4 my-2"
             value={newItemInput}
             onChange={(e) => setNewItemInput(e.target.value)}
             onKeyDown={(e) => {
@@ -138,7 +138,7 @@ export default function Inventory() {
           />
           <input
             placeholder="Search inventory"
-            className="p-4 border-2 border-violet-300 rounded-md w-3/4 my-2"
+            className="p-4 border-2 border-violet-300 rounded-md w-full lg:w-3/4 my-2"
             value={searchInput}
             onChange={(e) => {
               setSearchInput(e.target.value);
@@ -157,7 +157,7 @@ export default function Inventory() {
                   key={item.id}
                   className="p-2 h-full w-full focus:bg-gradient-to-r from-green-300 to-teal-300 text-left focus:font-semibold rounded-md"
                   onClick={() => {
-                    setItemSelected(true);
+                    setItemSelected(item.item);
                     findRecipes(item.item);
                   }}
                 >
@@ -175,14 +175,23 @@ export default function Inventory() {
         <div className="m-8">
           {itemSelected ? (
             recipes.length > 0 ? (
-              <div className="grid xl:grid-cols-3">
-                <RecipesDisplay recipes={recipes} />
+              <div>
+                <h2 className="text-center text-3xl font-medium">
+                  Recipes with {itemSelected}
+                </h2>
+                <div className="grid xl:grid-cols-3 m-8">
+                  <RecipesDisplay recipes={recipes} />
+                </div>
               </div>
             ) : (
-              <div className="">No recipes for this ingredient.</div>
+              <div className="text-center text-xl font-medium">
+                No recipes for this ingredient.
+              </div>
             )
           ) : (
-            <div>Select an item to view recipes with that ingredient.</div>
+            <div className="text-center text-xl font-medium">
+              Select an item to view recipes with that ingredient.
+            </div>
           )}
         </div>
       </div>
