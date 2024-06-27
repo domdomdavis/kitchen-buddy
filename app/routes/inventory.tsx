@@ -77,6 +77,9 @@ export default function Inventory() {
       },
       { method: "POST", action: "/inventory", encType: "application/json" }
     );
+    document
+      .getElementById("recipe-view")
+      ?.scrollIntoView({ behavior: "smooth" });
   };
   const addItemToInventory = (item: string) => {
     if (
@@ -120,8 +123,8 @@ export default function Inventory() {
   return (
     <div className="p-8">
       {errorText.length > 0 && <p>{errorText}</p>}
-      <div className="flex">
-        <div className="w-1/2 lg:w-1/4">
+      <div className="lg:flex">
+        <div className="w-full lg:w-1/4">
           <h1 className="text-2xl font-medium">My Inventory</h1>
 
           <input
@@ -172,7 +175,7 @@ export default function Inventory() {
               </div>
             ))}
         </div>
-        <div className="m-8">
+        <div className="m-8" id="recipe-view">
           {itemSelected ? (
             recipes.length > 0 ? (
               <div>
