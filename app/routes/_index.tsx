@@ -1,6 +1,7 @@
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import { redirect, useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
+import { IngredientType, RecipeType } from "~/helpers/types";
 import { RecipesDisplay } from "~/route-components/recipesDisplay";
 import stylesheet from "~/tailwind.css?url";
 import { db } from "~/utils/db.server";
@@ -23,18 +24,53 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         ingredients: true,
       },
     }),
+    inventory: await db.inventory.findMany({
+      where: {
+        user_id: user?.id,
+      },
+    }),
   };
   return data;
 };
 type LoaderType = Awaited<ReturnType<typeof loader>>;
 
 export default function Index() {
-  const { recipes } = useLoaderData<LoaderType>();
-  const [filteredRecipes, setFilteredRecipes] = useState(recipes);
+  const { recipes, inventory } = useLoaderData<LoaderType>();
+  const [filteredRecipes, setFilteredRecipes] = useState<RecipeType[]>(recipes);
+
+  const filterRecipes = () => {
+    const availableRecipes: RecipeType[] = [];
+    recipes.map((recipe) => {
+      const availableIngredients: IngredientType[] = [];
+      recipe.ingredients.map((ingredient) => {
+        inventory.map((item) => {
+          if (
+            ingredient.ingredient
+              .toLowerCase()
+              .includes(item.item.toLowerCase()) ||
+            ingredient.ingredient.includes("optional")
+          )
+            availableIngredients.push(ingredient);
+        });
+      });
+      const ingredientsWithoutDupes = new Set(availableIngredients);
+      const recipeIngredientsWithoutDupes = new Set(recipe.ingredients);
+      if (ingredientsWithoutDupes.size === recipeIngredientsWithoutDupes.size)
+        availableRecipes.push(recipe);
+    });
+    setFilteredRecipes(availableRecipes);
+  };
   return (
     <div className="p-4">
+      <button
+        className="p-2 rounded-md bg-gradient-to-r from-sky-300 via-teal-300 to-emerald-300 text-lg font-medium mx-4"
+        onClick={filterRecipes}
+      >
+        filter recipes I can make
+      </button>
       <div className="flex flex-col">
         <h1 className="text-center text-4xl font-semibold">My Recipes</h1>
+
         <input
           placeholder="Search recipes..."
           onChange={(e) => {

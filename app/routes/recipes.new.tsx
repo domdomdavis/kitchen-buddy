@@ -168,7 +168,7 @@ export default function NewRecipe() {
               name="amount"
               id="amount"
               className="p-4 w-full mb-2 border-2 border-violet-300 rounded-md"
-              placeholder="Amount"
+              placeholder="Amount (e.g. 1 cup)"
               value={inputFieldValues.amount}
               onChange={(e) =>
                 setInputFieldValues({

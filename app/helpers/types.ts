@@ -20,6 +20,7 @@ export type RecipeType = {
   prep_time: string | null;
   total_time: string | null;
   yield: string | null;
+  user_id: string | null;
 };
 
 export type InventoryType = {
