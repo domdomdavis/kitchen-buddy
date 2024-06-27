@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
+import { useEffect, useState } from "react";
 import { ShoppingListType } from "~/helpers/types";
 import { db } from "~/utils/db.server";
 import { getUser } from "~/utils/session.server";
@@ -43,6 +44,9 @@ type LoaderType = Awaited<ReturnType<typeof loader>>;
 
 export default function ShoppingList() {
   const { shoppingList, inventory } = useLoaderData<LoaderType>();
+  const [selectedItem, setSelectedItem] = useState<ShoppingListType | null>(
+    null
+  );
   const fetcher = useFetcher();
 
   const removeItem = (item: ShoppingListType) => {
@@ -59,6 +63,7 @@ export default function ShoppingList() {
   };
 
   const addItemToInventory = (item: ShoppingListType) => {
+    setSelectedItem(item);
     if (item) {
       fetcher.submit(
         { formData: item },
@@ -70,6 +75,23 @@ export default function ShoppingList() {
       );
     }
   };
+
+  const editItem = (item: ShoppingListType) => {
+    console.log(item);
+    setSelectedItem(null);
+    if (item) {
+      fetcher.submit(
+        { formData: item },
+        {
+          method: "POST",
+          action: "/editShoppingList",
+          encType: "application/json",
+        }
+      );
+    }
+  };
+
+  useEffect(() => {}, [fetcher.data]);
   return (
     <div>
       <h1 className="text-4xl font-semibold text-center m-4">Shopping List</h1>
@@ -118,18 +140,38 @@ export default function ShoppingList() {
                 (inventoryItem) =>
                   inventoryItem.item.toLowerCase() === item.item.toLowerCase()
               );
+              const itemSelected = selectedItem?.id === item.id;
               return (
                 <div
                   key={index}
                   className="flex justify-between border-b-2 p-2 group hover:bg-fuchsia-100"
                 >
-                  <p>{item.item}</p>
-                  <p className="invisible group-hover:visible lg:visible">
-                    {item.amount ?? ""}
-                  </p>
-                  <p className="invisible group-hover:visible lg:visible">
-                    {item.store ?? ""}
-                  </p>
+                  {!itemSelected ? (
+                    <div className="flex space-x-8 lg:space-x-16">
+                      <p>{item.item}</p>
+                      <p className="">{item.amount ?? ""}</p>
+                      <p className="hidden">{item.store ?? ""}</p>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col space-y-2">
+                      <input
+                        className="p-2 border-2 border-orange-300 rounded-md"
+                        defaultValue={item.item}
+                      />
+                      <input
+                        className="p-2 border-2 border-orange-300 rounded-md"
+                        defaultValue={item.amount ?? ""}
+                        placeholder="Add amount (optional)"
+                      />
+                      <input
+                        className="p-2 border-2 border-orange-300 rounded-md"
+                        defaultValue={item.store ?? ""}
+                        placeholder="Add store (optional)"
+                      />
+                      <button onClick={() => editItem(item)}>Save</button>
+                    </div>
+                  )}
+
                   <div className="invisible group-hover:visible lg:visible">
                     {!itemInInventory && (
                       <button
@@ -146,6 +188,15 @@ export default function ShoppingList() {
                       onClick={() => removeItem(item)}
                     >
                       -
+                    </button>
+                    <button
+                      className="text-sm px-2 hover:bg-fuchsia-400 rounded-md"
+                      onClick={() => {
+                        if (!itemSelected) setSelectedItem(item);
+                        else setSelectedItem(null);
+                      }}
+                    >
+                      {!itemSelected ? "edit" : "stop edit"}
                     </button>
                   </div>
                 </div>

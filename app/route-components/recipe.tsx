@@ -1,4 +1,4 @@
-import { InventoryType, RecipeType } from "~/helpers/types";
+import { IngredientType, InventoryType, RecipeType } from "~/helpers/types";
 import { IngredientDisplay } from "./ingredients/ingredientDisplay";
 import { ChangeEvent, LegacyRef, useEffect, useRef, useState } from "react";
 import { EditModeIngredients } from "./ingredients/editModeIngredients";
@@ -21,6 +21,7 @@ export const Recipe = ({
   const ingredientFetcher = useFetcher();
   const instructionFetcher = useFetcher();
   const saveAllFetcher = useFetcher();
+  const shoppingListFetcher = useFetcher();
   const navigate = useNavigate();
   const [inputFieldValues, setInputFieldValues] = useState({
     recipeTitle: recipe.title,
@@ -44,6 +45,13 @@ export const Recipe = ({
   const [newInstructionInput, setNewInstructionInput] = useState("");
   const [instructions, setInstructions] = useState(recipe.instructions);
   const [ingredients, setIngredients] = useState(recipe.ingredients);
+
+  const missingIngredients = ingredients.filter(
+    (ingredient) =>
+      !inventory.find((item) =>
+        ingredient.ingredient.toLowerCase().includes(item.item.toLowerCase())
+      )
+  );
 
   const saveEditRecipe = () => {
     const updatedRecipe = {
@@ -79,6 +87,16 @@ export const Recipe = ({
       {
         method: "POST",
         action: "/addIngredient",
+        encType: "application/json",
+      }
+    );
+  };
+  const addIngredientsToShoppingList = () => {
+    shoppingListFetcher.submit(
+      { formData: missingIngredients },
+      {
+        method: "POST",
+        action: "/addIngredientsToShoppingList",
         encType: "application/json",
       }
     );
@@ -260,7 +278,15 @@ export const Recipe = ({
           )}
         </span>
         <span className="p-4 2xl:w-1/2 lg:border-2 mx-2 rounded-md border-violet-300">
-          <h2 className="text-2xl font-medium mx-2">Ingredients</h2>
+          <div className="flex w-full justify-between">
+            <h2 className="text-2xl font-medium mx-2">Ingredients</h2>{" "}
+            {missingIngredients.length > 0 && (
+              <button onClick={addIngredientsToShoppingList}>
+                add missing ingredients to shopping list
+              </button>
+            )}
+          </div>
+
           <div className="mx-4 lg:mx-8 mt-2">
             {!editMode ? (
               <IngredientDisplay
