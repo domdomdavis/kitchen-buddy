@@ -24,6 +24,7 @@ export const Navbar = ({ user }: NavbarProps) => {
       name: "Recipe Notepad",
       route: "/notepad",
     },
+    { name: "Shopping List", route: "/shoppingList" },
   ];
   return (
     <div>

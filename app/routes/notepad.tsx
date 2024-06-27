@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { ActionFunctionArgs } from "@remix-run/node";
+import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { useState } from "react";
 import { DeleteIcon } from "~/common-components/svg/deleteIcon";
@@ -24,7 +24,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 }
 
-export const loader = async ({ request }: { request: Request }) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getUser(request);
 
   const notes = await db.recipeNote.findMany({

@@ -40,3 +40,11 @@ export type NoteType = {
   body: string;
   user_id: string;
 };
+
+export type ShoppingListType = {
+  id: string;
+  amount?: string | null;
+  store?: string | null;
+  item: string;
+  user_id: string;
+};

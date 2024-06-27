@@ -54,6 +54,7 @@ model User {
   recipes       Recipe[]
   inventory     Inventory[]
   notes         RecipeNote[]
+  shoppingList  ShoppingList[]
 }
 
 model Category {
@@ -77,4 +78,13 @@ model RecipeNote {
   user_id       String
   date_created  DateTime  @default(now())
   date_updated  DateTime  @updatedAt  @default(now())
+}
+
+model ShoppingList {
+  id            String  @id @default(uuid())
+  item          String
+  amount        String?
+  store         String?
+  user          User  @relation(fields: [user_id], references: [id])
+  user_id       String
 }
