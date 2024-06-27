@@ -62,15 +62,11 @@ export default function Index() {
   };
   return (
     <div className="p-4">
-      <button
-        className="p-2 rounded-md bg-gradient-to-r from-sky-300 via-teal-300 to-emerald-300 text-lg font-medium mx-4"
-        onClick={filterRecipes}
-      >
-        filter recipes I can make
-      </button>
-      <div className="flex flex-col">
+      <div className="flex flex-col items-center">
         <h1 className="text-center text-4xl font-semibold">My Recipes</h1>
-
+        <button className="p-2" onClick={filterRecipes}>
+          filter recipes I can make
+        </button>
         <input
           placeholder="Search recipes..."
           onChange={(e) => {
