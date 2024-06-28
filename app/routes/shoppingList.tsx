@@ -153,7 +153,7 @@ export default function ShoppingList() {
                       <p className="hidden">{item.store ?? ""}</p>
                     </div>
                   ) : (
-                    <div className="flex flex-col space-y-2">
+                    <div className="hidden flex-col space-y-2">
                       <input
                         className="p-2 border-2 border-orange-300 rounded-md"
                         defaultValue={item.item}
