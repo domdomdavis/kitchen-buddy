@@ -175,7 +175,7 @@ export default function ShoppingList() {
                     </div>
                     {itemSelected && (
                       <div>
-                        {item?.amount?.length && (
+                        {item?.amount?.length && item.amount.length > 0 && (
                           <p className="">Quantity: {item.amount}</p>
                         )}
                         {item?.store?.length && <p>Store: {item.store}</p>}
