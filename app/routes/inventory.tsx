@@ -175,24 +175,24 @@ export default function Inventory() {
               </div>
             ))}
         </div>
-        <div className="m-8 w-full justify-center" id="recipe-view">
+        <div className="lg:m-8 w-full justify-center" id="recipe-view">
           {itemSelected ? (
             recipes.length > 0 ? (
               <div>
-                <h2 className="text-center text-3xl font-medium">
+                <h2 className="lg:text-center text-3xl font-medium my-4">
                   Recipes with {itemSelected}
                 </h2>
-                <div className="m-8 xl:grid xl:grid-cols-3">
+                <div className="lg:m-8 xl:grid xl:grid-cols-3">
                   <RecipesDisplay recipes={recipes} />
                 </div>
               </div>
             ) : (
-              <div className="text-center text-xl font-medium">
+              <div className="lg:text-center text-xl font-medium">
                 No recipes for this ingredient.
               </div>
             )
           ) : (
-            <div className="text-center text-xl font-medium">
+            <div className="lg:ext-center text-xl font-medium">
               Select an item to view recipes with that ingredient.
             </div>
           )}
