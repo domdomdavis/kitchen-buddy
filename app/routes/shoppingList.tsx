@@ -178,7 +178,9 @@ export default function ShoppingList() {
                         {item?.amount?.length && item.amount.length > 0 && (
                           <p className="">Quantity: {item.amount}</p>
                         )}
-                        {item?.store?.length && <p>Store: {item.store}</p>}
+                        {item?.store?.length && item.store.length > 0 && (
+                          <p>Store: {item.store}</p>
+                        )}
                         <div className="flex flex-col items-end space-y-2">
                           {!itemInInventory && (
                             <button
