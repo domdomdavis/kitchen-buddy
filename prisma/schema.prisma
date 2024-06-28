@@ -88,3 +88,8 @@ model ShoppingList {
   user          User  @relation(fields: [user_id], references: [id])
   user_id       String
 }
+
+model FoodItem {
+  id            String  @id @default(uuid())
+  product       String  @unique
+}

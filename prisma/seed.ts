@@ -3,17 +3,12 @@ import { PrismaClient } from "@prisma/client";
 async function seed() {
   const prisma = new PrismaClient();
   try {
-    await prisma.category.createMany({
+    await prisma.foodItem.createMany({
       data: [
-        { name: "breakfast" },
-        { name: "breads" },
-        { name: "healthy" },
-        { name: "dessert" },
-        { name: "entrees" },
-        { name: "winter" },
-        { name: "summer" },
-        { name: "spring" },
-        { name: "autumn" },
+        { product: "gorgonzola cheese" },
+        { product: "raspberries" },
+        { product: "basil" },
+        { product: "quinoa" },
       ],
     });
   } catch (e) {

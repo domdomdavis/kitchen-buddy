@@ -48,3 +48,8 @@ export type ShoppingListType = {
   item: string;
   user_id: string;
 };
+
+export type FoodItemType = {
+  id: string;
+  product: string;
+};

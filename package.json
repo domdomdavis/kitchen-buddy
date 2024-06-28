@@ -29,6 +29,7 @@
     "dotenv": "^16.4.5",
     "esbuild-register": "^3.5.0",
     "isbot": "^4.1.0",
+    "parse-ingredient": "^1.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tsconfig-paths": "^4.2.0",
