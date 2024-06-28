@@ -190,7 +190,7 @@ export default function ShoppingList() {
                       -
                     </button>
                     <button
-                      className="text-sm px-2 hover:bg-fuchsia-400 rounded-md"
+                      className="hidden text-sm px-2 hover:bg-fuchsia-400 rounded-md"
                       onClick={() => {
                         if (!itemSelected) setSelectedItem(item);
                         else setSelectedItem(null);
