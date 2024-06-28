@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
+import { ThreeDotsIcon } from "~/common-components/svg/threeDotsIcon";
 import { ShoppingListType } from "~/helpers/types";
 import { db } from "~/utils/db.server";
 import { getUser } from "~/utils/session.server";
@@ -13,6 +14,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const item = form.get("item")?.toString();
   const amount = form.get("amount")?.toString();
   const store = form.get("store")?.toString();
+
   if (user && item) {
     const newItem = await prisma.shoppingList.create({
       data: {
@@ -47,6 +49,12 @@ export default function ShoppingList() {
   const [selectedItem, setSelectedItem] = useState<ShoppingListType | null>(
     null
   );
+  const [addingQuantity, setAddingQuantity] = useState(false);
+  const [addingStore, setAddingStore] = useState(false);
+  const [updatedValues, setUpdatedValues] = useState({
+    amount: "",
+    store: "",
+  });
   const fetcher = useFetcher();
 
   const removeItem = (item: ShoppingListType) => {
@@ -76,22 +84,30 @@ export default function ShoppingList() {
     }
   };
 
-  const editItem = (item: ShoppingListType) => {
-    console.log(item);
-    setSelectedItem(null);
-    if (item) {
-      fetcher.submit(
-        { formData: item },
-        {
-          method: "POST",
-          action: "/editShoppingList",
-          encType: "application/json",
-        }
-      );
-    }
+  const saveEditItem = (item: ShoppingListType) => {
+    const formData = {
+      ...item,
+      amount:
+        updatedValues.amount !== ""
+          ? updatedValues.amount
+          : item.amount ?? null,
+      store:
+        updatedValues.store !== "" ? updatedValues.store : item.store ?? null,
+    };
+    fetcher.submit(
+      { formData },
+      {
+        method: "POST",
+        action: "/editShoppingList",
+        encType: "application/json",
+      }
+    );
   };
-
-  useEffect(() => {}, [fetcher.data]);
+  useEffect(() => {
+    setAddingQuantity(false);
+    setAddingStore(false);
+    setUpdatedValues({ amount: "", store: "" });
+  }, [fetcher.data]);
   return (
     <div>
       <h1 className="text-4xl font-semibold text-center m-4">Shopping List</h1>
@@ -129,79 +145,119 @@ export default function ShoppingList() {
       <div className="flex justify-center">
         {shoppingList.length > 0 && (
           <div className="lg:border-2 border-orange-300 rounded-md w-full lg:w-2/3 m-4 p-4">
-            <div className="hidden lg:flex justify-between text-lg underline">
-              <p>Item</p>
-              <p>Amount</p>
-              <p>Store</p>
-              <p>Actions</p>
-            </div>
-            {shoppingList.map((item, index) => {
-              const itemInInventory = inventory.find(
-                (inventoryItem) =>
-                  inventoryItem.item.toLowerCase() === item.item.toLowerCase()
-              );
-              const itemSelected = selectedItem?.id === item.id;
-              return (
-                <div
-                  key={index}
-                  className="flex justify-between border-b-2 p-2 group hover:bg-fuchsia-100"
-                >
-                  {!itemSelected ? (
-                    <div className="flex space-x-8 lg:space-x-16">
-                      <p>{item.item}</p>
-                      <p className="">{item.amount ?? ""}</p>
-                      <p className="hidden">{item.store ?? ""}</p>
-                    </div>
-                  ) : (
-                    <div className="hidden flex-col space-y-2">
-                      <input
-                        className="p-2 border-2 border-orange-300 rounded-md"
-                        defaultValue={item.item}
-                      />
-                      <input
-                        className="p-2 border-2 border-orange-300 rounded-md"
-                        defaultValue={item.amount ?? ""}
-                        placeholder="Add amount (optional)"
-                      />
-                      <input
-                        className="p-2 border-2 border-orange-300 rounded-md"
-                        defaultValue={item.store ?? ""}
-                        placeholder="Add store (optional)"
-                      />
-                      <button onClick={() => editItem(item)}>Save</button>
-                    </div>
-                  )}
-
-                  <div className="invisible group-hover:visible lg:visible">
-                    {!itemInInventory && (
-                      <button
-                        title="Add Item to Inventory"
-                        className="mr-2 px-2 rounded-md hover:bg-fuchsia-400 font-medium"
-                        onClick={() => addItemToInventory(item)}
+            {shoppingList
+              .sort((a, b) => a.item.localeCompare(b.item))
+              .map((item, index) => {
+                const itemInInventory = inventory.find(
+                  (inventoryItem) =>
+                    inventoryItem.item.toLowerCase() === item.item.toLowerCase()
+                );
+                const itemSelected = selectedItem?.id === item.id;
+                return (
+                  <div className="border-b-2 p-2">
+                    <div key={index} className="flex justify-between">
+                      <p
+                        className={`text-lg ${
+                          itemSelected && "font-semibold"
+                        } w-full`}
+                        onClick={() => setSelectedItem(item)}
                       >
-                        +
-                      </button>
+                        {item.item}
+                      </p>
+                      {itemSelected && (
+                        <button
+                          className="font-semibold"
+                          onClick={() => setSelectedItem(null)}
+                        >
+                          -
+                        </button>
+                      )}
+                    </div>
+                    {itemSelected && (
+                      <div>
+                        {item?.amount?.length && (
+                          <p className="">Quantity: {item.amount}</p>
+                        )}
+                        {item?.store?.length && <p>Store: {item.store}</p>}
+                        <div className="flex flex-col items-end space-y-2">
+                          {!itemInInventory && (
+                            <button
+                              className="mr-2 rounded-md text-right hover:text-violet-700"
+                              onClick={() => addItemToInventory(item)}
+                            >
+                              Add to Inventory
+                            </button>
+                          )}
+                          <button
+                            className="px-2 rounded-md text-right hover:text-violet-700"
+                            onClick={() => removeItem(item)}
+                          >
+                            Remove from Shopping List
+                          </button>
+                          <button
+                            className="px-2 rounded-md text-right hover:text-violet-700"
+                            onClick={() => setAddingQuantity(!addingQuantity)}
+                          >
+                            {!addingQuantity
+                              ? `${
+                                  !item.amount
+                                    ? "Add Quantity"
+                                    : "Edit Quantity"
+                                }`
+                              : "Cancel Add Quantity"}
+                          </button>
+                          <button
+                            className="px-2 rounded-md text-right hover:text-violet-700"
+                            onClick={() => setAddingStore(!addingStore)}
+                          >
+                            {!addingStore
+                              ? `${!item.store ? "Add Store" : "Edit Store"}`
+                              : "Cancel Add Store"}
+                          </button>
+                        </div>
+                        {addingQuantity && (
+                          <input
+                            id="editQuantity"
+                            name="editQuantity"
+                            className="p-2 border-2 border-orange-300 rounded-md w-3/4 my-2"
+                            defaultValue={item.amount ?? ""}
+                            placeholder="Add quantity"
+                            onChange={(e) =>
+                              setUpdatedValues({
+                                ...updatedValues,
+                                amount: e.target.value,
+                              })
+                            }
+                          />
+                        )}
+                        {addingStore && (
+                          <input
+                            id="editStore"
+                            name="editStore"
+                            className="p-2 border-2 border-orange-300 rounded-md w-3/4 my-2"
+                            defaultValue={item.store ?? ""}
+                            placeholder="Add store"
+                            onChange={(e) =>
+                              setUpdatedValues({
+                                ...updatedValues,
+                                store: e.target.value,
+                              })
+                            }
+                          />
+                        )}
+                        {(addingQuantity || addingStore) && (
+                          <button
+                            onClick={() => saveEditItem(item)}
+                            className="m-2 border-2 p-2 border-emerald-300 rounded-md font-medium"
+                          >
+                            submit
+                          </button>
+                        )}
+                      </div>
                     )}
-                    <button
-                      title="Delete Item from List"
-                      className="px-2 rounded-md hover:bg-fuchsia-400 font-medium"
-                      onClick={() => removeItem(item)}
-                    >
-                      -
-                    </button>
-                    <button
-                      className="hidden text-sm px-2 hover:bg-fuchsia-400 rounded-md"
-                      onClick={() => {
-                        if (!itemSelected) setSelectedItem(item);
-                        else setSelectedItem(null);
-                      }}
-                    >
-                      {!itemSelected ? "edit" : "stop edit"}
-                    </button>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
         )}
       </div>
