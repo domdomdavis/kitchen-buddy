@@ -45,6 +45,9 @@ export const Recipe = ({
   const [newInstructionInput, setNewInstructionInput] = useState("");
   const [instructions, setInstructions] = useState(recipe.instructions);
   const [ingredients, setIngredients] = useState(recipe.ingredients);
+  const [buttonText, setButtonText] = useState(
+    "add missing ingredients to shopping list"
+  );
 
   const missingIngredients = ingredients.filter(
     (ingredient) =>
@@ -124,8 +127,10 @@ export const Recipe = ({
     } else if (instructionFetcher.data) {
       const fetcherData = instructionFetcher.data as RecipeType;
       setInstructions(fetcherData.instructions);
+    } else if (shoppingListFetcher.data) {
+      setButtonText("added to shopping list!");
     }
-  }, [saveAllFetcher.data, instructionFetcher.data]);
+  }, [saveAllFetcher.data, instructionFetcher.data, shoppingListFetcher.data]);
 
   const recipeComponents: string[] = [];
   const components = new Set(
@@ -282,7 +287,7 @@ export const Recipe = ({
             <h2 className="text-2xl font-medium mx-2">Ingredients</h2>{" "}
             {missingIngredients.length > 0 && (
               <button onClick={addIngredientsToShoppingList}>
-                add missing ingredients to shopping list
+                {buttonText}
               </button>
             )}
           </div>
