@@ -175,10 +175,10 @@ export default function ShoppingList() {
                     </div>
                     {itemSelected && (
                       <div>
-                        {item?.amount?.length && item.amount.length > 0 && (
+                        {item?.amount && item.amount !== "" && (
                           <p className="">Quantity: {item.amount}</p>
                         )}
-                        {item?.store?.length && item.store.length > 0 && (
+                        {item?.store && item.store !== "" && (
                           <p>Store: {item.store}</p>
                         )}
                         <div className="flex flex-col items-end space-y-2">

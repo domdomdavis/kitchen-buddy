@@ -174,7 +174,7 @@ export const Recipe = ({
       <div className="lg:flex lg:justify-center w-full mt-4">
         <span className="h-108 w-96 lg:p-8 lg:border-2 rounded-md border-violet-300 lg:mx-2">
           <img
-            src={recipe?.photo_url}
+            src={inputFieldValues.photoUrl}
             className="rounded-md object-cover hidden lg:flex"
           />
           {editMode && (
