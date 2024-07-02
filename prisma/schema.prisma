@@ -17,7 +17,6 @@ datasource db {
 
 model IngredientList {
   id            Int     @id @default(autoincrement())
-  amount        String
   ingredient    String
   component     String?
   recipe        Recipe  @relation(fields: [recipe_id], references: [id])
@@ -25,18 +24,18 @@ model IngredientList {
 }
 
 model Recipe {
-  id            String    @id @default(uuid())
-  title         String    
-  photo_url     String
-  ingredients   IngredientList[]
-  instructions  String[]
-  cook_time     String?
-  prep_time     String?
-  total_time    String?
-  yield         String?
-  user          User  @relation(fields: [user_id], references: [id])
-  user_id       String
-  categories    CategoriesOnRecipes[]
+  id                  String    @id @default(uuid())
+  title               String    
+  photo_url           String
+  ingredients         IngredientList[]
+  instructions        String[]
+  cook_time           String?
+  prep_time           String?
+  total_time          String?
+  yield               String?
+  user                User  @relation(fields: [user_id], references: [id])
+  user_id             String
+  original_recipe     String?
 }
 
 model Inventory {
@@ -57,19 +56,7 @@ model User {
   shoppingList  ShoppingList[]
 }
 
-model Category {
-  id            String  @id @default(uuid())
-  name          String
-  recipes       CategoriesOnRecipes[]
-}
 
-model CategoriesOnRecipes {
-  recipe        Recipe      @relation(fields: [recipe_id], references: [id])
-  recipe_id     String
-  category      Category    @relation(fields: [category_id], references: [id])
-  category_id   String
-    @@id([recipe_id, category_id])
-}
 
 model RecipeNote {
   id            String  @id @default(uuid())

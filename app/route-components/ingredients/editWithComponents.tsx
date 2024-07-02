@@ -95,7 +95,7 @@ export const EditWithComponents = ({
             <div key={index} className="pl-4 w-full">
               <span className="mx-2 text-sm text-cyan-500">✦</span>
 
-              <span className="">
+              {/* <span className="">
                 <input
                   defaultValue={value.amount}
                   className="border-2 p-2 border-blue-400 rounded-md m-2 w-1/4"
@@ -108,7 +108,7 @@ export const EditWithComponents = ({
                     updateIngredientsArray(ingredient, updated);
                   }}
                 />
-              </span>
+              </span> */}
               <span className="w-full">
                 <input
                   defaultValue={value.ingredient}

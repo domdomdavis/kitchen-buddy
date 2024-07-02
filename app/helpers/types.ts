@@ -1,5 +1,4 @@
 export type IngredientType = {
-  amount: string;
   ingredient: string;
   component?: string | null;
   recipe_id?: string;
@@ -21,6 +20,7 @@ export type RecipeType = {
   total_time: string | null;
   yield: string | null;
   user_id: string | null;
+  original_recipe: string | null;
 };
 
 export type InventoryType = {

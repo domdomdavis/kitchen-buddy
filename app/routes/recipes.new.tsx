@@ -11,9 +11,9 @@ export default function NewRecipe() {
   const [components, setComponents] = useState<string[]>([]);
   const defaultInputValues = {
     title: "",
+    originalRecipe: "",
     photoUrl: "",
     component: "",
-    amount: "",
     ingredient: "",
     instruction: "",
     prepTime: "",
@@ -87,6 +87,19 @@ export default function NewRecipe() {
             }
             className="w-full p-4 border-2 border-violet-300 rounded-md  mb-2"
             placeholder="Photo URL"
+          />
+          <input
+            name="original_recipe"
+            id="original_recipe"
+            className="w-full p-4 border-2 border-violet-300 rounded-md mb-2"
+            placeholder="Original Recipe URL (optional)"
+            value={inputFieldValues.originalRecipe}
+            onChange={(e) =>
+              setInputFieldValues({
+                ...inputFieldValues,
+                originalRecipe: e.target.value,
+              })
+            }
           />
           <input
             value={inputFieldValues.prepTime ?? ""}
@@ -165,20 +178,6 @@ export default function NewRecipe() {
             />
 
             <input
-              name="amount"
-              id="amount"
-              className="p-4 w-full mb-2 border-2 border-violet-300 rounded-md"
-              placeholder="Amount (e.g. 1 cup)"
-              value={inputFieldValues.amount}
-              onChange={(e) =>
-                setInputFieldValues({
-                  ...inputFieldValues,
-                  amount: e.target.value,
-                })
-              }
-            />
-
-            <input
               name="ingredient"
               id="ingredient"
               className="w-full p-4 border-2 border-violet-300 rounded-md"
@@ -194,7 +193,6 @@ export default function NewRecipe() {
                 if (e.code === "Enter") {
                   if (inputFieldValues.ingredient !== "") {
                     const newIngredient = {
-                      amount: inputFieldValues.amount,
                       ingredient: inputFieldValues.ingredient,
                       component:
                         components.length > 0
@@ -205,7 +203,6 @@ export default function NewRecipe() {
                     setInputFieldValues({
                       ...inputFieldValues,
                       component: "",
-                      amount: "",
                       ingredient: "",
                     });
                     document.getElementById("amount")?.focus();

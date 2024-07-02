@@ -9,7 +9,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       id: formData.id,
     },
     data: {
-      amount: formData.amount,
       ingredient: formData.ingredient,
     },
   });

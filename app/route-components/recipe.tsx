@@ -2,7 +2,7 @@ import { IngredientType, InventoryType, RecipeType } from "~/helpers/types";
 import { IngredientDisplay } from "./ingredients/ingredientDisplay";
 import { ChangeEvent, LegacyRef, useEffect, useRef, useState } from "react";
 import { EditModeIngredients } from "./ingredients/editModeIngredients";
-import { useFetcher, useNavigate } from "@remix-run/react";
+import { Link, useFetcher, useNavigate } from "@remix-run/react";
 import { InstructionsDisplay } from "./instructionsDisplay";
 
 type RecipeProps = {
@@ -25,6 +25,7 @@ export const Recipe = ({
   const navigate = useNavigate();
   const [inputFieldValues, setInputFieldValues] = useState({
     recipeTitle: recipe.title,
+    originalRecipe: recipe.original_recipe,
     photoUrl: recipe.photo_url,
     prepTime: recipe.prep_time,
     cookTime: recipe.cook_time,
@@ -60,6 +61,7 @@ export const Recipe = ({
     const updatedRecipe = {
       id: recipe.id,
       title: inputFieldValues.recipeTitle,
+      original_recipe: inputFieldValues.originalRecipe,
       photo_url: inputFieldValues.photoUrl,
       prep_time: inputFieldValues.prepTime,
       cook_time: inputFieldValues.cookTime,
@@ -152,9 +154,20 @@ export const Recipe = ({
   return (
     <div className="flex flex-col lg:mx-8 w-full pb-8 lg:mt-4 2xl:mt-0">
       {!editMode ? (
-        <h1 className="text-4xl font-semibold text-center">{recipe?.title}</h1>
+        <div className="text-center">
+          <h1 className="text-4xl font-semibold">{recipe?.title}</h1>
+          {recipe.original_recipe && (
+            <Link
+              to={recipe.original_recipe ?? "#"}
+              className="text-center hover:text-teal-700 hover:font-semibold"
+              target="_blank"
+            >
+              go to original recipe
+            </Link>
+          )}
+        </div>
       ) : (
-        <div className="place-self-center w-full lg:w-2/3 2xl:w-1/2">
+        <div className="place-self-center w-full lg:w-2/3 2xl:w-1/2 flex flex-col items-center">
           <input
             className="text-center font-semibold p-2 border-2 border-blue-400 rounded-md w-full text-4xl"
             value={inputFieldValues.recipeTitle}
@@ -162,6 +175,17 @@ export const Recipe = ({
               setInputFieldValues({
                 ...inputFieldValues,
                 recipeTitle: e.target.value,
+              })
+            }
+          />
+          <input
+            className="text-center p-2 border-2 border-blue-400 rounded-md 2xl:w-1/2 mt-4"
+            value={inputFieldValues.originalRecipe ?? ""}
+            placeholder="Original Recipe URL"
+            onChange={(e) =>
+              setInputFieldValues({
+                ...inputFieldValues,
+                originalRecipe: e.target.value,
               })
             }
           />
