@@ -23,13 +23,29 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
       user_id: user?.id,
     },
   });
+  const foodItems = await db.foodItem.findMany({
+    select: {
+      product: true,
+    },
+  });
+  const allRecipes = await db.recipe.findMany({
+    where: {
+      user_id: user?.id,
+    },
+    select: {
+      title: true,
+      id: true,
+    },
+  });
   if (!recipe) throw redirect("/");
-  return { recipe, inventory };
+  return { recipe, inventory, foodItems, allRecipes };
 };
 type LoaderType = Awaited<ReturnType<typeof loader>>;
 
 export default function RecipeDetails() {
-  const { recipe, inventory } = useLoaderData<LoaderType>();
+  const { recipe, inventory, foodItems, allRecipes } =
+    useLoaderData<LoaderType>();
+  const foodProducts = foodItems.map((item) => item.product);
   const navigate = useNavigate();
   const fetcher = useFetcher();
   const [editMode, setEditMode] = useState<boolean>(false);
@@ -88,6 +104,8 @@ export default function RecipeDetails() {
         recipeHasComponents={recipeHasComponents}
         editMode={editMode}
         inventory={inventory}
+        foodItems={foodProducts}
+        allRecipes={allRecipes}
       />
     </div>
   );

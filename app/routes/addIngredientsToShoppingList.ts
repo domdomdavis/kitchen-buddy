@@ -19,10 +19,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       formData.map((ingredient: IngredientType) => ingredient.ingredient)
     );
     const ingredients = Array.from(ingredientNamesUnique);
-    const matchingFoodItems = ingredients.map((ingredient) =>
-      foodItems.find((item) =>
-        ingredient.toLowerCase().includes(item.product.toLowerCase())
-      )
+    const matchingFoodItems = ingredients.map(
+      (ingredient) =>
+        foodItems
+          .filter((item) =>
+            ingredient.toLowerCase().includes(item.product.toLowerCase())
+          )
+          .sort((a, b) => b.product.length - a.product.length)[0]
     );
     const items: { item: string; user_id: string }[] = [];
 

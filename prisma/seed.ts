@@ -5,12 +5,10 @@ async function seed() {
   try {
     await prisma.foodItem.createMany({
       data: [
-        { product: "sesame oil" },
-        { product: "ume plum vinegar" },
-        { product: "scallions" },
-        { product: "green onions" },
-        { product: "spring onions" },
-        { product: "red onions" },
+        { product: "blood orange juice" },
+        { product: "lemon juice" },
+        { product: "lime juice" },
+        { product: "orange juice" },
       ],
     });
   } catch (e) {
