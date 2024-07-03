@@ -28,6 +28,10 @@ export default function NewRecipe() {
   const saveRecipe = () => {
     const newRecipe = {
       title: inputFieldValues.title,
+      original_recipe:
+        inputFieldValues.originalRecipe !== ""
+          ? inputFieldValues.originalRecipe
+          : null,
       photo_url: inputFieldValues.photoUrl,
       prep_time:
         inputFieldValues.prepTime !== "" ? inputFieldValues.prepTime : null,
@@ -309,6 +313,15 @@ export default function NewRecipe() {
                   <div className="mb-4" key={index}>
                     <span className="font-semibold text-xl">{index + 1}. </span>
                     <span className="text-lg">{step}</span>
+                    <button
+                      className="ml-4"
+                      onClick={() => {
+                        instructions.splice(index, 1);
+                        setInstructions([...instructions]);
+                      }}
+                    >
+                      remove
+                    </button>
                   </div>
                 );
               })}

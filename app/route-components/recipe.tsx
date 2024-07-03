@@ -41,7 +41,6 @@ export const Recipe = ({
   const [addingNewIngredient, setAddingNewIngredient] = useState(false);
   const [addingNewStep, setAddingNewStep] = useState(false);
   const defaultIngredientInputValues = {
-    amount: "",
     ingredient: "",
     component: "",
   };
@@ -78,7 +77,6 @@ export const Recipe = ({
   };
   const addIngredient = () => {
     const newIngredient = {
-      amount: newIngredientInput.amount,
       ingredient: newIngredientInput.ingredient,
       component:
         newIngredientInput.component !== ""
@@ -377,23 +375,11 @@ export const Recipe = ({
                       </div>
                     )}
                     <div>
-                      <span className="mx-2 text-sm text-emerald-500">✦</span>
-                      <span className="">
-                        <input
-                          value={newIngredientInput.amount}
-                          className="border-2 p-2 border-blue-400 rounded-md m-2"
-                          onChange={(e) =>
-                            setNewIngredientInput({
-                              ...newIngredientInput,
-                              amount: e.target.value,
-                            })
-                          }
-                        />
-                      </span>
+                      <span className="mx-2 text-sm text-sky-500">✦</span>
                       <span className="w-full">
                         <input
                           value={newIngredientInput.ingredient}
-                          className="border-2 p-2 border-blue-400 rounded-md m-2 w-1/2"
+                          className="border-2 p-2 border-blue-400 rounded-md m-2 w-2/3"
                           onChange={(e) =>
                             setNewIngredientInput({
                               ...newIngredientInput,

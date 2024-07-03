@@ -5,10 +5,15 @@ async function seed() {
   try {
     await prisma.foodItem.createMany({
       data: [
-        { product: "blood orange juice" },
-        { product: "lemon juice" },
-        { product: "lime juice" },
-        { product: "orange juice" },
+        { product: "bell pepper" },
+        { product: "yellow onion" },
+        { product: "chili powder" },
+        { product: "garlic powder" },
+        { product: "ketchup" },
+        { product: "BBQ sauce" },
+        { product: "bread crumbs" },
+        { product: "oat flour" },
+        { product: "feta cheese" },
       ],
     });
   } catch (e) {

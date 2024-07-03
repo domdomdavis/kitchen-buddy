@@ -7,7 +7,8 @@ import {
 import { Form, Link, useLoaderData } from "@remix-run/react";
 import { useRef, useState } from "react";
 import { findMissingIngredients } from "~/helpers/findMissingIngredients";
-import { RecipeType } from "~/helpers/types";
+import { matchIngredientsToFoodItems } from "~/helpers/matchIngredientsToFoodItems";
+import { IngredientType, RecipeType } from "~/helpers/types";
 import { db } from "~/utils/db.server";
 import { getUser } from "~/utils/session.server";
 
@@ -44,6 +45,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         user_id: user?.id,
       },
     }),
+    foodItems: await db.foodItem.findMany(),
   };
   return data;
 };
@@ -53,15 +55,23 @@ export default function RecipeQueue() {
   const data = useLoaderData<LoaderType>();
   const inventory = data.inventory;
 
+  const getMissingFoodItems = (ingredients: IngredientType[]) => {
+    const missingIngredients = findMissingIngredients({
+      ingredients,
+      inventory,
+    });
+    const foodItems = matchIngredientsToFoodItems({
+      ingredients: missingIngredients,
+      foodItems: data.foodItems,
+    });
+    return foodItems;
+  };
+
   return (
     <div className="flex flex-col items-center">
       <h1 className="text-center font-semibold text-3xl mt-2">Recipe Queue</h1>
       {data.recipes.map((recipe, index) => {
-        const ingredients = recipe.ingredients;
-        const missingIngredients = findMissingIngredients({
-          ingredients,
-          inventory,
-        });
+        const missingIngredients = getMissingFoodItems(recipe.ingredients);
         return (
           <div
             className="p-4 w-full lg:w-2/3 flex border-b-2 justify-between"
@@ -83,10 +93,10 @@ export default function RecipeQueue() {
                 />
                 {missingIngredients.length > 0 && (
                   <div className="mx-4 my-2">
-                    Missing:
+                    <p className="font-medium">Missing Ingredients:</p>
                     <ul>
                       {missingIngredients.map((ingredient) => (
-                        <li>&#x2022; {ingredient.ingredient}</li>
+                        <li>&#x2022; {ingredient.product}</li>
                       ))}
                     </ul>
                   </div>
