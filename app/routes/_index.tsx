@@ -43,12 +43,17 @@ export default function Index() {
     recipes.map((recipe) => {
       const availableIngredients: IngredientType[] = [];
       recipe.ingredients.map((ingredient) => {
+        const iceOrWater =
+          ingredient.ingredient.toLowerCase() === "ice" ||
+          ingredient.ingredient.toLowerCase().includes(" ice") ||
+          ingredient.ingredient.toLowerCase().includes(" water");
         inventory.map((item) => {
           if (
             ingredient.ingredient
               .toLowerCase()
               .includes(item.item.toLowerCase()) ||
-            ingredient.ingredient.includes("optional")
+            ingredient.ingredient.includes("optional") ||
+            iceOrWater
           )
             availableIngredients.push(ingredient);
         });

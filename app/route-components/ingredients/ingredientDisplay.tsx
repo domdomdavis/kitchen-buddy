@@ -28,7 +28,11 @@ export const IngredientDisplay = ({
             .toLowerCase()
             .includes(item.item.toLowerCase()) ?? null
       );
-      if (found)
+      const iceOrWater =
+        ingredient.ingredient.toLowerCase().includes(" ice") ||
+        ingredient.ingredient.toLowerCase() === "ice" ||
+        ingredient.ingredient.toLowerCase().includes("water");
+      if (found || iceOrWater)
         return <span className="text-green-500 ml-2 font-bold">✓</span>;
       else return <span className="text-red-500 ml-2">x</span>;
     }
@@ -54,7 +58,7 @@ export const IngredientDisplay = ({
         let ingredientRegExp = new RegExp(matchingFoodItem ?? "", "g");
         ingredientString = ingredientString.replace(
           ingredientRegExp,
-          `<span className="font-semibold">${matchingFoodItem}</span>`
+          `<span className="font-medium">${matchingFoodItem}</span>`
         );
       }
       return <span>{parse(ingredientString)}</span>;
