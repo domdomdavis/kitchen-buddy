@@ -81,4 +81,5 @@ model ShoppingList {
 model FoodItem {
   id            String  @id @default(uuid())
   product       String  @unique
+  perishable    Boolean?
 }

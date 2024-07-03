@@ -61,6 +61,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
       id: true,
     },
   });
+
   if (!recipe) throw redirect("/");
   return { recipe, inventory, foodItems, allRecipes };
 };
