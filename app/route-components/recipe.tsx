@@ -1,14 +1,10 @@
-import {
-  FoodItemType,
-  IngredientType,
-  InventoryType,
-  RecipeType,
-} from "~/helpers/types";
+import { InventoryType, RecipeType } from "~/helpers/types";
 import { IngredientDisplay } from "./ingredients/ingredientDisplay";
-import { ChangeEvent, LegacyRef, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { EditModeIngredients } from "./ingredients/editModeIngredients";
 import { Link, useFetcher, useNavigate } from "@remix-run/react";
 import { InstructionsDisplay } from "./instructionsDisplay";
+import { findMissingIngredients } from "~/helpers/findMissingIngredients";
 
 type RecipeProps = {
   recipe: RecipeType;
@@ -59,13 +55,7 @@ export const Recipe = ({
     "add missing ingredients to shopping list"
   );
 
-  const missingIngredients = ingredients.filter(
-    (ingredient) =>
-      !inventory.find((item) =>
-        ingredient.ingredient.toLowerCase().includes(item.item.toLowerCase())
-      )
-  );
-
+  const missingIngredients = findMissingIngredients({ ingredients, inventory });
   const saveEditRecipe = () => {
     const updatedRecipe = {
       id: recipe.id,

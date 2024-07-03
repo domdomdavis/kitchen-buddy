@@ -1,12 +1,36 @@
-import { LoaderFunctionArgs, redirect } from "@remix-run/node";
-import { useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
+import { PrismaClient } from "@prisma/client";
+import {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  redirect,
+} from "@remix-run/node";
+import {
+  Form,
+  useActionData,
+  useFetcher,
+  useLoaderData,
+  useNavigate,
+} from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { DeleteIcon } from "~/common-components/svg/deleteIcon";
 import { EditIcon } from "~/common-components/svg/editIcon";
 import { Recipe } from "~/route-components/recipe";
 import { db } from "~/utils/db.server";
 import { getUser } from "~/utils/session.server";
-
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const prisma = new PrismaClient();
+  const form = await request.formData();
+  const id = form.get("addToQueue")?.toString() ?? "";
+  const updated = await prisma.recipe.update({
+    where: {
+      id: id,
+    },
+    data: {
+      in_queue: true,
+    },
+  });
+  return updated;
+};
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const user = await getUser(request);
 
@@ -45,6 +69,7 @@ type LoaderType = Awaited<ReturnType<typeof loader>>;
 export default function RecipeDetails() {
   const { recipe, inventory, foodItems, allRecipes } =
     useLoaderData<LoaderType>();
+  useActionData();
   const foodProducts = foodItems.map((item) => item.product);
   const navigate = useNavigate();
   const fetcher = useFetcher();
@@ -71,9 +96,24 @@ export default function RecipeDetails() {
   }, [fetcher.data]);
   return (
     <div>
-      <div className="flex lg:hidden justify-end my-2">
+      <div className="flex justify-end my-2">
+        {!recipe.in_queue ? (
+          <Form method="POST">
+            <button
+              id="addToQueue"
+              name="addToQueue"
+              value={recipe.id}
+              type="submit"
+              className="mr-4 border-2 border-sky-300 bg-gradient-to-r from-emerald-300 via-teal-300 to-sky-300 p-2 rounded-md font-semibold"
+            >
+              Add to Recipe Queue
+            </button>
+          </Form>
+        ) : (
+          <p className="mr-4 p-2 font-semibold">Recipe in Queue!</p>
+        )}
         <button
-          className="mr-4 border-2 border-sky-300 hover:bg-emerald-400 p-2 rounded-md"
+          className="mr-4 border-2 border-sky-300  p-2 rounded-md"
           onClick={() => setEditMode(!editMode)}
         >
           <EditIcon />
@@ -83,20 +123,6 @@ export default function RecipeDetails() {
           onClick={deleteRecipe}
         >
           <DeleteIcon />
-        </button>
-      </div>
-      <div className="hidden lg:flex w-full justify-end mt-8">
-        <button
-          className="text-xl lg:mr-8 p-4 bg-gradient-to-r from-sky-300 to-teal-300 rounded-md font-semibold"
-          onClick={() => setEditMode(!editMode)}
-        >
-          {!editMode ? "Edit Recipe" : "Stop Editing"}
-        </button>
-        <button
-          className="text-xl lg:mr-8 p-4 border-red-500 border-2 text-red-500 rounded-md font-semibold"
-          onClick={deleteRecipe}
-        >
-          Delete Recipe
         </button>
       </div>
       <Recipe

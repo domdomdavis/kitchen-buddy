@@ -36,6 +36,8 @@ model Recipe {
   user                User  @relation(fields: [user_id], references: [id])
   user_id             String
   original_recipe     String?
+  in_queue            Boolean?
+  queue_position      Int?
 }
 
 model Inventory {
