@@ -26,7 +26,7 @@ export type RecipeType = {
 export type InventoryType = {
   id: string;
   item: string;
-  amount?: string | null;
+  user_id: string;
 };
 
 export type UserType = {
