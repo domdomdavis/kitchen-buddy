@@ -3,6 +3,7 @@ import { Dispatch, SetStateAction } from "react";
 import matchIngredientsToComponents from "~/helpers/matchIngredientToComponent";
 import { IngredientType, InventoryType } from "~/helpers/types";
 import parse from "html-react-parser";
+import pluralize from "pluralize";
 
 export type IngredientDisplayProps = {
   ingredients: Array<IngredientType>;

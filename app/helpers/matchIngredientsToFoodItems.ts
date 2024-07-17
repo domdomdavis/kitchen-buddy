@@ -1,4 +1,5 @@
 import { FoodItemType, IngredientType } from "./types";
+
 type MatchIngredientsToFoodItemsProps = {
   ingredients: IngredientType[];
   foodItems: FoodItemType[];

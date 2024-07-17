@@ -303,7 +303,7 @@ export const Recipe = ({
             </div>
           )}
         </span>
-        <span className="p-4 2xl:w-1/2 lg:border-2 mx-2 rounded-md border-violet-300">
+        <span className="p-4 lg:border-2  w-1/2 mx-2 rounded-md border-violet-300">
           <div className="flex w-full justify-between">
             <h2 className="text-2xl font-medium mx-2">Ingredients</h2>{" "}
             {missingIngredients.length > 0 && (
@@ -313,7 +313,7 @@ export const Recipe = ({
             )}
           </div>
 
-          <div className="mx-4 lg:mx-8 mt-2">
+          <div className="mt-2">
             {!editMode ? (
               <IngredientDisplay
                 ingredients={ingredients}

@@ -15,6 +15,7 @@ export const action = async ({ request }: ActionProps) => {
         user_id: user.id,
         title: formData.title,
         photo_url: formData.photo_url,
+        original_recipe: formData.original_recipe,
         prep_time: formData.prep_time,
         cook_time: formData.cook_time,
         total_time: formData.total_time,
