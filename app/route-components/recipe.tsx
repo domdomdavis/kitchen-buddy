@@ -127,7 +127,6 @@ export const Recipe = ({
       const fetcherData = instructionFetcher.data as RecipeType;
       setInstructions(fetcherData.instructions);
     } else if (shoppingListFetcher.data) {
-      console.log(shoppingListFetcher.data);
       setButtonText("added to shopping list!");
     }
   }, [saveAllFetcher.data, instructionFetcher.data, shoppingListFetcher.data]);
@@ -308,7 +307,7 @@ export const Recipe = ({
           <div className="flex w-full justify-between">
             <h2 className="text-2xl font-medium mx-4">Ingredients</h2>{" "}
             {missingIngredients.length > 0 && (
-              <button onClick={addIngredientsToShoppingList}>
+              <button onClick={addIngredientsToShoppingList} className="mr-4">
                 {buttonText}
               </button>
             )}

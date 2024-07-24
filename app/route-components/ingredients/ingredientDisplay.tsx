@@ -63,14 +63,14 @@ export const IngredientDisplay = ({
       let ingredientString = ingredient.ingredient;
       const matchingFoodItem = foodItems
         ?.filter((item) =>
-          ingredient.ingredient.toLowerCase().includes(item.toLowerCase())
+          ingredientString.toLowerCase().includes(item.toLowerCase())
         )
         .sort((a, b) => b.length - a.length)[0];
       if (matchingFoodItem) {
         let ingredientRegExp = new RegExp(matchingFoodItem ?? "", "g");
         ingredientString = ingredientString.replace(
           ingredientRegExp,
-          `<span className="font-medium">${matchingFoodItem}</span>`
+          `<span className="font-semibold">${matchingFoodItem}</span>`
         );
       }
       return <span>{parse(ingredientString)}</span>;

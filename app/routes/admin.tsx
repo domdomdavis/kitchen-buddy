@@ -10,6 +10,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const productId = form.get("productId")?.toString();
   const newItem = form.get("newItem")?.toString();
   const perishableNew = form.get("perishableNew")?.toString();
+  const deleteItem = form.get("delete")?.toString();
   if (productId) {
     const updated = await prisma.foodItem.update({
       where: {
@@ -28,6 +29,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       },
     });
     return newFoodItem;
+  } else if (deleteItem) {
+    return await prisma.foodItem.delete({
+      where: {
+        id: deleteItem,
+      },
+    });
   }
 };
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -92,6 +99,14 @@ export default function Admin() {
                       save
                     </button>
                   )}
+                  <button
+                    className="mx-8"
+                    id="delete"
+                    name="delete"
+                    value={item.id}
+                  >
+                    delete
+                  </button>
                 </Form>
               </div>
             );

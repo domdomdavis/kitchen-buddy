@@ -17,8 +17,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       foodItems,
     });
     const items: { item: string; user_id: string }[] = [];
-
-    matchingFoodItems.map((item) => {
+    const dedupedFoodItems = new Set(matchingFoodItems);
+    [...dedupedFoodItems].map((item) => {
       if (
         item &&
         !currentShoppingList.find((listItem) => listItem.item === item.product)
