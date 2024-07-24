@@ -27,7 +27,18 @@ export const IngredientDisplay = ({
         (item) =>
           ingredient.ingredient
             .toLowerCase()
-            .includes(item.item.toLowerCase()) ?? null
+            .replace(/[\s~`*();:"',-]/g, "")
+            .includes(
+              item.item.replace(/[\s~`*();:"',-]/g, "").toLowerCase()
+            ) ||
+          ingredient.ingredient
+            .toLowerCase()
+            .replace(/[\s~`*();:"',-]/g, "")
+            .includes(
+              pluralize
+                .singular(item.item.replace(/[\s~`*();:"',-]/g, ""))
+                .toLowerCase()
+            )
       );
       const iceOrWater =
         ingredient.ingredient.toLowerCase().includes(" ice") ||

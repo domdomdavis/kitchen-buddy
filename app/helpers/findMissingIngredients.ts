@@ -1,3 +1,4 @@
+import pluralize from "pluralize";
 import { IngredientType, InventoryType } from "./types";
 
 type FindMissingIngredientsProps = {
@@ -16,11 +17,21 @@ export const findMissingIngredients = ({
       ingredient.ingredient.toLowerCase().includes(" ice ") ||
       ingredient.ingredient.toLowerCase().includes(" water") ||
       ingredient.ingredient.toLowerCase().includes("optional");
-
+    const strippedIngredient = ingredient.ingredient
+      .toLowerCase()
+      .replace(/[\s~`*();:"',-]/g, "");
     if (!iceWaterOrOptional) {
       if (
-        !inventory.find((item) =>
-          ingredient.ingredient.toLowerCase().includes(item.item.toLowerCase())
+        !inventory.find(
+          (item) =>
+            strippedIngredient.includes(
+              item.item.toLowerCase().replace(/[\s~`*();:"',-]/g, "")
+            ) ||
+            strippedIngredient.includes(
+              pluralize.singular(
+                item.item.toLowerCase().replace(/[\s~`*();:"',-]/g, "")
+              )
+            )
         )
       )
         missingIngredients.push(ingredient);

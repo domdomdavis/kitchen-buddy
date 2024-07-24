@@ -1,5 +1,6 @@
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import { redirect, useLoaderData } from "@remix-run/react";
+import pluralize from "pluralize";
 import { useEffect, useState } from "react";
 import { IngredientType, RecipeType } from "~/helpers/types";
 import { RecipesDisplay } from "~/route-components/recipesDisplay";
@@ -37,23 +38,28 @@ type LoaderType = Awaited<ReturnType<typeof loader>>;
 export default function Index() {
   const { recipes, inventory } = useLoaderData<LoaderType>();
   const [filteredRecipes, setFilteredRecipes] = useState<RecipeType[]>(recipes);
-
   const filterRecipes = () => {
     const availableRecipes: RecipeType[] = [];
     recipes.map((recipe) => {
       const availableIngredients: IngredientType[] = [];
       recipe.ingredients.map((ingredient) => {
-        const iceOrWater =
+        const iceWaterOrOptional =
           ingredient.ingredient.toLowerCase() === "ice" ||
           ingredient.ingredient.toLowerCase().includes(" ice") ||
-          ingredient.ingredient.toLowerCase().includes(" water");
+          ingredient.ingredient.toLowerCase().includes(" water ") ||
+          ingredient.ingredient.toLowerCase().includes("optional");
+
+        const strippedIngredient = ingredient.ingredient
+          .toLowerCase()
+          .replace(/[\s~`*();:"',-]/g, "");
         inventory.map((item) => {
+          const strippedItem = item.item
+            .replace(/[\s~`*();:"',-]/g, "")
+            .toLowerCase();
           if (
-            ingredient.ingredient
-              .toLowerCase()
-              .includes(item.item.toLowerCase()) ||
-            ingredient.ingredient.includes("optional") ||
-            iceOrWater
+            strippedIngredient.includes(strippedItem) ||
+            strippedIngredient.includes(pluralize.singular(strippedItem)) ||
+            iceWaterOrOptional
           )
             availableIngredients.push(ingredient);
         });
