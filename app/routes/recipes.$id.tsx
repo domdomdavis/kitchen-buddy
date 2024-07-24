@@ -33,7 +33,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const user = await getUser(request);
-
+  if (!user) throw redirect("/login");
   const recipe = await db.recipe.findUnique({
     where: {
       id: params.id,

@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { ActionFunctionArgs } from "@remix-run/node";
+import { ActionFunctionArgs, redirect } from "@remix-run/node";
 import { useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { InventoryType, RecipeType } from "~/helpers/types";
@@ -63,7 +63,7 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 export const loader = async ({ request }: { request: Request }) => {
   const user = await getUser(request);
-
+  if (!user) throw redirect("/login");
   const inventory = await db.inventory.findMany({
     where: {
       user_id: user?.id,

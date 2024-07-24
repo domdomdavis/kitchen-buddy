@@ -1,5 +1,9 @@
 import { PrismaClient } from "@prisma/client";
-import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  redirect,
+} from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { ThreeDotsIcon } from "~/common-components/svg/threeDotsIcon";
@@ -30,6 +34,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getUser(request);
+  if (!user) throw redirect("/login");
   const shoppingList = await db.shoppingList.findMany({
     where: {
       user_id: user?.id,
