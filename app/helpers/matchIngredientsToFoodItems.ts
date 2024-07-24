@@ -16,7 +16,10 @@ export const matchIngredientsToFoodItems = ({
     (ingredient) =>
       foodItems
         .filter((item) =>
-          ingredient.toLowerCase().includes(item.product.toLowerCase())
+          ingredient
+            .toLowerCase()
+            .replace(/\s+/g, "")
+            .includes(item.product.toLowerCase().replace(/\s+/g, ""))
         )
         .sort((a, b) => b.product.length - a.product.length)[0]
   );

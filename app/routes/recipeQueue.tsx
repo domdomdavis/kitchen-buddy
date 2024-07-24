@@ -4,11 +4,10 @@ import {
   LoaderFunctionArgs,
   redirect,
 } from "@remix-run/node";
-import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
-import { useRef, useState } from "react";
+import { Form, Link, useLoaderData } from "@remix-run/react";
 import { findMissingIngredients } from "~/helpers/findMissingIngredients";
 import { matchIngredientsToFoodItems } from "~/helpers/matchIngredientsToFoodItems";
-import { IngredientType, RecipeType } from "~/helpers/types";
+import { IngredientType } from "~/helpers/types";
 import { db } from "~/utils/db.server";
 import { getUser } from "~/utils/session.server";
 
@@ -53,7 +52,6 @@ type LoaderType = Awaited<ReturnType<typeof loader>>;
 
 export default function RecipeQueue() {
   const data = useLoaderData<LoaderType>();
-  const updated = useActionData();
   const inventory = data.inventory;
 
   const getMissingFoodItems = (ingredients: IngredientType[]) => {

@@ -305,7 +305,7 @@ export const Recipe = ({
         </span>
         <span className="p-4 lg:border-2  w-1/2 mx-2 rounded-md border-violet-300">
           <div className="flex w-full justify-between">
-            <h2 className="text-2xl font-medium mx-2">Ingredients</h2>{" "}
+            <h2 className="text-2xl font-medium mx-4">Ingredients</h2>{" "}
             {missingIngredients.length > 0 && (
               <button onClick={addIngredientsToShoppingList}>
                 {buttonText}
@@ -313,7 +313,7 @@ export const Recipe = ({
             )}
           </div>
 
-          <div className="mt-2">
+          <div className="mt-2 mx-4">
             {!editMode ? (
               <IngredientDisplay
                 ingredients={ingredients}
@@ -421,8 +421,8 @@ export const Recipe = ({
       </div>
 
       <div className="flex justify-center mt-4">
-        <div className="p-2 flex-col flex-wrap w-full lg:w-3/4 2xl:w-4/5">
-          <h3 className="text-2xl font-medium">Instructions</h3>
+        <div className="flex-col flex-wrap w-full lg:w-3/4 2xl:w-4/5">
+          <h3 className="text-2xl font-medium mx-4">Instructions</h3>
           {editMode && (
             <div className="flex justify-end">
               <button

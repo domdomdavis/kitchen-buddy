@@ -11,11 +11,13 @@ export const findMissingIngredients = ({
   const missingIngredients: IngredientType[] = [];
 
   ingredients.map((ingredient) => {
-    const iceOrWater =
+    const iceWaterOrOptional =
       ingredient.ingredient.toLowerCase() === "ice" ||
-      ingredient.ingredient.toLowerCase().includes(" ice") ||
-      ingredient.ingredient.toLowerCase().includes(" water");
-    if (!iceOrWater) {
+      ingredient.ingredient.toLowerCase().includes(" ice ") ||
+      ingredient.ingredient.toLowerCase().includes(" water") ||
+      ingredient.ingredient.toLowerCase().includes("optional");
+
+    if (!iceWaterOrOptional) {
       if (
         !inventory.find((item) =>
           ingredient.ingredient.toLowerCase().includes(item.item.toLowerCase())
