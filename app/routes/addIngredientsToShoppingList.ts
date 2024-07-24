@@ -1,11 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { ActionFunctionArgs } from "@remix-run/node";
 import { matchIngredientsToFoodItems } from "~/helpers/matchIngredientsToFoodItems";
-import {
-  FoodItemType,
-  IngredientType,
-  ShoppingListType,
-} from "~/helpers/types";
 import { db } from "~/utils/db.server";
 import { getUser } from "~/utils/session.server";
 

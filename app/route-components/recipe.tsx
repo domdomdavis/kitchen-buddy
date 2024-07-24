@@ -127,6 +127,7 @@ export const Recipe = ({
       const fetcherData = instructionFetcher.data as RecipeType;
       setInstructions(fetcherData.instructions);
     } else if (shoppingListFetcher.data) {
+      console.log(shoppingListFetcher.data);
       setButtonText("added to shopping list!");
     }
   }, [saveAllFetcher.data, instructionFetcher.data, shoppingListFetcher.data]);

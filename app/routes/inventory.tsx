@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { ActionFunctionArgs, redirect } from "@remix-run/node";
 import { useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
+import pluralize from "pluralize";
 import { useEffect, useState } from "react";
 import { InventoryType, RecipeType } from "~/helpers/types";
 import { RecipesDisplay } from "~/route-components/recipesDisplay";
@@ -87,9 +88,18 @@ export default function Inventory() {
   const navigate = useNavigate();
 
   const findRecipes = (item: string) => {
+    const strippedItem = item.replace(/[\s~`*();:"',-]/g, "").toLowerCase();
+    const itemSingular = pluralize.singular(strippedItem);
     const recipeIds: string[] = [];
     ingredientList.map((ingredient) => {
-      if (ingredient.ingredient.toLowerCase().includes(item.toLowerCase()))
+      const strippedIngredient = ingredient.ingredient
+        .replace(/[\s~`*();:"',-]/g, "")
+        .toLowerCase();
+
+      if (
+        strippedIngredient.includes(strippedItem) ||
+        strippedIngredient.includes(itemSingular)
+      )
         recipeIds.push(ingredient.recipe_id);
     });
     fetcher.submit(
@@ -207,7 +217,7 @@ export default function Inventory() {
               >
                 <button
                   key={item.id}
-                  className="p-2 h-full w-full focus:bg-gradient-to-r from-green-300 to-teal-300 text-left focus:font-semibold rounded-md"
+                  className="p-2 text-left focus:font-semibold focus:border-b-2 border-fuchsia-500"
                   onClick={() => {
                     setItemSelected(item.item);
                     findRecipes(item.item);
@@ -237,7 +247,7 @@ export default function Inventory() {
               </div>
             ) : (
               <div className="lg:text-center text-xl font-medium">
-                No recipes for this ingredient.
+                No recipes with {itemSelected}.
               </div>
             )
           ) : (

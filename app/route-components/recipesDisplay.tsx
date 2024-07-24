@@ -6,7 +6,7 @@ type RecipeDisplayProps = {
 export const RecipesDisplay = ({ recipes }: RecipeDisplayProps) => {
   return recipes.map((recipe) => (
     <div key={recipe.id} className="flex flex-col items-center">
-      <Link to={`/recipes/${recipe.id}`}>
+      <Link to={`/recipes/${recipe.id}`} className="mt-8">
         <p className="font-medium text-xl text-center pb-2" key={recipe.id}>
           {recipe.title}
         </p>
