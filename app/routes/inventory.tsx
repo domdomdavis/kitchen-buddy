@@ -3,6 +3,7 @@ import { ActionFunctionArgs, redirect } from "@remix-run/node";
 import { useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
 import pluralize from "pluralize";
 import { useEffect, useState } from "react";
+import { ConfirmDialog } from "~/common-components/confirmDialog";
 import { InventoryType, RecipeType } from "~/helpers/types";
 import { RecipesDisplay } from "~/route-components/recipesDisplay";
 import { db } from "~/utils/db.server";
@@ -27,6 +28,22 @@ export async function action({ request }: ActionFunctionArgs) {
       });
       return newItem;
     } else if (formData.removingItem) {
+      if (formData.addToShoppingList) {
+        const currentShoppingList = await db.shoppingList.findMany();
+        if (
+          !currentShoppingList.find(
+            (listItem) =>
+              listItem.item.toLowerCase() === formData.item.toLowerCase()
+          )
+        ) {
+          await prisma.shoppingList.create({
+            data: {
+              item: formData.item,
+              user_id: user.id,
+            },
+          });
+        }
+      }
       return await prisma.inventory.delete({
         where: {
           id: formData.id,
@@ -82,7 +99,8 @@ export default function Inventory() {
   const [filteringItems, setFilteringItems] = useState(false);
   const [newItemInput, setNewItemInput] = useState("");
   const [searchInput, setSearchInput] = useState("");
-  const [itemSelected, setItemSelected] = useState("");
+  const [itemSelected, setItemSelected] = useState<InventoryType>();
+  const [openModal, setOpenModal] = useState(false);
   const [errorText, setErrorText] = useState("");
   const fetcher = useFetcher<typeof action>();
   const navigate = useNavigate();
@@ -128,10 +146,18 @@ export default function Inventory() {
       );
     }
   };
-  const removeItemFromInventory = (item: InventoryType) => {
+  const removeItemFromInventory = (
+    item: InventoryType,
+    addToShoppingList?: boolean
+  ) => {
     fetcher.submit(
       {
-        formData: { id: item.id, removingItem: true },
+        formData: {
+          id: item.id,
+          item: item.item,
+          removingItem: true,
+          addToShoppingList: addToShoppingList ?? false,
+        },
       },
       { method: "POST", action: "/inventory", encType: "application/json" }
     );
@@ -219,15 +245,18 @@ export default function Inventory() {
                   key={item.id}
                   className="p-2 text-left focus:font-semibold focus:border-b-2 border-fuchsia-500"
                   onClick={() => {
-                    setItemSelected(item.item);
+                    setItemSelected(item);
                     findRecipes(item.item);
                   }}
                 >
                   {item.item.toLowerCase()}
                 </button>
                 <button
-                  className="text-sm invisible group-hover:visible text-gray-700 hover:border-2 border-red-500 rounded-md"
-                  onClick={() => removeItemFromInventory(item)}
+                  className="text-sm p-2 invisible group-hover:visible text-gray-700 hover:border-2 border-red-500 rounded-md"
+                  onClick={() => {
+                    setItemSelected(item);
+                    setOpenModal(true);
+                  }}
                 >
                   remove item
                 </button>
@@ -239,7 +268,7 @@ export default function Inventory() {
             recipes.length > 0 ? (
               <div>
                 <h2 className="lg:text-center text-3xl font-medium my-4">
-                  Recipes with {itemSelected}
+                  Recipes with {itemSelected.item}
                 </h2>
                 <div className="lg:m-8 xl:grid xl:grid-cols-3">
                   <RecipesDisplay recipes={recipes} />
@@ -247,16 +276,23 @@ export default function Inventory() {
               </div>
             ) : (
               <div className="lg:text-center text-xl font-medium">
-                No recipes with {itemSelected}.
+                No recipes with {itemSelected.item}.
               </div>
             )
           ) : (
-            <div className="lg:ext-center text-xl font-medium">
+            <div className="lg:text-center text-xl font-medium">
               Select an item to view recipes with that ingredient.
             </div>
           )}
         </div>
       </div>
+      {openModal && itemSelected && (
+        <ConfirmDialog
+          removeItem={removeItemFromInventory}
+          selectedItem={itemSelected}
+          setOpenModal={setOpenModal}
+        />
+      )}
     </div>
   );
 }
