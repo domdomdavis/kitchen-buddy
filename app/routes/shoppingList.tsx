@@ -159,8 +159,8 @@ export default function ShoppingList() {
                 );
                 const itemSelected = selectedItem?.id === item.id;
                 return (
-                  <div className="border-b-2 p-2">
-                    <div key={index} className="flex justify-between">
+                  <div className="border-b-2 p-2" key={index}>
+                    <div className="flex justify-between">
                       <p
                         className={`text-lg ${
                           itemSelected && "font-semibold"

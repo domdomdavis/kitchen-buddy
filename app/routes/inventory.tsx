@@ -29,7 +29,11 @@ export async function action({ request }: ActionFunctionArgs) {
       return newItem;
     } else if (formData.removingItem) {
       if (formData.addToShoppingList) {
-        const currentShoppingList = await db.shoppingList.findMany();
+        const currentShoppingList = await db.shoppingList.findMany({
+          where: {
+            user_id: user.id,
+          },
+        });
         if (
           !currentShoppingList.find(
             (listItem) =>

@@ -85,7 +85,7 @@ export default function RecipeQueue() {
                   <span className="text-green-500 ml-2 font-bold">✓</span>
                 )}
               </div>
-              <div className="flex">
+              <div className="flex mt-2">
                 <img
                   src={recipe.photo_url}
                   className="h-44 w-44 object-cover rounded-md"
@@ -95,7 +95,9 @@ export default function RecipeQueue() {
                     <p className="font-medium">Missing Ingredients:</p>
                     <ul>
                       {missingIngredients.map((ingredient) => (
-                        <li>&#x2022; {ingredient.product}</li>
+                        <li key={ingredient.id}>
+                          &#x2022; {ingredient.product}
+                        </li>
                       ))}
                     </ul>
                   </div>
