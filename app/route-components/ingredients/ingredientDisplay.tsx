@@ -22,23 +22,33 @@ export const IngredientDisplay = ({
   allRecipes,
 }: IngredientDisplayProps) => {
   const findIngredientInInventory = (ingredient: IngredientType) => {
-    if (inventory && inventory.length > 0) {
+    const matchingFoodItem = foodItems
+      ?.filter((item) =>
+        ingredient.ingredient
+          .toLowerCase()
+          .replace(/[\s~`*();:"',-]/g, "")
+          .includes(item.toLowerCase().replace(/[\s~`*();:"',-]/g, ""))
+      )
+      .sort((a, b) => b.length - a.length)[0];
+    if (inventory && inventory.length > 0 && matchingFoodItem) {
       const found = inventory?.find(
         (item) =>
-          ingredient.ingredient
+          matchingFoodItem
             .toLowerCase()
-            .replace(/[\s~`*();:"',-]/g, "")
-            .includes(
-              item.item.replace(/[\s~`*();:"',-]/g, "").toLowerCase()
-            ) ||
-          ingredient.ingredient
+            .replace(/[~`*();:"',-]/g, "")
+            .split(" ")[0] ===
+            item.item
+              .replace(/[~`*();:"',-]/g, "")
+              .toLowerCase()
+              .split(" ")[0] ||
+          matchingFoodItem
             .toLowerCase()
-            .replace(/[\s~`*();:"',-]/g, "")
-            .includes(
-              pluralize
-                .singular(item.item.replace(/[\s~`*();:"',-]/g, ""))
-                .toLowerCase()
-            )
+            .replace(/[~`*();:"',-]/g, "")
+            .split(" ")[0] ===
+            pluralize
+              .singular(item.item.replace(/[~`*();:"',-]/g, ""))
+              .toLowerCase()
+              .split(" ")[0]
       );
       const iceOrWater =
         ingredient.ingredient.toLowerCase().includes(" ice") ||

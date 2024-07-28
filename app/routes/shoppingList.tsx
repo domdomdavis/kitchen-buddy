@@ -6,7 +6,6 @@ import {
 } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
-import { ThreeDotsIcon } from "~/common-components/svg/threeDotsIcon";
 import { ShoppingListType } from "~/helpers/types";
 import { db } from "~/utils/db.server";
 import { getUser } from "~/utils/session.server";
