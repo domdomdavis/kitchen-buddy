@@ -4,6 +4,7 @@ import { useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
 import pluralize from "pluralize";
 import { useEffect, useState } from "react";
 import { ConfirmDialog } from "~/common-components/confirmDialog";
+import { LoadingSpinner } from "~/common-components/loadingSpinner";
 import { InventoryType, RecipeType } from "~/helpers/types";
 import { RecipesDisplay } from "~/route-components/recipesDisplay";
 import { db } from "~/utils/db.server";
@@ -268,7 +269,11 @@ export default function Inventory() {
             ))}
         </div>
         <div className="lg:m-8 w-full justify-center" id="recipe-view">
-          {itemSelected ? (
+          {fetcher.state !== "idle" ? (
+            <div className="flex justify-center">
+              <LoadingSpinner />
+            </div>
+          ) : itemSelected ? (
             recipes.length > 0 ? (
               <div>
                 <h2 className="lg:text-center text-3xl font-medium my-4">

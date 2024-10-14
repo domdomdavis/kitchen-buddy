@@ -1,5 +1,7 @@
+import { Fetcher } from "@remix-run/react";
 import { SetStateAction } from "react";
 import { InventoryType } from "~/helpers/types";
+import { LoadingSpinner } from "./loadingSpinner";
 
 type ConfirmDialogProps = {
   removeItem: (item: InventoryType, addingToShoppingList: boolean) => void;
@@ -27,14 +29,20 @@ export const ConfirmDialog = ({
             <button
               id="confirm-delete-btn"
               className="block w-full md:inline-block md:w-auto px-4 py-3 md:py-2 bg-fuchsia-200 text-fuchsia-700 rounded-lg font-semibold text-sm md:ml-2"
-              onClick={() => removeItem(selectedItem, true)}
+              onClick={() => {
+                setOpenModal(false);
+                removeItem(selectedItem, true);
+              }}
             >
               Yes, add to shopping list.
             </button>
             <button
               id="confirm-delete-btn"
               className="block w-full md:inline-block md:w-auto px-4 py-3 md:py-2 bg-cyan-200 text-cyan-700 rounded-lg font-semibold text-sm mt-4 md:mt-0 md:ml-2"
-              onClick={() => removeItem(selectedItem, false)}
+              onClick={() => {
+                setOpenModal(false);
+                removeItem(selectedItem, false);
+              }}
             >
               No, just remove from inventory.
             </button>
