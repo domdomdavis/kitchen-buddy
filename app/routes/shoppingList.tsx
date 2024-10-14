@@ -4,8 +4,14 @@ import {
   LoaderFunctionArgs,
   redirect,
 } from "@remix-run/node";
-import { useFetcher, useLoaderData } from "@remix-run/react";
+import {
+  Form,
+  useFetcher,
+  useLoaderData,
+  useNavigation,
+} from "@remix-run/react";
 import { useEffect, useState } from "react";
+import { LoadingSpinner } from "~/common-components/loadingSpinner";
 import { ShoppingListType } from "~/helpers/types";
 import { db } from "~/utils/db.server";
 import { getUser } from "~/utils/session.server";
@@ -60,6 +66,7 @@ export default function ShoppingList() {
     store: "",
   });
   const fetcher = useFetcher();
+  const navigation = useNavigation();
 
   const removeItem = (item: ShoppingListType) => {
     if (item) {
@@ -116,7 +123,7 @@ export default function ShoppingList() {
     <div>
       <h1 className="text-4xl font-semibold text-center m-4">Shopping List</h1>
       <div className="w-full flex justify-center">
-        <form method="POST" action="/shoppingList" className="w-2/3">
+        <Form method="POST" action="/shoppingList" className="w-2/3">
           <p className="text-center text-xl font-medium">Add Item</p>
           <div className="lg:flex justify-center">
             <input
@@ -144,7 +151,12 @@ export default function ShoppingList() {
               Submit
             </button>
           </div>
-        </form>
+          {navigation.state !== "idle" && (
+            <div className="flex justify-center">
+              <LoadingSpinner />
+            </div>
+          )}
+        </Form>
       </div>
       <div className="flex justify-center">
         {shoppingList.length > 0 && (
@@ -179,6 +191,7 @@ export default function ShoppingList() {
                     </div>
                     {itemSelected && (
                       <div>
+                        {fetcher.state !== "idle" && <LoadingSpinner />}
                         {item?.amount && item.amount !== "" && (
                           <p className="">Quantity: {item.amount}</p>
                         )}
