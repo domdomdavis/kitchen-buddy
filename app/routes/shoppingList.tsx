@@ -6,11 +6,12 @@ import {
 } from "@remix-run/node";
 import {
   Form,
+  useActionData,
   useFetcher,
   useLoaderData,
   useNavigation,
 } from "@remix-run/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { LoadingSpinner } from "~/common-components/loadingSpinner";
 import { ShoppingListType } from "~/helpers/types";
 import { db } from "~/utils/db.server";
@@ -67,6 +68,8 @@ export default function ShoppingList() {
   });
   const fetcher = useFetcher();
   const navigation = useNavigation();
+  const actionData = useActionData();
+  let $form = useRef<HTMLFormElement>(null);
 
   const removeItem = (item: ShoppingListType) => {
     if (item) {
@@ -114,6 +117,10 @@ export default function ShoppingList() {
       }
     );
   };
+
+  if (navigation.state === "idle" && actionData && $form.current)
+    $form.current.reset();
+
   useEffect(() => {
     setAddingQuantity(false);
     setAddingStore(false);
@@ -123,7 +130,12 @@ export default function ShoppingList() {
     <div>
       <h1 className="text-4xl font-semibold text-center m-4">Shopping List</h1>
       <div className="w-full flex justify-center">
-        <Form method="POST" action="/shoppingList" className="w-2/3">
+        <Form
+          method="POST"
+          action="/shoppingList"
+          className="w-2/3"
+          ref={$form}
+        >
           <p className="text-center text-xl font-medium">Add Item</p>
           <div className="lg:flex justify-center">
             <input
@@ -178,7 +190,7 @@ export default function ShoppingList() {
                         } w-full`}
                         onClick={() => setSelectedItem(item)}
                       >
-                        {item.item}
+                        {item.item.toLowerCase()}
                       </p>
                       {itemSelected && (
                         <button

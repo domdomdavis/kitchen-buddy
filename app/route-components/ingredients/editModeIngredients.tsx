@@ -3,6 +3,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { IngredientType } from "~/helpers/types";
 import { EditWithoutComponents } from "./editWithoutComponents";
 import { EditWithComponents } from "./editWithComponents";
+import { LoadingSpinner } from "~/common-components/loadingSpinner";
 
 type EditModeIngredientsProps = {
   ingredients: IngredientType[];
@@ -28,6 +29,7 @@ export const EditModeIngredients = ({
       }
     );
   };
+
   const deleteIngredient = (ingredientId: number) => {
     fetcher.submit(
       { formData: { id: ingredientId } },
@@ -41,21 +43,33 @@ export const EditModeIngredients = ({
 
   if (!recipeHasComponents) {
     return (
-      <EditWithoutComponents
-        ingredients={ingredients}
-        setIngredients={setIngredients}
-        saveEditIngredient={saveEditIngredient}
-        deleteIngredient={deleteIngredient}
-      />
+      <div>
+        {fetcher.state !== "idle" ? (
+          <LoadingSpinner />
+        ) : (
+          <EditWithoutComponents
+            ingredients={ingredients}
+            setIngredients={setIngredients}
+            saveEditIngredient={saveEditIngredient}
+            deleteIngredient={deleteIngredient}
+          />
+        )}
+      </div>
     );
   } else {
     return (
-      <EditWithComponents
-        ingredients={ingredients}
-        setIngredients={setIngredients}
-        saveEditIngredient={saveEditIngredient}
-        deleteIngredient={deleteIngredient}
-      />
+      <div>
+        {fetcher.state !== "idle" ? (
+          <LoadingSpinner />
+        ) : (
+          <EditWithComponents
+            ingredients={ingredients}
+            setIngredients={setIngredients}
+            saveEditIngredient={saveEditIngredient}
+            deleteIngredient={deleteIngredient}
+          />
+        )}
+      </div>
     );
   }
 };

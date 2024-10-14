@@ -1,5 +1,6 @@
 import { useFetcher, useNavigate } from "@remix-run/react";
 import { useEffect, useState } from "react";
+import { LoadingSpinner } from "~/common-components/loadingSpinner";
 import { IngredientType, RecipeType } from "~/helpers/types";
 import { IngredientDisplay } from "~/route-components/ingredients/ingredientDisplay";
 
@@ -251,82 +252,92 @@ export default function NewRecipe() {
             />
           </div>
         </form>
-        <div className="hidden lg:block w-full">
-          <div className="m-8 hidden lg:flex justify-around">
-            <div className="flex-col">
-              {inputFieldValues.title !== "" ? (
-                <h2 className="text-2xl text-center font-medium mb-4 w-full">
-                  {inputFieldValues.title}
-                </h2>
-              ) : (
-                <p>Recipe preview will be displayed here.</p>
-              )}
-              {inputFieldValues.photoUrl !== "" && (
-                <img
-                  src={inputFieldValues.photoUrl}
-                  className="h-80 w-64 rounded-md object-cover mb-4"
+        {fetcher.state !== "idle" ? (
+          <div className="flex justify-center">
+            <LoadingSpinner />
+          </div>
+        ) : (
+          <div className="hidden lg:block w-full">
+            <div className="m-8 hidden lg:flex justify-around">
+              <div className="flex-col">
+                {inputFieldValues.title !== "" ? (
+                  <h2 className="text-2xl text-center font-medium mb-4 w-full">
+                    {inputFieldValues.title}
+                  </h2>
+                ) : (
+                  <p>Recipe preview will be displayed here.</p>
+                )}
+                {inputFieldValues.photoUrl !== "" && (
+                  <img
+                    src={inputFieldValues.photoUrl}
+                    className="h-80 w-64 rounded-md object-cover mb-4"
+                  />
+                )}
+                {inputFieldValues.prepTime !== "" && (
+                  <p>
+                    <span>Prep time: </span>
+                    <span className="font-medium">
+                      {inputFieldValues.prepTime}
+                    </span>
+                  </p>
+                )}
+                {inputFieldValues.cookTime !== "" && (
+                  <p>
+                    <span>Cook time: </span>
+                    <span className="font-medium">
+                      {inputFieldValues.cookTime}
+                    </span>
+                  </p>
+                )}
+                {inputFieldValues.totalTime !== "" && (
+                  <p>
+                    <span>Total time: </span>
+                    <span className="font-medium">
+                      {inputFieldValues.totalTime}
+                    </span>
+                  </p>
+                )}
+                {inputFieldValues.yield !== "" && (
+                  <p>
+                    <span>Yield: </span>
+                    <span className="font-medium">
+                      {inputFieldValues.yield}
+                    </span>
+                  </p>
+                )}
+              </div>
+              <div>
+                <IngredientDisplay
+                  ingredients={ingredients}
+                  setIngredients={setIngredients}
+                  recipeHasComponents={components.length > 0}
                 />
-              )}
-              {inputFieldValues.prepTime !== "" && (
-                <p>
-                  <span>Prep time: </span>
-                  <span className="font-medium">
-                    {inputFieldValues.prepTime}
-                  </span>
-                </p>
-              )}
-              {inputFieldValues.cookTime !== "" && (
-                <p>
-                  <span>Cook time: </span>
-                  <span className="font-medium">
-                    {inputFieldValues.cookTime}
-                  </span>
-                </p>
-              )}
-              {inputFieldValues.totalTime !== "" && (
-                <p>
-                  <span>Total time: </span>
-                  <span className="font-medium">
-                    {inputFieldValues.totalTime}
-                  </span>
-                </p>
-              )}
-              {inputFieldValues.yield !== "" && (
-                <p>
-                  <span>Yield: </span>
-                  <span className="font-medium">{inputFieldValues.yield}</span>
-                </p>
-              )}
+              </div>
             </div>
-            <div>
-              <IngredientDisplay
-                ingredients={ingredients}
-                setIngredients={setIngredients}
-                recipeHasComponents={components.length > 0}
-              />
+            <div className="mx-8 h-96 overflow-y-auto">
+              {instructions.length > 0 &&
+                instructions.map((step, index) => {
+                  return (
+                    <div className="mb-4" key={index}>
+                      <span className="font-semibold text-xl">
+                        {index + 1}.{" "}
+                      </span>
+                      <span className="text-lg">{step}</span>
+                      <button
+                        className="ml-4"
+                        onClick={() => {
+                          instructions.splice(index, 1);
+                          setInstructions([...instructions]);
+                        }}
+                      >
+                        remove
+                      </button>
+                    </div>
+                  );
+                })}
             </div>
           </div>
-          <div className="mx-8 h-96 overflow-y-auto">
-            {instructions.length > 0 &&
-              instructions.map((step, index) => {
-                return (
-                  <div className="mb-4" key={index}>
-                    <span className="font-semibold text-xl">{index + 1}. </span>
-                    <span className="text-lg">{step}</span>
-                    <button
-                      className="ml-4"
-                      onClick={() => {
-                        instructions.splice(index, 1);
-                        setInstructions([...instructions]);
-                      }}
-                    >
-                      remove
-                    </button>
-                  </div>
-                );
-              })}
-          </div>
-        </div>
+        )}
       </div>
 
       <div className="w-full flex justify-center mt-4">
