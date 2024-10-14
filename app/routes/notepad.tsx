@@ -4,8 +4,9 @@ import {
   LoaderFunctionArgs,
   redirect,
 } from "@remix-run/node";
-import { useFetcher, useLoaderData } from "@remix-run/react";
+import { useFetcher, useLoaderData, useNavigation } from "@remix-run/react";
 import { useState } from "react";
+import { LoadingSpinner } from "~/common-components/loadingSpinner";
 import { DeleteIcon } from "~/common-components/svg/deleteIcon";
 import { EditIcon } from "~/common-components/svg/editIcon";
 import { NoteType } from "~/helpers/types";
@@ -43,6 +44,7 @@ type LoaderType = Awaited<ReturnType<typeof loader>>;
 export default function RecipeNotepad() {
   const { notes, user } = useLoaderData<LoaderType>();
   const fetcher = useFetcher();
+  const navigation = useNavigation();
   const [recipeNote, setRecipeNote] = useState("");
   const [selectedNote, setSelectedNote] = useState<NoteType | null>(null);
 
@@ -82,61 +84,67 @@ export default function RecipeNotepad() {
       <div className="lg:flex justify-center">
         <div className="lg:w-1/2 mx-8">
           <h2 className="text-xl font-medium">Notes</h2>
-          <div className="w-full border-2 rounded-md">
-            {sortedNotes.map((note, index) => {
-              const dateCreated = new Date(note.date_created).toDateString();
-              const dateUpdated = new Date(note.date_updated).toLocaleString();
-              const noteSelected = selectedNote?.id === note.id;
-              return (
-                <div key={index}>
-                  <div className="flex justify-between p-2">
-                    <p className="font-medium">{dateCreated}</p>
-                    <p>Last Updated: {dateUpdated}</p>
-                  </div>
-                  <div className={`border-b-2 flex justify-between pb-2`}>
-                    <textarea
-                      className={`${
-                        noteSelected
-                          ? "h-64 border-2 border-emerald-300 rounded-md"
-                          : "h-36"
-                      } w-full bg-white p-2`}
-                      defaultValue={note.body}
-                      disabled={!noteSelected}
-                      onBlur={(e) => {
-                        if (e.target.value !== note.body) {
-                          const newNote = {
-                            id: note.id,
-                            body: e.target.value,
-                            user_id: user?.id ?? "",
-                          };
-                          saveEditNote(newNote);
-                        }
-                        setSelectedNote(null);
-                      }}
-                    />
-                    <div className="flex flex-col mx-2">
-                      <button
-                        className={`border-2 p-2 border-sky-400 rounded-md mb-2 ${
-                          noteSelected && "bg-emerald-200"
-                        }`}
-                        onClick={() => setSelectedNote(note)}
-                      >
-                        <EditIcon />
-                      </button>
-                      <button
-                        className="border-2 p-2 border-red-500 rounded-md"
-                        onClick={() => {
-                          removeNote(note);
+          {fetcher.state !== "idle" ? (
+            <LoadingSpinner />
+          ) : (
+            <div className="w-full border-2 rounded-md">
+              {sortedNotes.map((note, index) => {
+                const dateCreated = new Date(note.date_created).toDateString();
+                const dateUpdated = new Date(
+                  note.date_updated
+                ).toLocaleString();
+                const noteSelected = selectedNote?.id === note.id;
+                return (
+                  <div key={index}>
+                    <div className="flex justify-between p-2">
+                      <p className="font-medium">{dateCreated}</p>
+                      <p>Last Updated: {dateUpdated}</p>
+                    </div>
+                    <div className={`border-b-2 flex justify-between pb-2`}>
+                      <textarea
+                        className={`${
+                          noteSelected
+                            ? "h-64 border-2 border-emerald-300 rounded-md"
+                            : "h-36"
+                        } w-full bg-white p-2`}
+                        defaultValue={note.body}
+                        disabled={!noteSelected}
+                        onBlur={(e) => {
+                          if (e.target.value !== note.body) {
+                            const newNote = {
+                              id: note.id,
+                              body: e.target.value,
+                              user_id: user?.id ?? "",
+                            };
+                            saveEditNote(newNote);
+                          }
+                          setSelectedNote(null);
                         }}
-                      >
-                        <DeleteIcon />
-                      </button>
+                      />
+                      <div className="flex flex-col mx-2">
+                        <button
+                          className={`border-2 p-2 border-sky-400 rounded-md mb-2 ${
+                            noteSelected && "bg-emerald-200"
+                          }`}
+                          onClick={() => setSelectedNote(note)}
+                        >
+                          <EditIcon />
+                        </button>
+                        <button
+                          className="border-2 p-2 border-red-500 rounded-md"
+                          onClick={() => {
+                            removeNote(note);
+                          }}
+                        >
+                          <DeleteIcon />
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         <div className="lg:w-1/4 mx-8">
@@ -162,6 +170,7 @@ export default function RecipeNotepad() {
             >
               Save Note
             </button>
+            {navigation.state !== "idle" && <LoadingSpinner />}
           </form>
         </div>
       </div>
