@@ -101,21 +101,19 @@ export default function RecipeDetails() {
   return (
     <div>
       <div className="flex justify-end my-2">
-        {!recipe.in_queue ? (
+        {navigation.state !== "idle" ? (
+          <LoadingSpinner />
+        ) : !recipe.in_queue ? (
           <Form method="POST">
-            {navigation.state !== "idle" ? (
-              <LoadingSpinner />
-            ) : (
-              <button
-                id="addToQueue"
-                name="addToQueue"
-                value={recipe.id}
-                type="submit"
-                className="mr-4 border-2 border-sky-300 bg-gradient-to-r from-emerald-300 via-teal-300 to-sky-300 p-2 rounded-md font-semibold"
-              >
-                Add to Recipe Queue
-              </button>
-            )}
+            <button
+              id="addToQueue"
+              name="addToQueue"
+              value={recipe.id}
+              type="submit"
+              className="mr-4 border-2 border-sky-300 bg-gradient-to-r from-emerald-300 via-teal-300 to-sky-300 p-2 rounded-md font-semibold"
+            >
+              Add to Recipe Queue
+            </button>
           </Form>
         ) : (
           <p className="mr-4 p-2 font-semibold">Recipe in Queue!</p>

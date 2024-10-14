@@ -4,7 +4,8 @@ import {
   LoaderFunctionArgs,
   redirect,
 } from "@remix-run/node";
-import { Form, Link, useLoaderData } from "@remix-run/react";
+import { Form, Link, useLoaderData, useNavigation } from "@remix-run/react";
+import { LoadingSpinner } from "~/common-components/loadingSpinner";
 import { findMissingIngredients } from "~/helpers/findMissingIngredients";
 import { matchIngredientsToFoodItems } from "~/helpers/matchIngredientsToFoodItems";
 import { IngredientType } from "~/helpers/types";
@@ -52,6 +53,7 @@ type LoaderType = Awaited<ReturnType<typeof loader>>;
 
 export default function RecipeQueue() {
   const data = useLoaderData<LoaderType>();
+  const navigation = useNavigation();
   const inventory = data.inventory;
 
   const getMissingFoodItems = (ingredients: IngredientType[]) => {
@@ -121,19 +123,26 @@ export default function RecipeQueue() {
               </Link>
               <div>
                 <Form method="POST">
-                  <button
-                    type="submit"
-                    name="remove"
-                    id="remove"
-                    value={recipe.recipe.id}
-                  >
-                    remove from queue
-                  </button>
+                  <div>
+                    <button
+                      type="submit"
+                      name="remove"
+                      id="remove"
+                      value={recipe.recipe.id}
+                    >
+                      remove from queue
+                    </button>
+                  </div>
                 </Form>
               </div>
             </div>
           );
         })}
+      {navigation.state !== "idle" && (
+        <div className="flex justify-center">
+          <LoadingSpinner />
+        </div>
+      )}
     </div>
   );
 }

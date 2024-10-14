@@ -4,7 +4,12 @@ import {
   LoaderFunctionArgs,
   redirect,
 } from "@remix-run/node";
-import { useFetcher, useLoaderData, useNavigation } from "@remix-run/react";
+import {
+  Form,
+  useFetcher,
+  useLoaderData,
+  useNavigation,
+} from "@remix-run/react";
 import { useState } from "react";
 import { LoadingSpinner } from "~/common-components/loadingSpinner";
 import { DeleteIcon } from "~/common-components/svg/deleteIcon";
@@ -74,7 +79,6 @@ export default function RecipeNotepad() {
     const dateCreated2 = new Date(b.date_created);
     return dateCreated2.getTime() - dateCreated1.getTime();
   });
-
   return (
     <div className="">
       <h1 className="text-center w-full text-4xl font-semibold my-4">
@@ -149,7 +153,7 @@ export default function RecipeNotepad() {
 
         <div className="lg:w-1/4 mx-8">
           <label className="text-xl font-medium">Add Note</label>
-          <form method="POST" className="w-full">
+          <Form method="POST" className="w-full">
             <textarea
               id="note"
               name="note"
@@ -171,7 +175,7 @@ export default function RecipeNotepad() {
               Save Note
             </button>
             {navigation.state !== "idle" && <LoadingSpinner />}
-          </form>
+          </Form>
         </div>
       </div>
     </div>
