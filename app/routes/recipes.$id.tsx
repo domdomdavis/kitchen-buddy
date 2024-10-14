@@ -10,8 +10,10 @@ import {
   useFetcher,
   useLoaderData,
   useNavigate,
+  useNavigation,
 } from "@remix-run/react";
 import { useEffect, useState } from "react";
+import { LoadingSpinner } from "~/common-components/loadingSpinner";
 import { DeleteIcon } from "~/common-components/svg/deleteIcon";
 import { EditIcon } from "~/common-components/svg/editIcon";
 import { Recipe } from "~/route-components/recipe";
@@ -73,6 +75,7 @@ export default function RecipeDetails() {
   useActionData();
   const foodProducts = foodItems.map((item) => item.product);
   const navigate = useNavigate();
+  const navigation = useNavigation();
   const fetcher = useFetcher();
   const [editMode, setEditMode] = useState<boolean>(false);
   const recipeHasComponents = recipe?.ingredients.some(
@@ -100,15 +103,19 @@ export default function RecipeDetails() {
       <div className="flex justify-end my-2">
         {!recipe.in_queue ? (
           <Form method="POST">
-            <button
-              id="addToQueue"
-              name="addToQueue"
-              value={recipe.id}
-              type="submit"
-              className="mr-4 border-2 border-sky-300 bg-gradient-to-r from-emerald-300 via-teal-300 to-sky-300 p-2 rounded-md font-semibold"
-            >
-              Add to Recipe Queue
-            </button>
+            {navigation.state !== "idle" ? (
+              <LoadingSpinner />
+            ) : (
+              <button
+                id="addToQueue"
+                name="addToQueue"
+                value={recipe.id}
+                type="submit"
+                className="mr-4 border-2 border-sky-300 bg-gradient-to-r from-emerald-300 via-teal-300 to-sky-300 p-2 rounded-md font-semibold"
+              >
+                Add to Recipe Queue
+              </button>
+            )}
           </Form>
         ) : (
           <p className="mr-4 p-2 font-semibold">Recipe in Queue!</p>

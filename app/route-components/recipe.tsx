@@ -5,6 +5,7 @@ import { EditModeIngredients } from "./ingredients/editModeIngredients";
 import { Link, useFetcher, useNavigate } from "@remix-run/react";
 import { InstructionsDisplay } from "./instructionsDisplay";
 import { findMissingIngredients } from "~/helpers/findMissingIngredients";
+import { LoadingSpinner } from "~/common-components/loadingSpinner";
 
 type RecipeProps = {
   recipe: RecipeType;
@@ -68,6 +69,7 @@ export const Recipe = ({
       instructions,
       ingredients,
     };
+
     saveAllFetcher.submit(
       {
         formData: updatedRecipe,
@@ -306,11 +308,14 @@ export const Recipe = ({
         <span className="p-4 lg:border-2  w-1/2 mx-2 rounded-md border-violet-300">
           <div className="flex w-full justify-between">
             <h2 className="text-2xl font-medium mx-4">Ingredients</h2>{" "}
-            {missingIngredients.length > 0 && (
-              <button onClick={addIngredientsToShoppingList} className="mr-4">
-                {buttonText}
-              </button>
-            )}
+            {missingIngredients.length > 0 &&
+              (shoppingListFetcher.state === "idle" ? (
+                <button onClick={addIngredientsToShoppingList} className="mr-4">
+                  {buttonText}
+                </button>
+              ) : (
+                <LoadingSpinner />
+              ))}
           </div>
 
           <div className="mt-2 mx-4">
@@ -324,6 +329,11 @@ export const Recipe = ({
               />
             ) : (
               <div className="w-full">
+                {ingredientFetcher.state !== "idle" && (
+                  <div className="flex justify-center">
+                    <LoadingSpinner />
+                  </div>
+                )}
                 <EditModeIngredients
                   ingredients={ingredients}
                   setIngredients={setIngredients}
@@ -386,22 +396,43 @@ export const Recipe = ({
                               ingredient: e.target.value,
                             })
                           }
-                          onKeyDown={(e) => {
-                            if (e.code === "Enter") {
-                              if (newIngredientInput.ingredient !== "") {
-                                ingredients.push(newIngredientInput);
-                                setIngredients([...ingredients]);
-                                if (addingNewComponent)
-                                  setAddingNewComponent(false);
-                                setAddingNewIngredient(false);
-                                setNewIngredientInput(
-                                  defaultIngredientInputValues
-                                );
-                                addIngredient();
-                              }
+                          // onBlur={() => {
+                          //   if (newIngredientInput.ingredient !== "") {
+                          //     ingredients.push(newIngredientInput);
+                          //     setIngredients([...ingredients]);
+                          //     if (addingNewComponent)
+                          //       setAddingNewComponent(false);
+                          //     setAddingNewIngredient(false);
+                          //     setNewIngredientInput(
+                          //       defaultIngredientInputValues
+                          //     );
+                          //     addIngredient();
+                          //   }
+                          // }}
+                        />
+                        <button
+                          className={`ml-6 font-medium border-2 rounded-md p-2 ${
+                            newIngredientInput.ingredient !== ""
+                              ? "border-orange-300"
+                              : "border-gray-300 text-gray-300"
+                          }`}
+                          disabled={newIngredientInput.ingredient === ""}
+                          onClick={() => {
+                            if (newIngredientInput.ingredient !== "") {
+                              ingredients.push(newIngredientInput);
+                              setIngredients([...ingredients]);
+                              if (addingNewComponent)
+                                setAddingNewComponent(false);
+                              setAddingNewIngredient(false);
+                              setNewIngredientInput(
+                                defaultIngredientInputValues
+                              );
+                              addIngredient();
                             }
                           }}
-                        />
+                        >
+                          save ingredient
+                        </button>
                       </span>
                     </div>
                   </div>
@@ -433,6 +464,11 @@ export const Recipe = ({
               </button>
             </div>
           )}
+          {instructionFetcher.state !== "idle" && (
+            <div className="flex justify-center backdrop-blur">
+              <LoadingSpinner />
+            </div>
+          )}
           <InstructionsDisplay
             instructions={instructions}
             editMode={editMode}
@@ -450,14 +486,12 @@ export const Recipe = ({
                   className="border-2 p-2 border-blue-400 rounded-md w-full mt-2"
                   rows={5}
                   onChange={(e) => setNewInstructionInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.code === "Enter") {
-                      if (newInstructionInput !== "") {
-                        setAddingNewStep(false);
-                        setNewInstructionInput("");
-                        instructions.push(newInstructionInput);
-                        setInstructions([...instructions]);
-                      }
+                  onBlur={() => {
+                    if (newInstructionInput !== "") {
+                      setAddingNewStep(false);
+                      setNewInstructionInput("");
+                      instructions.push(newInstructionInput);
+                      setInstructions([...instructions]);
                     }
                   }}
                 />
@@ -471,7 +505,12 @@ export const Recipe = ({
           <div className="hidden lg:flex justify-end w-11/12">
             <button
               onClick={saveEditRecipe}
-              className="p-4 rounded-md font-semibold text-xl mx-16 bg-fuchsia-300 hover:bg-fuchsia-500"
+              className={`p-4 rounded-md font-semibold text-xl mx-16 ${
+                saveAllFetcher.state === "idle"
+                  ? "bg-fuchsia-300 hover:bg-fuchsia-500"
+                  : "bg-gray-500"
+              }`}
+              disabled={saveAllFetcher.state !== "idle"}
             >
               Save Changes
             </button>
@@ -480,10 +519,16 @@ export const Recipe = ({
             <button
               onClick={saveEditRecipe}
               className="border-2 border-emerald-400 rounded-md p-2 bg-gradient-to-r from-emerald-300 to-teal-300 text-xl"
+              disabled={saveAllFetcher.state !== "idle"}
             >
               Save Changes
             </button>
           </div>
+          {saveAllFetcher.state !== "idle" && (
+            <div className="flex justify-center pb-2">
+              <LoadingSpinner />
+            </div>
+          )}
         </div>
       )}
     </div>
