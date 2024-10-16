@@ -25,5 +25,13 @@ export const matchIngredientsToFoodItems = ({
         )
         .sort((a, b) => b.product.length - a.product.length)[0]
   );
-  return matchingFoodItems;
+  const foodItemList = matchingFoodItems.map((item, index) => {
+    if (item === undefined)
+      return {
+        id: `error${index}`,
+        product: "error: food item not in database",
+      };
+    else return item;
+  });
+  return foodItemList;
 };

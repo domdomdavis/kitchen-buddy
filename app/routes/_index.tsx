@@ -76,7 +76,7 @@ export default function Index() {
       <div className="flex flex-col items-center">
         <h1 className="text-center text-4xl font-semibold">My Recipes</h1>
         <button className="p-2" onClick={filterRecipes}>
-          filter recipes I can make
+          see recipes I can make
         </button>
         <input
           placeholder="Search recipes..."
