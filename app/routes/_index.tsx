@@ -40,6 +40,7 @@ type LoaderType = Awaited<ReturnType<typeof loader>>;
 export default function Index() {
   const { recipes, inventory, foodItems } = useLoaderData<LoaderType>();
   const [filteredRecipes, setFilteredRecipes] = useState<RecipeType[]>(recipes);
+  const [recipesFiltered, setRecipesFiltered] = useState(false);
   const filterRecipes = () => {
     const availableRecipes: RecipeType[] = [];
     recipes.map((recipe) => {
@@ -48,6 +49,7 @@ export default function Index() {
         ingredients,
         inventory,
         foodItems,
+        excludeOptional: true,
       });
       if (missingIngredients.length === 0) {
         availableRecipes.push(recipe);
@@ -55,15 +57,22 @@ export default function Index() {
     });
     setFilteredRecipes(availableRecipes);
   };
+  const filterButtonText = !recipesFiltered
+    ? "see recipes I can make"
+    : "see all recipes";
   return (
     <div className="p-4">
       <div className="flex flex-col items-center">
         <h1 className="text-center text-4xl font-semibold">My Recipes</h1>
         <button
           className="p-2 border-2 rounded-md mt-2 font-medium border-green-300"
-          onClick={filterRecipes}
+          onClick={() => {
+            if (!recipesFiltered) filterRecipes();
+            else setFilteredRecipes(recipes);
+            setRecipesFiltered(!recipesFiltered);
+          }}
         >
-          see recipes I can make
+          {filterButtonText}
         </button>
         <input
           placeholder="Search recipes..."

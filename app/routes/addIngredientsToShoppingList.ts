@@ -14,8 +14,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (user) {
     const items = formData.map((newItem: string) => {
       if (!currentShoppingList.find((item) => item.item === newItem)) {
+        const newListItem = newItem.includes("juice")
+          ? newItem.split(" ")[0]
+          : newItem;
         return {
-          item: newItem,
+          item: newListItem,
           user_id: user.id,
         };
       }

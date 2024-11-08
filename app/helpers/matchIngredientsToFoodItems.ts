@@ -14,7 +14,7 @@ export const matchIngredientsToFoodItems = ({
   const ingredientArray = Array.from(ingredientNamesUnique);
   const matchingFoodItems = ingredientArray.map((ingredient) => {
     if (ingredient) {
-      return foodItems
+      const matchingItem = foodItems
         .filter((item) =>
           ingredient
             .toLowerCase()
@@ -24,14 +24,14 @@ export const matchIngredientsToFoodItems = ({
             )
         )
         .sort((a, b) => b.product.length - a.product.length)[0];
+      return {
+        optional: ingredient.includes("optional"),
+        item: matchingItem.product,
+      };
     }
   });
-  const foodItemList = matchingFoodItems.map((item, index) => {
-    if (item === undefined)
-      return {
-        id: `error${index}`,
-        product: "error: food item not in database",
-      };
+  const foodItemList = matchingFoodItems.map((item) => {
+    if (item === undefined) throw new Error("error: item not in food database");
     else return item;
   });
   return foodItemList;

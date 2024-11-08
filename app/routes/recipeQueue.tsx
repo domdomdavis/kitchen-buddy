@@ -61,6 +61,7 @@ export default function RecipeQueue() {
       ingredients,
       inventory,
       foodItems,
+      excludeOptional: true,
     });
     return missingIngredients;
   };

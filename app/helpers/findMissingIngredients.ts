@@ -6,19 +6,25 @@ type FindMissingIngredientsProps = {
   ingredients: IngredientType[];
   inventory: InventoryType[];
   foodItems: FoodItemType[];
+  excludeOptional?: boolean;
 };
 export const findMissingIngredients = ({
   ingredients,
   inventory,
   foodItems,
+  excludeOptional,
 }: FindMissingIngredientsProps) => {
   const missingIngredients: string[] = [];
-  const ingredientItems = matchIngredientsToFoodItems({
+  let ingredientItems = matchIngredientsToFoodItems({
     ingredients,
     foodItems,
   });
+  if (excludeOptional)
+    ingredientItems = ingredientItems.filter(
+      (ingredient) => ingredient.optional === false
+    );
   ingredientItems.map((foodItem) => {
-    const ingredient = foodItem.product;
+    const ingredient = foodItem.item;
     const iceOrWater =
       ingredient.toLowerCase() === "ice" ||
       ingredient.toLowerCase() === "water";
