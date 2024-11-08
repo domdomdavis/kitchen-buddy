@@ -99,7 +99,7 @@ export default function RecipeQueue() {
                 <div className="flex mt-2">
                   <img
                     src={recipe.recipe.photo_url}
-                    className="h-44 w-44 object-cover rounded-md"
+                    className="h-36 w-36 lg:h-48 lg:w-48 object-cover rounded-md"
                   />
                   {recipe.missingIngredients.length > 0 && (
                     <div className="mx-4 my-2">
