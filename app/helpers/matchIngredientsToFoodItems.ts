@@ -12,9 +12,9 @@ export const matchIngredientsToFoodItems = ({
     ingredients.map((ingredient: IngredientType) => ingredient.ingredient)
   );
   const ingredientArray = Array.from(ingredientNamesUnique);
-  const matchingFoodItems = ingredientArray.map(
-    (ingredient) =>
-      foodItems
+  const matchingFoodItems = ingredientArray.map((ingredient) => {
+    if (ingredient) {
+      return foodItems
         .filter((item) =>
           ingredient
             .toLowerCase()
@@ -23,8 +23,9 @@ export const matchIngredientsToFoodItems = ({
               item.product.toLowerCase().replace(/[\s~`*();:"',-]/g, "")
             )
         )
-        .sort((a, b) => b.product.length - a.product.length)[0]
-  );
+        .sort((a, b) => b.product.length - a.product.length)[0];
+    }
+  });
   const foodItemList = matchingFoodItems.map((item, index) => {
     if (item === undefined)
       return {

@@ -1,7 +1,7 @@
 import { Link } from "@remix-run/react";
 import { Dispatch, SetStateAction } from "react";
 import matchIngredientsToComponents from "~/helpers/matchIngredientToComponent";
-import { IngredientType, InventoryType } from "~/helpers/types";
+import { FoodItemType, IngredientType, InventoryType } from "~/helpers/types";
 import parse from "html-react-parser";
 import pluralize from "pluralize";
 
@@ -10,7 +10,7 @@ export type IngredientDisplayProps = {
   setIngredients?: Dispatch<SetStateAction<IngredientType[]>>;
   recipeHasComponents?: boolean;
   inventory?: InventoryType[];
-  foodItems?: string[];
+  foodItems?: FoodItemType[];
   allRecipes?: { id: string; title: string }[];
 };
 export const IngredientDisplay = ({
@@ -27,9 +27,9 @@ export const IngredientDisplay = ({
         ingredient.ingredient
           .toLowerCase()
           .replace(/[\s~`*();:"',-]/g, "")
-          .includes(item.toLowerCase().replace(/[\s~`*();:"',-]/g, ""))
+          .includes(item.product.toLowerCase().replace(/[\s~`*();:"',-]/g, ""))
       )
-      .sort((a, b) => b.length - a.length)[0];
+      .sort((a, b) => b.product.length - a.product.length)[0].product;
     if (inventory && inventory.length > 0 && matchingFoodItem) {
       const found = matchingFoodItem.includes("juice")
         ? inventory.find(
@@ -93,9 +93,9 @@ export const IngredientDisplay = ({
       let ingredientString = ingredient.ingredient;
       const matchingFoodItem = foodItems
         ?.filter((item) =>
-          ingredientString.toLowerCase().includes(item.toLowerCase())
+          ingredientString.toLowerCase().includes(item.product.toLowerCase())
         )
-        .sort((a, b) => b.length - a.length)[0];
+        .sort((a, b) => b.product.length - a.product.length)[0].product;
       if (matchingFoodItem) {
         let ingredientRegExp = new RegExp(matchingFoodItem ?? "", "g");
         ingredientString = ingredientString.replace(

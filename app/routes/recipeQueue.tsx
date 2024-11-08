@@ -55,20 +55,22 @@ export default function RecipeQueue() {
   const data = useLoaderData<LoaderType>();
   const navigation = useNavigation();
   const inventory = data.inventory;
+  const foodItems = data.foodItems;
 
   const getMissingFoodItems = (ingredients: IngredientType[]) => {
     const missingIngredients = findMissingIngredients({
       ingredients,
       inventory,
+      foodItems,
     });
-    const foodItems = new Set(
-      matchIngredientsToFoodItems({
-        ingredients: missingIngredients,
-        foodItems: data.foodItems,
-      })
-    );
-    const missingFoodItems = [...foodItems];
-    return missingFoodItems;
+    // const foodItems = new Set(
+    //   matchIngredientsToFoodItems({
+    //     ingredients: missingIngredients,
+    //     foodItems: data.foodItems,
+    //   })
+    // );
+    // const missingFoodItems = [...foodItems];
+    return missingIngredients;
   };
 
   const recipes = data.recipes.map((recipe) => {
@@ -109,10 +111,8 @@ export default function RecipeQueue() {
                     <div className="mx-4 my-2">
                       <p className="font-medium">Missing Ingredients:</p>
                       <ul>
-                        {recipe.missingIngredients.map((ingredient) => (
-                          <li key={ingredient.id}>
-                            &#x2022; {ingredient.product}
-                          </li>
+                        {recipe.missingIngredients.map((ingredient, index) => (
+                          <li key={index}>&#x2022; {ingredient}</li>
                         ))}
                       </ul>
                     </div>

@@ -49,11 +49,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
       user_id: user?.id,
     },
   });
-  const foodItems = await db.foodItem.findMany({
-    select: {
-      product: true,
-    },
-  });
+  const foodItems = await db.foodItem.findMany();
   const allRecipes = await db.recipe.findMany({
     where: {
       user_id: user?.id,
@@ -73,7 +69,6 @@ export default function RecipeDetails() {
   const { recipe, inventory, foodItems, allRecipes } =
     useLoaderData<LoaderType>();
   useActionData();
-  const foodProducts = foodItems.map((item) => item.product);
   const navigate = useNavigate();
   const navigation = useNavigation();
   const fetcher = useFetcher();
@@ -136,7 +131,7 @@ export default function RecipeDetails() {
         recipeHasComponents={recipeHasComponents}
         editMode={editMode}
         inventory={inventory}
-        foodItems={foodProducts}
+        foodItems={foodItems}
         allRecipes={allRecipes}
       />
     </div>

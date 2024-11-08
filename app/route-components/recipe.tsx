@@ -1,4 +1,4 @@
-import { InventoryType, RecipeType } from "~/helpers/types";
+import { FoodItemType, InventoryType, RecipeType } from "~/helpers/types";
 import { IngredientDisplay } from "./ingredients/ingredientDisplay";
 import { ChangeEvent, useEffect, useState } from "react";
 import { EditModeIngredients } from "./ingredients/editModeIngredients";
@@ -12,7 +12,7 @@ type RecipeProps = {
   recipeHasComponents?: boolean;
   editMode: boolean;
   inventory: InventoryType[];
-  foodItems: string[];
+  foodItems: FoodItemType[];
   allRecipes: { id: string; title: string }[];
 };
 
@@ -55,7 +55,11 @@ export const Recipe = ({
     "add missing ingredients to shopping list"
   );
 
-  const missingIngredients = findMissingIngredients({ ingredients, inventory });
+  const missingIngredients = findMissingIngredients({
+    ingredients,
+    inventory,
+    foodItems,
+  });
   const saveEditRecipe = () => {
     const updatedRecipe = {
       id: recipe.id,

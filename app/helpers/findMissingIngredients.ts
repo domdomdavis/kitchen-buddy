@@ -1,41 +1,49 @@
 import pluralize from "pluralize";
-import { IngredientType, InventoryType } from "./types";
+import { FoodItemType, IngredientType, InventoryType } from "./types";
+import { matchIngredientsToFoodItems } from "./matchIngredientsToFoodItems";
 
 type FindMissingIngredientsProps = {
   ingredients: IngredientType[];
   inventory: InventoryType[];
+  foodItems: FoodItemType[];
 };
 export const findMissingIngredients = ({
   ingredients,
   inventory,
+  foodItems,
 }: FindMissingIngredientsProps) => {
-  const missingIngredients: IngredientType[] = [];
-
-  ingredients.map((ingredient) => {
-    const iceWaterOrOptional =
-      ingredient.ingredient.toLowerCase() === "ice" ||
-      ingredient.ingredient.toLowerCase().includes(" ice ") ||
-      ingredient.ingredient.toLowerCase().includes(" water") ||
-      ingredient.ingredient.toLowerCase().includes("optional");
-    const strippedIngredient = ingredient.ingredient
+  const missingIngredients: string[] = [];
+  const ingredientItems = matchIngredientsToFoodItems({
+    ingredients,
+    foodItems,
+  });
+  ingredientItems.map((foodItem) => {
+    const ingredient = foodItem.product;
+    const iceOrWater =
+      ingredient.toLowerCase() === "ice" ||
+      ingredient.toLowerCase() === "water";
+    const strippedIngredient = ingredient
       .toLowerCase()
-      .replace(/[\s~`*();:"',-]/g, "");
-    if (!iceWaterOrOptional) {
+      .replace(/[\s~`*();:"',-]/g, "")
+      .trim();
+    if (!iceOrWater) {
       if (
         !inventory.find(
           (item) =>
-            strippedIngredient.includes(
-              item.item.toLowerCase().replace(/[\s~`*();:"',-]/g, "")
-            ) ||
-            strippedIngredient.includes(
+            strippedIngredient ===
+              item.item
+                .toLowerCase()
+                .replace(/[\s~`*();:"',-]/g, "")
+                .trim() ||
+            strippedIngredient ===
               pluralize.singular(
                 item.item.toLowerCase().replace(/[\s~`*();:"',-]/g, "")
               )
-            )
         )
       )
         missingIngredients.push(ingredient);
     }
   });
-  return missingIngredients;
+  const missingWithoutDupes = new Set(missingIngredients);
+  return [...missingWithoutDupes];
 };
