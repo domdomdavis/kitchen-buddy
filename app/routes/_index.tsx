@@ -31,13 +31,14 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         user_id: user?.id,
       },
     }),
+    foodItems: await db.foodItem.findMany(),
   };
   return data;
 };
 type LoaderType = Awaited<ReturnType<typeof loader>>;
 
 export default function Index() {
-  const { recipes, inventory } = useLoaderData<LoaderType>();
+  const { recipes, inventory, foodItems } = useLoaderData<LoaderType>();
   const [filteredRecipes, setFilteredRecipes] = useState<RecipeType[]>(recipes);
   const filterRecipes = () => {
     const availableRecipes: RecipeType[] = [];
@@ -46,6 +47,7 @@ export default function Index() {
       const missingIngredients = findMissingIngredients({
         ingredients,
         inventory,
+        foodItems,
       });
       if (missingIngredients.length === 0) {
         availableRecipes.push(recipe);

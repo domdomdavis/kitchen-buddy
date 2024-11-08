@@ -7,7 +7,6 @@ import {
 import { Form, Link, useLoaderData, useNavigation } from "@remix-run/react";
 import { LoadingSpinner } from "~/common-components/loadingSpinner";
 import { findMissingIngredients } from "~/helpers/findMissingIngredients";
-import { matchIngredientsToFoodItems } from "~/helpers/matchIngredientsToFoodItems";
 import { IngredientType } from "~/helpers/types";
 import { db } from "~/utils/db.server";
 import { getUser } from "~/utils/session.server";
@@ -63,13 +62,6 @@ export default function RecipeQueue() {
       inventory,
       foodItems,
     });
-    // const foodItems = new Set(
-    //   matchIngredientsToFoodItems({
-    //     ingredients: missingIngredients,
-    //     foodItems: data.foodItems,
-    //   })
-    // );
-    // const missingFoodItems = [...foodItems];
     return missingIngredients;
   };
 
