@@ -156,10 +156,12 @@ export const Recipe = ({
   };
 
   return (
-    <div className="flex flex-col lg:mx-8 w-full pb-8 lg:mt-4 2xl:mt-0">
+    <div className="flex flex-col lg:mx-8 w-full pb-8 lg:mt-2 2xl:mt-0">
       {!editMode ? (
-        <div className="text-center">
-          <h1 className="text-4xl font-semibold mb-2">{recipe?.title}</h1>
+        <div className="text-center mb-4">
+          <h1 className="text-3xl lg:text-4xl font-semibold mb-2">
+            {recipe?.title}
+          </h1>
           {recipe.original_recipe && (
             <Link
               to={recipe.original_recipe ?? "#"}
