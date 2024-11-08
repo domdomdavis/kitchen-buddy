@@ -61,11 +61,14 @@ export default function RecipeQueue() {
       ingredients,
       inventory,
     });
-    const foodItems = matchIngredientsToFoodItems({
-      ingredients: missingIngredients,
-      foodItems: data.foodItems,
-    });
-    return foodItems;
+    const foodItems = new Set(
+      matchIngredientsToFoodItems({
+        ingredients: missingIngredients,
+        foodItems: data.foodItems,
+      })
+    );
+    const missingFoodItems = [...foodItems];
+    return missingFoodItems;
   };
 
   const recipes = data.recipes.map((recipe) => {
@@ -87,7 +90,7 @@ export default function RecipeQueue() {
               key={index}
             >
               <Link to={`/recipes/${recipe.recipe.id}`}>
-                <div>
+                <div className="justify-between">
                   <span className="text-xl font-medium">
                     {recipe.recipe.title}
                   </span>
@@ -125,12 +128,13 @@ export default function RecipeQueue() {
                 <Form method="POST">
                   <div>
                     <button
+                      className="border-2 border-green-300 rounded-md p-2"
                       type="submit"
                       name="remove"
                       id="remove"
                       value={recipe.recipe.id}
                     >
-                      remove from queue
+                      remove
                     </button>
                   </div>
                 </Form>
