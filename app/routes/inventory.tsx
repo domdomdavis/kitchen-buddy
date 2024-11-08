@@ -3,6 +3,7 @@ import { ActionFunctionArgs, redirect } from "@remix-run/node";
 import { useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
 import pluralize from "pluralize";
 import { useEffect, useState } from "react";
+import { Button } from "~/common-components/button";
 import { ConfirmDialog } from "~/common-components/confirmDialog";
 import { LoadingSpinner } from "~/common-components/loadingSpinner";
 import { InventoryType, RecipeType } from "~/helpers/types";
@@ -202,7 +203,7 @@ export default function Inventory() {
           <div className="flex justify-between">
             {" "}
             <h1 className="text-2xl font-medium">My Inventory</h1>
-            <button
+            <Button
               onClick={() => {
                 if (!filteringItems) {
                   setFilteringItems(true);
@@ -212,9 +213,10 @@ export default function Inventory() {
                   setItemList(inventory);
                 }
               }}
-            >
-              {!filteringItems ? "view perishables only" : "view all items"}
-            </button>
+              text={
+                !filteringItems ? "view perishables only" : "view all items"
+              }
+            />
           </div>
 
           <input

@@ -6,6 +6,7 @@ import { Link, useFetcher, useNavigate } from "@remix-run/react";
 import { InstructionsDisplay } from "./instructionsDisplay";
 import { findMissingIngredients } from "~/helpers/findMissingIngredients";
 import { LoadingSpinner } from "~/common-components/loadingSpinner";
+import { Button } from "~/common-components/button";
 
 type RecipeProps = {
   recipe: RecipeType;
@@ -158,11 +159,11 @@ export const Recipe = ({
     <div className="flex flex-col lg:mx-8 w-full pb-8 lg:mt-4 2xl:mt-0">
       {!editMode ? (
         <div className="text-center">
-          <h1 className="text-4xl font-semibold">{recipe?.title}</h1>
+          <h1 className="text-4xl font-semibold mb-2">{recipe?.title}</h1>
           {recipe.original_recipe && (
             <Link
               to={recipe.original_recipe ?? "#"}
-              className="text-center hover:text-teal-700 hover:font-semibold"
+              className="text-center font-medium border-2 p-2 rounded-md border-orange-300"
               target="_blank"
             >
               go to original recipe
@@ -313,10 +314,13 @@ export const Recipe = ({
           <div className="flex w-full justify-between">
             <h2 className="text-2xl font-medium mx-4">Ingredients</h2>{" "}
             {missingIngredients.length > 0 &&
+              !editMode &&
               (shoppingListFetcher.state === "idle" ? (
-                <button onClick={addIngredientsToShoppingList} className="mr-4">
-                  {buttonText}
-                </button>
+                <Button
+                  onClick={addIngredientsToShoppingList}
+                  text={buttonText}
+                  disabled={buttonText === "added to shopping list!"}
+                />
               ) : (
                 <LoadingSpinner />
               ))}
@@ -400,19 +404,6 @@ export const Recipe = ({
                               ingredient: e.target.value,
                             })
                           }
-                          // onBlur={() => {
-                          //   if (newIngredientInput.ingredient !== "") {
-                          //     ingredients.push(newIngredientInput);
-                          //     setIngredients([...ingredients]);
-                          //     if (addingNewComponent)
-                          //       setAddingNewComponent(false);
-                          //     setAddingNewIngredient(false);
-                          //     setNewIngredientInput(
-                          //       defaultIngredientInputValues
-                          //     );
-                          //     addIngredient();
-                          //   }
-                          // }}
                         />
                         <button
                           className={`ml-6 font-medium border-2 rounded-md p-2 ${
@@ -442,12 +433,10 @@ export const Recipe = ({
                   </div>
                 )}
                 <div className="flex justify-end">
-                  <button
-                    className="m-4 font-medium text-lg"
+                  <Button
                     onClick={() => setAddingNewIngredient(true)}
-                  >
-                    Add New Ingredient
-                  </button>
+                    text="Add New Ingredient"
+                  />
                 </div>
               </div>
             )}
@@ -460,12 +449,7 @@ export const Recipe = ({
           <h3 className="text-2xl font-medium mx-4">Instructions</h3>
           {editMode && (
             <div className="flex justify-end">
-              <button
-                className="text-lg font-medium"
-                onClick={() => setAddingNewStep(true)}
-              >
-                Add Step
-              </button>
+              <Button onClick={() => setAddingNewStep(true)} text="Add Step" />
             </div>
           )}
           {instructionFetcher.state !== "idle" && (
@@ -506,23 +490,14 @@ export const Recipe = ({
       </div>
       {editMode && (
         <div>
-          <div className="hidden lg:flex justify-end w-11/12">
+          <div className="flex justify-center w-11/12">
             <button
               onClick={saveEditRecipe}
               className={`p-4 rounded-md font-semibold text-xl mx-16 ${
                 saveAllFetcher.state === "idle"
-                  ? "bg-fuchsia-300 hover:bg-fuchsia-500"
+                  ? "bg-gradient-to-r from-fuchsia-400 to-orange-400"
                   : "bg-gray-500"
               }`}
-              disabled={saveAllFetcher.state !== "idle"}
-            >
-              Save Changes
-            </button>
-          </div>
-          <div className="lg:hidden text-center font-semibold">
-            <button
-              onClick={saveEditRecipe}
-              className="border-2 border-emerald-400 rounded-md p-2 bg-gradient-to-r from-emerald-300 to-teal-300 text-xl"
               disabled={saveAllFetcher.state !== "idle"}
             >
               Save Changes

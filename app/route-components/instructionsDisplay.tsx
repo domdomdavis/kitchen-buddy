@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
+import { Button } from "~/common-components/button";
 
 type InstructionsDisplayProps = {
   instructions: string[];
@@ -43,15 +44,13 @@ export const InstructionsDisplay = ({
             />
           </span>
           <span className="flex items-center ml-4">
-            <button
-              className=""
+            <Button
               onClick={() => {
                 instructions.splice(index, 1);
                 updateInstructions();
               }}
-            >
-              remove
-            </button>
+              text="remove"
+            />
           </span>
         </div>
       );

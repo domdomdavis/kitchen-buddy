@@ -12,6 +12,7 @@ import {
   useNavigation,
 } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
+import { Button } from "~/common-components/button";
 import { LoadingSpinner } from "~/common-components/loadingSpinner";
 import { ShoppingListType } from "~/helpers/types";
 import { db } from "~/utils/db.server";
@@ -158,7 +159,7 @@ export default function ShoppingList() {
             />
             <button
               type="submit"
-              className="p-2 text-lg font-medium border-emerald-300 rounded-md border-2 mx-2 mt-2"
+              className="p-2 text-lg font-medium border-sky-300 rounded-md border-2 mx-2 mt-2"
             >
               Submit
             </button>
@@ -212,39 +213,35 @@ export default function ShoppingList() {
                         )}
                         <div className="flex flex-col items-end space-y-2">
                           {!itemInInventory && (
-                            <button
-                              className="mr-2 rounded-md text-right hover:text-violet-700"
+                            <Button
                               onClick={() => addItemToInventory(item)}
-                            >
-                              Add to Inventory
-                            </button>
+                              text="Add to Inventory"
+                            />
                           )}
-                          <button
-                            className="px-2 rounded-md text-right hover:text-violet-700"
+                          <Button
                             onClick={() => removeItem(item)}
-                          >
-                            Remove from Shopping List
-                          </button>
-                          <button
-                            className="px-2 rounded-md text-right hover:text-violet-700"
+                            text="Remove from Shopping List"
+                          />
+                          <Button
                             onClick={() => setAddingQuantity(!addingQuantity)}
-                          >
-                            {!addingQuantity
-                              ? `${
-                                  !item.amount
-                                    ? "Add Quantity"
-                                    : "Edit Quantity"
-                                }`
-                              : "Cancel Add Quantity"}
-                          </button>
-                          <button
-                            className="px-2 rounded-md text-right hover:text-violet-700"
+                            text={
+                              !addingQuantity
+                                ? `${
+                                    !item.amount
+                                      ? "Add Quantity"
+                                      : "Edit Quantity"
+                                  }`
+                                : "Cancel Add Quantity"
+                            }
+                          />
+                          <Button
                             onClick={() => setAddingStore(!addingStore)}
-                          >
-                            {!addingStore
-                              ? `${!item.store ? "Add Store" : "Edit Store"}`
-                              : "Cancel Add Store"}
-                          </button>
+                            text={
+                              !addingStore
+                                ? `${!item.store ? "Add Store" : "Edit Store"}`
+                                : "Cancel Add Store"
+                            }
+                          />
                         </div>
                         {addingQuantity && (
                           <input
@@ -279,7 +276,7 @@ export default function ShoppingList() {
                         {(addingQuantity || addingStore) && (
                           <button
                             onClick={() => saveEditItem(item)}
-                            className="m-2 border-2 p-2 border-emerald-300 rounded-md font-medium"
+                            className="m-2 border-2 p-2 border-sky-300 rounded-md font-medium"
                           >
                             submit
                           </button>

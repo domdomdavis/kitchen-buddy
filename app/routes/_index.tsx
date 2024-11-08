@@ -2,6 +2,7 @@ import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import { redirect, useLoaderData } from "@remix-run/react";
 import pluralize from "pluralize";
 import { useEffect, useState } from "react";
+import { Button } from "~/common-components/button";
 import { findMissingIngredients } from "~/helpers/findMissingIngredients";
 import { IngredientType, RecipeType } from "~/helpers/types";
 import { RecipesDisplay } from "~/route-components/recipesDisplay";
@@ -64,16 +65,14 @@ export default function Index() {
     <div className="p-4">
       <div className="flex flex-col items-center">
         <h1 className="text-center text-4xl font-semibold">My Recipes</h1>
-        <button
-          className="p-2 border-2 rounded-md mt-2 font-medium border-green-300"
+        <Button
+          text={filterButtonText}
           onClick={() => {
             if (!recipesFiltered) filterRecipes();
             else setFilteredRecipes(recipes);
             setRecipesFiltered(!recipesFiltered);
           }}
-        >
-          {filterButtonText}
-        </button>
+        />
         <input
           placeholder="Search recipes..."
           onChange={(e) => {

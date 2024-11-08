@@ -105,7 +105,7 @@ export default function RecipeDetails() {
               name="addToQueue"
               value={recipe.id}
               type="submit"
-              className="mr-4 border-2 border-sky-300 bg-gradient-to-r from-emerald-300 via-teal-300 to-sky-300 p-2 rounded-md font-semibold"
+              className="mr-4 bg-gradient-to-r from-emerald-400 via-teal-400 to-sky-400 p-2 rounded-md font-semibold"
             >
               Add to Recipe Queue
             </button>
