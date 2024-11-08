@@ -6,6 +6,7 @@ import {
 } from "@remix-run/node";
 import { Form, Link, useLoaderData, useNavigation } from "@remix-run/react";
 import { LoadingSpinner } from "~/common-components/loadingSpinner";
+import { DeleteIcon } from "~/common-components/svg/deleteIcon";
 import { findMissingIngredients } from "~/helpers/findMissingIngredients";
 import { IngredientType } from "~/helpers/types";
 import { db } from "~/utils/db.server";
@@ -121,13 +122,13 @@ export default function RecipeQueue() {
                 <Form method="POST">
                   <div>
                     <button
-                      className="border-2 border-green-300 rounded-md p-2"
+                      className="border-2 border-red-300 rounded-md p-2"
                       type="submit"
                       name="remove"
                       id="remove"
                       value={recipe.recipe.id}
                     >
-                      remove
+                      <DeleteIcon />
                     </button>
                   </div>
                 </Form>
