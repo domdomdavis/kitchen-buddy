@@ -344,7 +344,7 @@ export default function NewRecipe() {
         <div className="justify-center">
           <button
             onClick={saveRecipe}
-            className="m-4 p-4 bg-gradient-to-r from-sky-300 to-green-300 border-2 border-sky-300 rounded-md font-semibold text-lg"
+            className="m-4 p-4 bg-gradient-to-r border-2 border-fuchsia-500 rounded-md font-semibold text-lg"
           >
             Save Recipe
           </button>

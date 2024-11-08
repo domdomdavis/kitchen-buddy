@@ -164,10 +164,8 @@ export default function RecipeNotepad() {
               onChange={(e) => setRecipeNote(e.target.value)}
             />
             <button
-              className={`p-4 ${
-                recipeNote.length
-                  ? "bg-gradient-to-r from-sky-300 to-green-300 border-2 border-sky-300"
-                  : "bg-gray-300"
+              className={`p-4 border-2 rounded-md ${
+                recipeNote.length ? "border-emerald-500" : "border-gray-300"
               } rounded-md font-semibold text-xl`}
               disabled={!recipeNote.length}
               type="submit"
