@@ -103,10 +103,12 @@ export default function RecipeQueue() {
                   />
                   {recipe.missingIngredients.length > 0 && (
                     <div className="mx-4 my-2">
-                      <p className="font-medium">Missing Ingredients:</p>
-                      <ul>
+                      <p className="font-medium w-full">Missing Ingredients:</p>
+                      <ul className="w-full">
                         {recipe.missingIngredients.map((ingredient, index) => (
-                          <li key={index}>&#x2022; {ingredient}</li>
+                          <li key={index} className="w-full">
+                            &#x2022; {ingredient}
+                          </li>
                         ))}
                       </ul>
                     </div>
