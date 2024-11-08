@@ -2,6 +2,7 @@ import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import { redirect, useLoaderData } from "@remix-run/react";
 import pluralize from "pluralize";
 import { useEffect, useState } from "react";
+import { findMissingIngredients } from "~/helpers/findMissingIngredients";
 import { IngredientType, RecipeType } from "~/helpers/types";
 import { RecipesDisplay } from "~/route-components/recipesDisplay";
 import stylesheet from "~/tailwind.css?url";
@@ -41,33 +42,14 @@ export default function Index() {
   const filterRecipes = () => {
     const availableRecipes: RecipeType[] = [];
     recipes.map((recipe) => {
-      const availableIngredients: IngredientType[] = [];
-      recipe.ingredients.map((ingredient) => {
-        const iceWaterOrOptional =
-          ingredient.ingredient.toLowerCase() === "ice" ||
-          ingredient.ingredient.toLowerCase().includes(" ice") ||
-          ingredient.ingredient.toLowerCase().includes(" water ") ||
-          ingredient.ingredient.toLowerCase().includes("optional");
-
-        const strippedIngredient = ingredient.ingredient
-          .toLowerCase()
-          .replace(/[\s~`*();:"',-]/g, "");
-        inventory.map((item) => {
-          const strippedItem = item.item
-            .replace(/[\s~`*();:"',-]/g, "")
-            .toLowerCase();
-          if (
-            strippedIngredient.includes(strippedItem) ||
-            strippedIngredient.includes(pluralize.singular(strippedItem)) ||
-            iceWaterOrOptional
-          )
-            availableIngredients.push(ingredient);
-        });
+      const ingredients = recipe.ingredients;
+      const missingIngredients = findMissingIngredients({
+        ingredients,
+        inventory,
       });
-      const ingredientsWithoutDupes = new Set(availableIngredients);
-      const recipeIngredientsWithoutDupes = new Set(recipe.ingredients);
-      if (ingredientsWithoutDupes.size === recipeIngredientsWithoutDupes.size)
+      if (missingIngredients.length === 0) {
         availableRecipes.push(recipe);
+      }
     });
     setFilteredRecipes(availableRecipes);
   };
@@ -75,7 +57,10 @@ export default function Index() {
     <div className="p-4">
       <div className="flex flex-col items-center">
         <h1 className="text-center text-4xl font-semibold">My Recipes</h1>
-        <button className="p-2" onClick={filterRecipes}>
+        <button
+          className="p-2 border-2 rounded-md mt-2 font-medium border-green-300"
+          onClick={filterRecipes}
+        >
           see recipes I can make
         </button>
         <input
