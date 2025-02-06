@@ -20,19 +20,18 @@ export const matchIngredientsToFoodItems = ({
             .toLowerCase()
             .replace(/[\s~`*();:"',-]/g, "")
             .includes(
-              item.product.toLowerCase().replace(/[\s~`*();:"',-]/g, "")
+              item?.product.toLowerCase().replace(/[\s~`*();:"',-]/g, "")
             )
         )
-        .sort((a, b) => b.product.length - a.product.length)[0];
+        .sort((a, b) => b?.product.length - a?.product.length)[0];
       return {
         optional: ingredient.includes("optional"),
-        item: matchingItem.product,
+        item: matchingItem?.product,
       };
     }
   });
-  const foodItemList = matchingFoodItems.map((item) => {
-    if (item === undefined) throw new Error("error: item not in food database");
-    else return item;
+  const foodItemList = matchingFoodItems?.map((item) => {
+    return item;
   });
   return foodItemList;
 };

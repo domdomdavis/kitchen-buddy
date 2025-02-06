@@ -21,15 +21,15 @@ export const findMissingIngredients = ({
   });
   if (excludeOptional)
     ingredientItems = ingredientItems.filter(
-      (ingredient) => ingredient.optional === false
+      (ingredient) => ingredient?.optional === false
     );
   ingredientItems.map((foodItem) => {
-    const ingredient = foodItem.item;
+    const ingredient = foodItem?.item;
     const iceOrWater =
-      ingredient.toLowerCase() === "ice" ||
-      ingredient.toLowerCase() === "water";
+      ingredient?.toLowerCase() === "ice" ||
+      ingredient?.toLowerCase() === "water";
     const strippedIngredient = ingredient
-      .toLowerCase()
+      ?.toLowerCase()
       .replace(/[\s~`*();:"',-]/g, "")
       .trim();
     if (!iceOrWater) {
@@ -47,7 +47,7 @@ export const findMissingIngredients = ({
               )
         )
       )
-        missingIngredients.push(ingredient);
+        if (ingredient) missingIngredients.push(ingredient);
     }
   });
   const missingWithoutDupes = new Set(missingIngredients);

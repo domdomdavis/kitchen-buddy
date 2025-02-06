@@ -27,9 +27,11 @@ export const IngredientDisplay = ({
         ingredient.ingredient
           .toLowerCase()
           .replace(/[\s~`*();:"',-]/g, "")
-          .includes(item.product.toLowerCase().replace(/[\s~`*();:"',-]/g, ""))
+          .includes(
+            item?.product?.toLowerCase().replace(/[\s~`*();:"',-]/g, "")
+          )
       )
-      .sort((a, b) => b.product.length - a.product.length)[0].product;
+      .sort((a, b) => b?.product?.length - a?.product?.length)[0]?.product;
     if (inventory && inventory.length > 0 && matchingFoodItem) {
       const found = matchingFoodItem.includes("juice")
         ? inventory.find(
@@ -93,9 +95,9 @@ export const IngredientDisplay = ({
       let ingredientString = ingredient.ingredient;
       const matchingFoodItem = foodItems
         ?.filter((item) =>
-          ingredientString.toLowerCase().includes(item.product.toLowerCase())
+          ingredientString.toLowerCase().includes(item?.product?.toLowerCase())
         )
-        .sort((a, b) => b.product.length - a.product.length)[0].product;
+        .sort((a, b) => b?.product.length - a?.product.length)[0]?.product;
       if (matchingFoodItem) {
         let ingredientRegExp = new RegExp(matchingFoodItem ?? "", "g");
         ingredientString = ingredientString.replace(
