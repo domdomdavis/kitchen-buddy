@@ -341,7 +341,7 @@ export const Recipe = ({
         </span>
         <span className="p-4 lg:border-2  w-1/2 mx-2 rounded-md border-violet-300">
           <div className="flex w-full justify-between">
-            <h2 className="text-2xl font-medium mx-4">Ingredients</h2>{" "}
+            <h2 className="text-2xl font-medium mx-4 mt-2">Ingredients</h2>{" "}
             {missingIngredients.length > 0 &&
               !editMode &&
               (shoppingListFetcher.state === "idle" ? (

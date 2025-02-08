@@ -202,7 +202,7 @@ export default function Inventory() {
         <div className="w-full lg:w-1/4">
           <div className="flex justify-between">
             {" "}
-            <h1 className="text-2xl font-medium">My Inventory</h1>
+            <h1 className="text-2xl font-medium mt-2">My Inventory</h1>
             <Button
               onClick={() => {
                 if (!filteringItems) {
