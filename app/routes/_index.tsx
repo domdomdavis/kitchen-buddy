@@ -105,13 +105,15 @@ export default function Index() {
           <option value="default" disabled>
             Filter by Category
           </option>
-          {categories.map((category, index) => {
-            return (
-              <option value={category} key={index}>
-                {category}
-              </option>
-            );
-          })}
+          {categories
+            .sort((a, b) => a.localeCompare(b))
+            .map((category, index) => {
+              return (
+                <option value={category} key={index}>
+                  {category}
+                </option>
+              );
+            })}
         </select>
       </div>
 
