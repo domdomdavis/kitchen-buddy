@@ -87,7 +87,11 @@ export const IngredientDisplay = ({
     );
     if (matchingRecipe) {
       return (
-        <Link to={`/recipes/${matchingRecipe.id}`} className="underline">
+        <Link
+          to={`/recipes/${matchingRecipe.id}`}
+          className="underline"
+          target="_blank"
+        >
           {ingredient.ingredient}
         </Link>
       );
