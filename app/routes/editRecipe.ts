@@ -19,6 +19,7 @@ export const action = async ({ request }: ActionProps) => {
       total_time: formData.total_time,
       yield: formData.yield,
       instructions: formData.instructions,
+      category: formData.category.split(", "),
     },
   });
   return updatedRecipe;

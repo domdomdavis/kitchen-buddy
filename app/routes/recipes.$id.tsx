@@ -95,7 +95,7 @@ export default function RecipeDetails() {
   }, [fetcher.data]);
   return (
     <div>
-      <div className="flex justify-end my-2">
+      <div className="flex justify-end mt-2">
         {navigation.state !== "idle" ? (
           <LoadingSpinner />
         ) : !recipe.in_queue ? (

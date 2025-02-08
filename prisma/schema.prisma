@@ -37,7 +37,7 @@ model Recipe {
   user_id             String
   original_recipe     String?
   in_queue            Boolean?
-  queue_position      Int?
+  category            String[]
 }
 
 model Inventory {

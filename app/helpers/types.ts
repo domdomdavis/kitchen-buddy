@@ -21,6 +21,7 @@ export type RecipeType = {
   yield: string | null;
   user_id: string | null;
   original_recipe: string | null;
+  category: string[];
 };
 
 export type InventoryType = {

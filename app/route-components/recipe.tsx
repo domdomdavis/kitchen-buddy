@@ -38,6 +38,7 @@ export const Recipe = ({
     cookTime: recipe.cook_time,
     totalTime: recipe.total_time,
     yield: recipe.yield,
+    category: recipe.category?.join(", "),
   });
   const [addingNewComponent, setAddingNewComponent] = useState(false);
   const [addingNewIngredient, setAddingNewIngredient] = useState(false);
@@ -71,10 +72,10 @@ export const Recipe = ({
       cook_time: inputFieldValues.cookTime,
       total_time: inputFieldValues.totalTime,
       yield: inputFieldValues.yield,
+      category: inputFieldValues.category,
       instructions,
       ingredients,
     };
-
     saveAllFetcher.submit(
       {
         formData: updatedRecipe,
@@ -157,6 +158,32 @@ export const Recipe = ({
 
   return (
     <div className="flex flex-col lg:mx-8 w-full pb-8 lg:mt-2 2xl:mt-0">
+      <div>
+        {!editMode ? (
+          <div className="flex">
+            {recipe.category.length > 0 && (
+              <div>
+                <span>Category:</span>
+                <span className="font-medium ml-2 text-violet-700">
+                  {recipe.category.join(", ")}
+                </span>
+              </div>
+            )}
+          </div>
+        ) : (
+          <input
+            className="p-2 border-2 border-blue-400 rounded-md lg:w-1/6 text-lg"
+            value={inputFieldValues.category ?? ""}
+            onChange={(e) => {
+              setInputFieldValues({
+                ...inputFieldValues,
+                category: e.target.value,
+              });
+            }}
+            placeholder={"add categories (separate by comma)"}
+          />
+        )}
+      </div>
       {!editMode ? (
         <div className="text-center mb-4">
           <h1 className="text-3xl lg:text-4xl font-semibold mb-2">
