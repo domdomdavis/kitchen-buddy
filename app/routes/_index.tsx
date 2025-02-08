@@ -97,9 +97,7 @@ export default function Index() {
         />
         <select
           defaultValue="default"
-          name="category"
-          id="category"
-          className="place-self-center border-2 border-violet-300 rounded-md p-2 mt-4 w-3/4 lg:w-1/2 2xl:w-1/5"
+          className="place-self-center border-2 border-violet-300 rounded-md p-2 mt-4 w-3/4 lg:w-1/2 2xl:w-1/5 bg-white"
           onChange={(e) => filterByCategory(e.target.value)}
         >
           <option value="default" disabled>

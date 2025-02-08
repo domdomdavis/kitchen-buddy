@@ -158,9 +158,9 @@ export const Recipe = ({
 
   return (
     <div className="flex flex-col lg:mx-8 w-full pb-8 lg:mt-2 2xl:mt-0">
-      <div>
+      <div className="my-2 lg:my-0">
         {!editMode ? (
-          <div className="flex">
+          <div className="flex mx-8 lg:mx-0">
             {recipe.category.length > 0 && (
               <div>
                 <span>Category:</span>
@@ -172,7 +172,7 @@ export const Recipe = ({
           </div>
         ) : (
           <input
-            className="p-2 border-2 border-blue-400 rounded-md lg:w-1/6 text-lg"
+            className="p-2 border-2 border-blue-400 rounded-md lg:w-1/6 text-lg mb-2 lg:mb-0"
             value={inputFieldValues.category ?? ""}
             onChange={(e) => {
               setInputFieldValues({
