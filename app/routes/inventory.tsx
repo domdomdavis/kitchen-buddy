@@ -279,7 +279,10 @@ export default function Inventory() {
             recipes.length > 0 ? (
               <div>
                 <h2 className="lg:text-center text-3xl font-medium my-4">
-                  Recipes with {itemSelected.item}
+                  Recipes with{" "}
+                  <span className="text-fuchsia-700">
+                    {itemSelected.item.toLowerCase()}
+                  </span>
                 </h2>
                 <div className="lg:m-8 xl:grid xl:grid-cols-3">
                   <RecipesDisplay recipes={recipes} />
@@ -287,7 +290,7 @@ export default function Inventory() {
               </div>
             ) : (
               <div className="lg:text-center text-xl font-medium">
-                No recipes with {itemSelected.item}.
+                No recipes with {itemSelected.item.toLowerCase()}.
               </div>
             )
           ) : (

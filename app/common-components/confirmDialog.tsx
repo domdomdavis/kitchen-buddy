@@ -21,7 +21,9 @@ export const ConfirmDialog = ({
           <div className="md:flex items-center">
             <div className="mt-4 md:mt-0 md:ml-6 text-center md:text-left">
               <p className="font-medium mt-2">
-                Would you like to add {selectedItem.item} to the shopping list?
+                Would you like to add{" "}
+                <span className="text-emerald-700">{selectedItem.item}</span> to
+                the shopping list?
               </p>
             </div>
           </div>
