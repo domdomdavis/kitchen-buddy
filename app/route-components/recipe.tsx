@@ -186,7 +186,7 @@ export const Recipe = ({
       </div>
       {!editMode ? (
         <div className="text-center mb-4">
-          <h1 className="text-3xl lg:text-4xl font-semibold mb-2">
+          <h1 className="text-3xl lg:text-4xl font-semibold mb-4">
             {recipe?.title}
           </h1>
           {recipe.original_recipe && (
