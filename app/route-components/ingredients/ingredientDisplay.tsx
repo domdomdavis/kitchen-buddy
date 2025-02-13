@@ -22,63 +22,68 @@ export const IngredientDisplay = ({
   allRecipes,
 }: IngredientDisplayProps) => {
   const findIngredientInInventory = (ingredient: IngredientType) => {
-    const matchingFoodItem = foodItems
-      ?.filter((item) =>
-        ingredient.ingredient
-          .toLowerCase()
-          .replace(/[\s~`*();:"',-]/g, "")
-          .includes(
-            item?.product?.toLowerCase().replace(/[\s~`*();:"',-]/g, "")
-          )
-      )
-      .sort((a, b) => b?.product?.length - a?.product?.length)[0]?.product;
-    if (inventory && inventory.length > 0 && matchingFoodItem) {
-      const found = matchingFoodItem.includes("juice")
-        ? inventory.find(
-            (item) =>
-              matchingFoodItem
-                .toLowerCase()
-                .replace(/[~`*();:"',-]/g, "")
-                .split(" ")[0] ===
-                item.item
+    const matchingRecipe = allRecipes?.find((recipe) =>
+      ingredient.ingredient.toLowerCase().includes(recipe.title.toLowerCase())
+    );
+    if (!matchingRecipe) {
+      const matchingFoodItem = foodItems
+        ?.filter((item) =>
+          ingredient.ingredient
+            .toLowerCase()
+            .replace(/[\s~`*();:"',-]/g, "")
+            .includes(
+              item?.product?.toLowerCase().replace(/[\s~`*();:"',-]/g, "")
+            )
+        )
+        .sort((a, b) => b?.product?.length - a?.product?.length)[0]?.product;
+      if (inventory && inventory.length > 0 && matchingFoodItem) {
+        const found = matchingFoodItem.includes("juice")
+          ? inventory.find(
+              (item) =>
+                matchingFoodItem
+                  .toLowerCase()
                   .replace(/[~`*();:"',-]/g, "")
+                  .split(" ")[0] ===
+                  item.item
+                    .replace(/[~`*();:"',-]/g, "")
+                    .toLowerCase()
+                    .split(" ")[0] ||
+                matchingFoodItem
                   .toLowerCase()
-                  .split(" ")[0] ||
-              matchingFoodItem
-                .toLowerCase()
-                .replace(/[~`*();:"',-]/g, "")
-                .split(" ")[0] ===
-                pluralize
-                  .singular(item.item.replace(/[~`*();:"',-]/g, ""))
-                  .toLowerCase()
-                  .split(" ")[0]
-          )
-        : inventory?.find(
-            (item) =>
-              matchingFoodItem
-                .toLowerCase()
-                .replace(/[~`*();:"',-]/g, "")
-                .trim() ===
-                item.item
                   .replace(/[~`*();:"',-]/g, "")
+                  .split(" ")[0] ===
+                  pluralize
+                    .singular(item.item.replace(/[~`*();:"',-]/g, ""))
+                    .toLowerCase()
+                    .split(" ")[0]
+            )
+          : inventory?.find(
+              (item) =>
+                matchingFoodItem
                   .toLowerCase()
-                  .trim() ||
-              matchingFoodItem
-                .toLowerCase()
-                .replace(/[~`*();:"',-]/g, "")
-                .trim() ===
-                pluralize
-                  .singular(item.item.replace(/[~`*();:"',-]/g, ""))
+                  .replace(/[~`*();:"',-]/g, "")
+                  .trim() ===
+                  item.item
+                    .replace(/[~`*();:"',-]/g, "")
+                    .toLowerCase()
+                    .trim() ||
+                matchingFoodItem
                   .toLowerCase()
-                  .trim()
-          );
-      const iceOrWater =
-        ingredient.ingredient.toLowerCase().includes(" ice") ||
-        ingredient.ingredient.toLowerCase() === "ice" ||
-        ingredient.ingredient.toLowerCase().includes("water");
-      if (found || iceOrWater)
-        return <span className="text-green-500 ml-2 font-bold">✓</span>;
-      else return <span className="text-red-500 ml-2">x</span>;
+                  .replace(/[~`*();:"',-]/g, "")
+                  .trim() ===
+                  pluralize
+                    .singular(item.item.replace(/[~`*();:"',-]/g, ""))
+                    .toLowerCase()
+                    .trim()
+            );
+        const iceOrWater =
+          ingredient.ingredient.toLowerCase().includes(" ice") ||
+          ingredient.ingredient.toLowerCase() === "ice" ||
+          ingredient.ingredient.toLowerCase().includes("water");
+        if (found || iceOrWater)
+          return <span className="text-green-500 ml-2 font-bold">✓</span>;
+        else return <span className="text-red-500 ml-2">x</span>;
+      }
     }
   };
   const checkIngredient = (ingredient: IngredientType) => {
